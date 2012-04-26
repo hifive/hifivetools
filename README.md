@@ -1,8 +1,11 @@
 hifivetools
 ===========
 
-tools repository
+This repository hosts tools for hifive.
 contents coming soon.
+
+- hifive / hifivetools is for release.
+- hifive-labs / hifivetools is for development.
 
 This product licensed under the Apache License, Version 2.0.
 
