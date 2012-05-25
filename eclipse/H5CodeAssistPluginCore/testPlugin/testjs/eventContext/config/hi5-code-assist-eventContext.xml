@@ -1,0 +1,10 @@
+<h5-code-assist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="h5-code-assist.xsd">
+<eventcontext controllerSuffix="Controller">
+    	<function returnType="ReturnType1" name="test1">
+			<argument name="arg1" type="Object" />
+			<argument name="arg2" type="Object" />
+			<description><![CDATA[<b>テスト1テスト1</b>]]></description>
+		</function>
+</eventcontext>
+</h5-code-assist>

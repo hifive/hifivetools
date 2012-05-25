@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="jp.co.nssol.h5.tool.codeassist.h5codeassist"
+      label="%feature.name"
+      version="1.0.1.vqualifier"
+      provider-name="%feature.vendor"
+      plugin="jp.co.nssol.h5.tools.codeassist.ui.H5CodeAssistUIPlugin">
+
+   <description>
+      %feature.description
+   </description>
+
+   <copyright>
+      %feature.copyright.notice
+   </copyright>
+
+   <license url="">
+      %feature.license.agreement
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="jp.co.nssol.h5.tool.codeassist.H5CodeAssistLibraryPlugin" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.wst.jsdt.ui"/>
+      <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.wst.jsdt.core"/>
+   </requires>
+
+   <plugin
+         id="jp.co.nssol.h5.tools.codeassist.ui.H5CodeAssistUIPlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="jp.co.nssol.h5.tool.codeassist.core.H5CodeAssistCorePlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="jp.co.nssol.h5.tool.codeassist.H5CodeAssistLibraryPlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

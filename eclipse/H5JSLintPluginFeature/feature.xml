@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="jp.co.nssol.h5.tool.jslint.feature"
+      label="%feature.name"
+      version="1.0.0.vqualifier"
+      provider-name="%feature.vendor"
+      plugin="jp.co.nssol.h5.tool.jslint.H5JSLintPlugin">
+
+   <description>
+      %feature.description
+   </description>
+
+   <copyright>
+      %feature.copyright.notice
+   </copyright>
+
+   <license url="">
+      %feature.license.agreement
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="jp.co.nssol.h5.tool.jslint.H5JSLintPluginLibrary" version="0.9.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.wst.jsdt.core"/>
+   </requires>
+
+   <plugin
+         id="jp.co.nssol.h5.tool.jslint.H5JSLintPlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="jp.co.nssol.h5.tool.jslint.H5JSLintPluginLibrary"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
