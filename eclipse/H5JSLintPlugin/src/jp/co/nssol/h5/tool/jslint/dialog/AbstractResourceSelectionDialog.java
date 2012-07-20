@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.dialog;
+package jp.co.nssol.h5.tool.jslint.dialog;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ViewerFilter;

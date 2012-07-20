@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.view;
+package jp.co.nssol.h5.tool.jslint.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,18 +47,20 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 /**
  * 設定ページ用コンポジット.
- * 
+ *
  * @author NS Solutions Corporation
- * 
+ *
  */
 public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 
@@ -103,15 +105,21 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	private Button buttonOptionForm;
 
 	/**
+	 * JSLintのヘルプページ用のリンク.
+	 */
+	private Link linkHelpPage;
+
+	/**
 	 * グルーピングコンポジット.
 	 */
 	private DescriptionGroupComposite filterComp;
 
 	/**
 	 * コンストラクタ.
-	 * 
+	 *
 	 * @param parent 親コンポジット
 	 * @param project 選択プロジェクト
+	 *
 	 */
 	public JslintPropertyComposite(Composite parent, IProject project) {
 
@@ -134,14 +142,29 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	private void createOtherProject() {
 
 		// 全体のベースコンポジット
-		Composite comp = new Composite(this, SWT.None);
-		GridData gdComp = new GridData(GridData.FILL_HORIZONTAL);
-		comp.setLayoutData(gdComp);
-		GridLayout layout = new GridLayout(8, false);
-		comp.setLayout(layout);
+		Composite comp = createBaseComposite(2);
+		// JSLintの設定トップラベル
+		Label messageLabel = new Label(comp, SWT.None);
+		GridData gdMessageLabel = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		messageLabel.setText("JSLintプラグインの設定を行います。");
+		messageLabel.setLayoutData(gdMessageLabel);
 
+		// ヘルプリンクの作成
+		linkHelpPage = new Link(comp, SWT.None);
+		GridData gdLinkHelpPage = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		linkHelpPage.setText("JSLintヘルプページは<a>こちら</a>");
+		linkHelpPage.setLayoutData(gdLinkHelpPage);
+		linkHelpPage.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Program.launch("http://www.htmlhifive.com/conts/web/view/reference/eclipseplugins#HJSLint30D730E930B030A430F3");
+			}
+		});
+		Group group = createGroup(comp, "プロジェクト参照", 2, 2, GridData.FILL_HORIZONTAL);
 		// チェックボックス作成
-		checkUseOtherProject = new Button(comp, SWT.CHECK);
+		checkUseOtherProject = new Button(group, SWT.CHECK);
 		GridData gdUseOtherProjectCheck = new GridData();
 		gdUseOtherProjectCheck.horizontalSpan = 1;
 		checkUseOtherProject.setLayoutData(gdUseOtherProjectCheck);
@@ -157,18 +180,18 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 		});
 
 		// チェックボックスのラベル作成.
-		Label labelUseOtherProject = new Label(comp, SWT.None);
+		Label labelUseOtherProject = new Label(group, SWT.None);
 		GridData gdLabelUseOtherProject = new GridData();
-		gdLabelUseOtherProject.horizontalSpan = 7;
+		gdLabelUseOtherProject.horizontalSpan = 1;
 		labelUseOtherProject.setText(Messages.DL0003.getText());
 		labelUseOtherProject.setLayoutData(gdLabelUseOtherProject);
 
 		// プロジェクトリスト.
-		listviewer = new TableViewer(comp, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		listviewer = new TableViewer(group, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		listviewer.setContentProvider(new ArrayContentProvider());
 		listviewer.setLabelProvider(new WorkbenchLabelProvider());
 		GridData gdListviewer = new GridData(GridData.FILL_HORIZONTAL);
-		gdListviewer.horizontalSpan = 8;
+		gdListviewer.horizontalSpan = 2;
 		gdListviewer.heightHint = 100;
 		listviewer.getControl().setLayoutData(gdListviewer);
 		listviewer.add(getJsLintProjects());
@@ -186,8 +209,22 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	}
 
 	/**
+	 * ベースコンポジットを生成する.
+	 *
+	 * @param numColumn カラム数
+	 * @return ベースコンポジット
+	 */
+	private Composite createBaseComposite(int numColumn) {
+		Composite comp = new Composite(this, SWT.None);
+		comp.setLayoutData(new GridData(SWT.FILL, 1, true, false));
+		GridLayout layout = new GridLayout(numColumn, false);
+		comp.setLayout(layout);
+		return comp;
+	}
+
+	/**
 	 * JSLint設定ファイルがあるプロジェクトを取得する.
-	 * 
+	 *
 	 * @return JSLint設定ファイルを持っているプロジェクト.
 	 */
 	private IProject[] getJsLintProjects() {
@@ -207,12 +244,9 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	 */
 	private void createGroup1() {
 
-		Group group = createGroup(Messages.DL0001.getText(), 8, GridData.FILL_HORIZONTAL);
+		Group group = createGroup(createBaseComposite(2), Messages.DL0001.getText(), 2, 2, GridData.FILL_HORIZONTAL);
 		textOptionPath = new Text(group, SWT.BORDER);
-		GridData gridOptionPath = new GridData(GridData.FILL_HORIZONTAL);
-		gridOptionPath.horizontalSpan = 7;
-		gridOptionPath.verticalSpan = 2;
-		gridOptionPath.verticalAlignment = SWT.TOP;
+		GridData gridOptionPath = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		textOptionPath.setLayoutData(gridOptionPath);
 		textOptionPath.setText(getConfigBean().getOptionFilePath());
 		textOptionPath.addModifyListener(new ModifyListener() {
@@ -261,12 +295,12 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	 * 下部のコンポジットを作成する.
 	 */
 	private void createGroup2() {
-
-		Group group = createGroup(Messages.DL0002.getText(), 8, GridData.FILL_HORIZONTAL);
+		Composite composite = createBaseComposite(1);
+		Group group = createGroup(composite, Messages.DL0002.getText(), 1, 1, GridData.FILL_HORIZONTAL);
 
 		textJslintPath = new Text(group, SWT.BORDER);
 		GridData gridOptionPath = new GridData(GridData.FILL_HORIZONTAL);
-		gridOptionPath.horizontalSpan = 7;
+		gridOptionPath.horizontalSpan = 1;
 		textJslintPath.setLayoutData(gridOptionPath);
 		textJslintPath.setText(getConfigBean().getJsLintPath());
 		textJslintPath.addModifyListener(new ModifyListener() {
@@ -296,7 +330,8 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 
 		});
 
-		Group descriptionFilter = createGroup(Messages.DL0006.getText(), 1, GridData.FILL_BOTH);
+		Group descriptionFilter = createGroup(composite, Messages.DL0006.getText(), 1, 1, GridData.FILL_HORIZONTAL);
+		((GridData) descriptionFilter.getLayoutData()).heightHint = 300;
 		filterComp = new DescriptionGroupComposite(descriptionFilter, SWT.None);
 		filterComp.addFilterBeanListChangeListener(new FilterBeanListChangeListener() {
 
@@ -310,25 +345,27 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 
 	/**
 	 * Gridカラム8のグループを生成する.
-	 * 
+	 *
+	 * @param parent 親コンポジット
 	 * @param groupName グループ名
 	 * @param column カラム数
 	 * @param style スタイル
 	 * @return グループ
 	 */
-	private Group createGroup(String groupName, int column, int style) {
+	private Group createGroup(Composite parent, String groupName, int column, int horizontalSpan, int style) {
 
-		Group group = new Group(this, SWT.NONE);
+		Group group = new Group(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(column, false);
 		group.setLayout(layout);
-		group.setLayoutData(new GridData(style));
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, horizontalSpan, 1);
+		group.setLayoutData(gd);
 		group.setText(groupName);
 		return group;
 	}
 
 	/**
 	 * GridLayoutのレイアウトを持つコンポジット(parent)にボタンを配置する.
-	 * 
+	 *
 	 * @param parent 親コンポジット
 	 * @param horizontalSpan カラム数.
 	 * @param text ボタン名
@@ -337,9 +374,8 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	private Button locateButton(Composite parent, int horizontalSpan, String text) {
 
 		Button button = new Button(parent, SWT.None);
-		GridData gridbutton = new GridData();
+		GridData gridbutton = new GridData(SWT.LEFT, SWT.CENTER, false, false, horizontalSpan, 1);
 		gridbutton.widthHint = BUTTON_WIDTH;
-		gridbutton.horizontalSpan = horizontalSpan;
 		button.setLayoutData(gridbutton);
 		button.setText(text);
 		return button;
@@ -347,7 +383,7 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 
 	/**
 	 * 他のプロジェクトを利用するかどうかによる、ウィジェットの活性・非活性を設定する.
-	 * 
+	 *
 	 * @param useOtherProject 他プロジェクトを使用するかどうか.
 	 */
 	private void setActive(boolean useOtherProject) {
@@ -385,7 +421,7 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 
 	/**
 	 * ワークスペース内に指定したパスのファイルが存在するかをチェックする.
-	 * 
+	 *
 	 * @param path パス.
 	 * @return 指定したファイルが存在するかどうか.
 	 */

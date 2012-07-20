@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.configure;
+package jp.co.nssol.h5.tool.jslint.configure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +25,9 @@ import jp.co.nssol.h5.tool.jslint.engine.option.CheckOption;
 
 /**
  * JSLintプラグインの設定保存クラス.
- * 
+ *
  * @author NS Solutions Corporation
- * 
+ *
  */
 public class ConfigBean implements Cloneable {
 
@@ -79,7 +79,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 検査をするJSLintファイルパス.を取得する.
-	 * 
+	 *
 	 * @return 検査をするJSLintファイルパス.
 	 */
 	public String getJsLintPath() {
@@ -89,7 +89,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 検査をするJSLintファイルパス.を設定する.
-	 * 
+	 *
 	 * @param jsLintPath 検査をするJSLintファイルパス.
 	 */
 	public void setJsLintPath(String jsLintPath) {
@@ -120,7 +120,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * オプションを設定したプロパティファイルパス.を取得する.
-	 * 
+	 *
 	 * @return オプションを設定したプロパティファイルパス.
 	 */
 	public String getOptionFilePath() {
@@ -130,7 +130,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * オプションを設定したプロパティファイルパス.を設定する.
-	 * 
+	 *
 	 * @param optionFilePath オプションを設定したプロパティファイルパス.
 	 */
 	public void setOptionFilePath(String optionFilePath) {
@@ -140,7 +140,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 他プロジェクトの設定を使用するかどうか.を取得する.
-	 * 
+	 *
 	 * @return 他プロジェクトの設定を使用するかどうか.
 	 */
 	public boolean isUseOtherProject() {
@@ -150,7 +150,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 他プロジェクトの設定を使用するかどうか.を設定する.
-	 * 
+	 *
 	 * @param useOtherProject 他プロジェクトの設定を使用するかどうか.
 	 */
 	public void setUseOtherProject(boolean useOtherProject) {
@@ -160,7 +160,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 他プロジェクトのパス.を取得する.
-	 * 
+	 *
 	 * @return 他プロジェクトのパス.
 	 */
 	public String getOtherProjectPath() {
@@ -170,7 +170,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 他プロジェクトのパス.を設定する.
-	 * 
+	 *
 	 * @param otherProjectPath 他プロジェクトのパス.
 	 */
 	public void setOtherProjectPath(String otherProjectPath) {
@@ -180,7 +180,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * フィルタビーンリスト.を取得する.
-	 * 
+	 *
 	 * @return フィルタビーンリスト.
 	 */
 	public FilterBean[] getFilterBeans() {
@@ -190,7 +190,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * フィルタビーンリストを追加する.
-	 * 
+	 *
 	 * @param filterBean フィルタビーン.
 	 */
 	public void addFilterBean(FilterBean filterBean) {
@@ -203,7 +203,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * フィルタビーンを追加する.
-	 * 
+	 *
 	 * @param filterBeans フィルタビーン.
 	 */
 	public void addFilterBeans(FilterBean[] filterBeans) {
@@ -215,7 +215,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * jsLintのオプションを取得する.
-	 * 
+	 *
 	 * @return jsLintのオプション
 	 */
 	public CheckOption[] getJsLintOptionList() {
@@ -225,7 +225,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * jsLintのオプションを設定する.
-	 * 
+	 *
 	 * @param option jsLintのオプション
 	 * @param overwrite 同キーがすでにあった場合上書きするかどうか.
 	 */
@@ -242,7 +242,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * jsHintのオプションを取得する.
-	 * 
+	 *
 	 * @return jsHintのオプション
 	 */
 	public CheckOption[] getJsHintOptionList() {
@@ -252,7 +252,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * jsHintのオプションを設定する.
-	 * 
+	 *
 	 * @param option jsHintのオプション
 	 * @param overwrite 同キーがすでにあった場合上書きするかどうか.
 	 */
@@ -285,7 +285,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * ライブラリパスリストを追加する.
-	 * 
+	 *
 	 * @param lib ライブラリパス
 	 */
 	public void addLibList(String lib) {
@@ -295,7 +295,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * ライブラリパスリストを追加する.
-	 * 
+	 *
 	 * @param libs ライブラリパス
 	 */
 	public void setLibList(String[] libs) {
@@ -308,7 +308,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * ライブラリパスリスト.を取得する.
-	 * 
+	 *
 	 * @return ライブラリパスリスト.
 	 */
 	public String[] getLibList() {
@@ -318,7 +318,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * ライブラリパスリスト.を設定する.
-	 * 
+	 *
 	 * @param libList ライブラリパスリスト.
 	 */
 	public void setLibList(List<String> libList) {
@@ -328,7 +328,7 @@ public class ConfigBean implements Cloneable {
 
 	/**
 	 * 保持しているフィルタービーンを引数に置き換える.
-	 * 
+	 *
 	 * @param filterBeans 置き換えるフィルタビーン.
 	 */
 	public void replaceFilterBeans(FilterBean[] filterBeans) {
@@ -345,7 +345,7 @@ public class ConfigBean implements Cloneable {
 
 	/*
 	 * (非 Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -366,7 +366,7 @@ public class ConfigBean implements Cloneable {
 
 	/*
 	 * (非 Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

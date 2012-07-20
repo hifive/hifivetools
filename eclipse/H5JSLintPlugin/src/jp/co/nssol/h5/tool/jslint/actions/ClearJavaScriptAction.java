@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.actions;
+package jp.co.nssol.h5.tool.jslint.actions;
 
 import jp.co.nssol.h5.tool.jslint.JSLintPluginConstant;
 import jp.co.nssol.h5.tool.jslint.dialog.StatusList;

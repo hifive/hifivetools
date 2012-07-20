@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.logger;
+package jp.co.nssol.h5.tool.jslint.logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;

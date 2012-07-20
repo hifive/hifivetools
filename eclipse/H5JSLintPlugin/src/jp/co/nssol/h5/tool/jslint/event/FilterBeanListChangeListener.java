@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.event;
+package jp.co.nssol.h5.tool.jslint.event;
 
 import java.util.EventListener;
 

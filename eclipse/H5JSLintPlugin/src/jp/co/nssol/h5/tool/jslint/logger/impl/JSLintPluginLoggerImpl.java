@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.logger.impl;
+package jp.co.nssol.h5.tool.jslint.logger.impl;
 
 import jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger;
 import jp.co.nssol.h5.tool.jslint.logger.LogLevel;
@@ -49,8 +49,7 @@ public class JSLintPluginLoggerImpl implements JSLintPluginLogger {
 	/*
 	 * (非 Javadoc)
 	 * 
-	 * @see
-	 * jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#put(jp.co.nssol
+	 * @see jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#put(jp.co.nssol
 	 * .hi5.tool.jslint.messages.MessagesBase.Message, java.lang.Throwable,
 	 * java.lang.Object[])
 	 */
@@ -77,8 +76,7 @@ public class JSLintPluginLoggerImpl implements JSLintPluginLogger {
 	/*
 	 * (非 Javadoc)
 	 * 
-	 * @see
-	 * jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#put(jp.co.nssol
+	 * @see jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#put(jp.co.nssol
 	 * .hi5.tool.jslint.messages.MessagesBase.Message, java.lang.Object[])
 	 */
 	@Override
@@ -90,8 +88,7 @@ public class JSLintPluginLoggerImpl implements JSLintPluginLogger {
 	/*
 	 * (非 Javadoc)
 	 * 
-	 * @see
-	 * jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#enableFor(jp.co
+	 * @see jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#enableFor(jp.co
 	 * .nssol.hi5.tool.jslint.messages.MessagesBase.Message)
 	 */
 	@Override
@@ -103,8 +100,7 @@ public class JSLintPluginLoggerImpl implements JSLintPluginLogger {
 	/*
 	 * (非 Javadoc)
 	 * 
-	 * @see
-	 * jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#debug(java.lang
+	 * @see jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger#debug(java.lang
 	 * .Object)
 	 */
 	@Override

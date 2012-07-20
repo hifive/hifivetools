@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.configure;
+package jp.co.nssol.h5.tool.jslint.configure;
 
 import java.util.HashMap;
 import java.util.Map;

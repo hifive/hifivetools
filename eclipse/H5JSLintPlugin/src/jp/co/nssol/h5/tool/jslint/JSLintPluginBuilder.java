@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint;
+package jp.co.nssol.h5.tool.jslint;
 
 import java.util.Map;
 
@@ -59,15 +59,15 @@ public class JSLintPluginBuilder extends IncrementalProjectBuilder {
 
 			IResource resource = delta.getResource();
 			switch (delta.getKind()) {
-				case IResourceDelta.ADDED:
-					checkJs(resource);
-					break;
+			case IResourceDelta.ADDED:
+				checkJs(resource);
+				break;
 
-				case IResourceDelta.CHANGED:
-					checkJs(resource);
-					break;
-				default:
-					break;
+			case IResourceDelta.CHANGED:
+				checkJs(resource);
+				break;
+			default:
+				break;
 			}
 
 			return true;
@@ -99,7 +99,8 @@ public class JSLintPluginBuilder extends IncrementalProjectBuilder {
 	 * (非 Javadoc)
 	 * 
 	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(int,
-	 * java.util.Map<java.lang.String,java.lang.String>, org.eclipse.core.runtime.IProgressMonitor)
+	 * java.util.Map<java.lang.String,java.lang.String>,
+	 * org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {

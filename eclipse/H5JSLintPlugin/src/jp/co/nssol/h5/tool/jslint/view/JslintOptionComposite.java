@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.view;
+package jp.co.nssol.h5.tool.jslint.view;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.util;
+package jp.co.nssol.h5.tool.jslint.util;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IWorkspaceRoot;

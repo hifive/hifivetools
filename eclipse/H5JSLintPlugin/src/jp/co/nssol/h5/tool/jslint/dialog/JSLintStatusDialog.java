@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.dialog;
+package jp.co.nssol.h5.tool.jslint.dialog;
 
 import jp.co.nssol.h5.tool.jslint.Activator;
 import jp.co.nssol.h5.tool.jslint.messages.Messages;

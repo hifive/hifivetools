@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.logger.impl;
+package jp.co.nssol.h5.tool.jslint.logger.impl;
 
 import jp.co.nssol.h5.tool.jslint.Activator;
 import jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLogger;
@@ -73,18 +73,18 @@ public class JSLintPluginLoggerDefaultImpl implements JSLintPluginLogger {
 	private int convertInnerLogLevel(LogLevel level) {
 
 		switch (level) {
-			case FATAL:
-				return IStatus.ERROR;
-			case ERROR:
-				return IStatus.ERROR;
-			case WARN:
-				return IStatus.WARNING;
-			case INFO:
-				return IStatus.INFO;
-			case DEBUG:
-				return IStatus.INFO;
-			default:
-				break;
+		case FATAL:
+			return IStatus.ERROR;
+		case ERROR:
+			return IStatus.ERROR;
+		case WARN:
+			return IStatus.WARNING;
+		case INFO:
+			return IStatus.INFO;
+		case DEBUG:
+			return IStatus.INFO;
+		default:
+			break;
 		}
 		return IStatus.INFO;
 	}

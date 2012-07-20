@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.view;
+package jp.co.nssol.h5.tool.jslint.view;
 
 import jp.co.nssol.h5.tool.jslint.JSLintPluginConstant;
 import jp.co.nssol.h5.tool.jslint.configure.ConfigBean;

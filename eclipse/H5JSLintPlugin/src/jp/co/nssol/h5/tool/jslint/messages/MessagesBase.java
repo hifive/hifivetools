@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.messages;
+package jp.co.nssol.h5.tool.jslint.messages;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

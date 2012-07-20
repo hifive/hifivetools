@@ -24,11 +24,12 @@ public final class Messages extends MessagesBase {
 	// # you may not use this file except in compliance with the License.
 	// # You may obtain a copy of the License at
 	// #
-	// #    http://www.apache.org/licenses/LICENSE-2.0
+	// # http://www.apache.org/licenses/LICENSE-2.0
 	// #
 	// # Unless required by applicable law or agreed to in writing, software
 	// # distributed under the License is distributed on an "AS IS" BASIS,
-	// # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+	// implied.
 	// # See the License for the specific language governing permissions and
 	// # limitations under the License.
 	// #
@@ -318,7 +319,10 @@ public final class Messages extends MessagesBase {
 	/** DES_COUCH=INFO,CouchDBでの実行を想定(CouchDBのグローバル変数が事前に定義されているか.). */
 	public static final Message DES_COUCH = createMessage("DES_COUCH");
 
-	/** DES_PROTOTYPEJS=INFO,prototype.jsでの実行を想定(prototype.jsのグローバル変数が事前に定義されているか.). */
+	/**
+	 * DES_PROTOTYPEJS=INFO,prototype.jsでの実行を想定(prototype.jsのグローバル変数が事前に定義されているか
+	 * .).
+	 */
 	public static final Message DES_PROTOTYPEJS = createMessage("DES_PROTOTYPEJS");
 
 	/** DES_MOOTOOLS=INFO,mootoolsでの実行を想定(mootoolsのグローバル変数が事前に定義されているか.). */
@@ -339,7 +343,10 @@ public final class Messages extends MessagesBase {
 	/** DES_EQNULL=INFO,= null を許容.. */
 	public static final Message DES_EQNULL = createMessage("DES_EQNULL");
 
-	/** DES_IMMED=INFO,If true、 JSHint will require immediate invocations to be wrapped in parens.. */
+	/**
+	 * DES_IMMED=INFO,If true、 JSHint will require immediate invocations to be
+	 * wrapped in parens..
+	 */
 	public static final Message DES_IMMED = createMessage("DES_IMMED");
 
 	/** DES_LAXBREAK=INFO,改行をチェックしない.. */
@@ -361,10 +368,16 @@ public final class Messages extends MessagesBase {
 	public static final Message DES_STRICT = createMessage("DES_STRICT");
 
 	// #オプション詳細
-	/** DET_NEWCAP=INFO,(注意)JSHINTは、コンストラクタの定義の所で名前のチェックをしていない。\r\n newでコンストラクタを呼ぶ所で名前をチェックしているので、小文字だった場合は\r\n その行を指摘される。. */
+	/**
+	 * DET_NEWCAP=INFO,(注意)JSHINTは、コンストラクタの定義の所で名前のチェックをしていない。\r\n
+	 * newでコンストラクタを呼ぶ所で名前をチェックしているので、小文字だった場合は\r\n その行を指摘される。.
+	 */
 	public static final Message DET_NEWCAP = createMessage("DET_NEWCAP");
 
-	/** DET_SUB=INFO,ドット演算子(dot notation): sample.aaa\r\n 括弧記法(subscript notation): sample['aaa']. */
+	/**
+	 * DET_SUB=INFO,ドット演算子(dot notation): sample.aaa\r\n 括弧記法(subscript
+	 * notation): sample['aaa'].
+	 */
 	public static final Message DET_SUB = createMessage("DET_SUB");
 
 	/**

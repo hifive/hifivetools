@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.view;
+package jp.co.nssol.h5.tool.jslint.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +38,9 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * .jslintを使用するときのコンポジット抽象クラス.
- * 
+ *
  * @author NS Solutions Corporation
- * 
+ *
  */
 public abstract class AbstractJsLintPropertyComposite extends Composite {
 
@@ -61,7 +61,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 
 	/**
 	 * コンストラクタ.
-	 * 
+	 *
 	 * @param parent 親コンポジット
 	 * @param project プロジェクト
 	 */
@@ -74,8 +74,6 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 		GridLayout layout = new GridLayout(1, true);
 		this.setLayout(layout);
 		GridData data = new GridData(GridData.FILL_BOTH);
-		data.widthHint = 600;
-		data.heightHint = 600;
 		this.setLayoutData(data);
 		createMainArea();
 		this.pack();
@@ -89,7 +87,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 
 	/**
 	 * 設定ビーンを取得する.
-	 * 
+	 *
 	 * @return 設定ビーン.
 	 */
 	protected ConfigBean getConfigBean() {
@@ -99,7 +97,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 
 	/**
 	 * リスナを追加する.
-	 * 
+	 *
 	 * @param listener 追加するリスナ.
 	 */
 	protected void addConfigBeanChangeListener(ConfigBeanChangeListener listener) {
@@ -125,7 +123,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 
 	/**
 	 * 表示を設定する.
-	 * 
+	 *
 	 * @param initBean 初期状態の設定ファイルビーン
 	 */
 	protected void setupVariable(ConfigBean initBean) {
@@ -141,7 +139,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 
 	/**
 	 * 表示設定処理を行う.
-	 * 
+	 *
 	 * @param configBean コンフィグビーン
 	 * @throws JSLintPluginException 初期化例外.
 	 */
@@ -149,7 +147,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 
 	/**
 	 * プロジェクトを取得する.
-	 * 
+	 *
 	 * @return プロジェクト
 	 */
 	protected IProject getProject() {

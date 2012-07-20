@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.view;
+package jp.co.nssol.h5.tool.jslint.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +50,9 @@ import org.eclipse.swt.widgets.Label;
 
 /**
  * 説明文でフィルタリング、グルーピング設定をするコンポジット.
- * 
+ *
  * @author NS Solutions Corporation
- * 
+ *
  */
 public class DescriptionGroupComposite {
 
@@ -80,10 +80,11 @@ public class DescriptionGroupComposite {
 	 * リスナリスト.
 	 */
 	private List<FilterBeanListChangeListener> listenerList;
+	private Composite baseComp;
 
 	/**
 	 * コンストラクタ.
-	 * 
+	 *
 	 * @param parent 親コンポジット.
 	 * @param style スタイル.
 	 */
@@ -91,22 +92,23 @@ public class DescriptionGroupComposite {
 
 		tableElemList = new ArrayList<FilterBean>();
 		listenerList = new ArrayList<FilterBeanListChangeListener>();
-		Composite comp = new Composite(parent, style);
-		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridLayout layout = new GridLayout(8, false);
-		comp.setLayout(layout);
-		Label top = new Label(comp, SWT.None);
+		baseComp = new Composite(parent, style);
+		baseComp.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridLayout glBaseComp = new GridLayout(2, false);
+		glBaseComp.verticalSpacing = -1;
+		baseComp.setLayout(glBaseComp);
+		Label top = new Label(baseComp, SWT.None);
+		top.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		top.setText(Messages.DL0007.getText());
-		GridData gdTopLabel = new GridData();
-		gdTopLabel.horizontalSpan = 8;
-		top.setLayoutData(gdTopLabel);
-		createTable(comp);
+		createTable(baseComp);
+		new Label(baseComp, SWT.NONE);
+		new Label(baseComp, SWT.NONE);
 
 	}
 
 	/**
 	 * テーブルを作成する.
-	 * 
+	 *
 	 * @param comp コンポジット
 	 */
 	private void createTable(Composite comp) {
@@ -114,10 +116,7 @@ public class DescriptionGroupComposite {
 		// テーブルビューアの作成
 		tableViewer = CheckboxTableViewer.newCheckList(comp, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.SINGLE | SWT.CHECK);
-		GridData gdTableViewer = new GridData(GridData.FILL_BOTH);
-		gdTableViewer.horizontalSpan = 7;
-		gdTableViewer.verticalSpan = 6;
-		tableViewer.getTable().setLayoutData(gdTableViewer);
+		tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(50));
 		layout.addColumnData(new ColumnPixelData(300));
@@ -232,8 +231,15 @@ public class DescriptionGroupComposite {
 
 			}
 		});
+
+		Composite composite = new Composite(baseComp, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		composite.setLayout(new GridLayout(1, false));
 		// 追加ボタンの作成
-		btnAdd = new Button(comp, SWT.None);
+		btnAdd = new Button(composite, SWT.None);
+		GridData gd_btnAdd = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnAdd.widthHint = 60;
+		btnAdd.setLayoutData(gd_btnAdd);
 		btnAdd.setText(Messages.B0002.getText());
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -243,12 +249,11 @@ public class DescriptionGroupComposite {
 				updateVariable();
 			}
 		});
-		GridData gdBtnAdd = new GridData();
-		gdBtnAdd.horizontalSpan = 1;
-		gdBtnAdd.widthHint = 60;
-		btnAdd.setLayoutData(gdBtnAdd);
 		// 削除ボタンの作成
-		btnDel = new Button(comp, SWT.None);
+		btnDel = new Button(composite, SWT.None);
+		GridData gd_btnDel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnDel.widthHint = 60;
+		btnDel.setLayoutData(gd_btnDel);
 		btnDel.setText(Messages.B0003.getText());
 		btnDel.addSelectionListener(new SelectionAdapter() {
 
@@ -260,16 +265,11 @@ public class DescriptionGroupComposite {
 				updateVariable();
 			}
 		});
-
-		GridData gdBtnDel = new GridData();
-		gdBtnDel.horizontalSpan = 1;
-		gdBtnDel.widthHint = 60;
-		btnDel.setLayoutData(gdBtnDel);
 	}
 
 	/**
 	 * リスナを追加する.
-	 * 
+	 *
 	 * @param listener 追加するリスナ.
 	 */
 	public void addFilterBeanListChangeListener(FilterBeanListChangeListener listener) {
@@ -279,7 +279,7 @@ public class DescriptionGroupComposite {
 
 	/**
 	 * リスナを削除する.
-	 * 
+	 *
 	 * @param listener 削除するリスナ.
 	 */
 	public void removeFilterBeanListChangeListener(FilterBeanListChangeListener listener) {
@@ -290,7 +290,7 @@ public class DescriptionGroupComposite {
 
 	/**
 	 * テーブルに設定されているフィルタビーンを取得する.
-	 * 
+	 *
 	 * @return 設定されているフィルタビーン.
 	 */
 	public FilterBean[] getFilterBeans() {
@@ -300,7 +300,7 @@ public class DescriptionGroupComposite {
 
 	/**
 	 * フィルタビーンをセットする.
-	 * 
+	 *
 	 * @param input テーブルにセットするフィルタビーン.
 	 */
 	public void setUpTableElement(FilterBean[] input) {
@@ -332,7 +332,7 @@ public class DescriptionGroupComposite {
 
 	/**
 	 * ボタン、ビューアの活性、非活性を操作する.
-	 * 
+	 *
 	 * @param enabled 活性するかどうか.
 	 */
 	public void setEnabled(boolean enabled) {

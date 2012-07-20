@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.parse;
+package jp.co.nssol.h5.tool.jslint.parse;
 
 import java.io.BufferedReader;
 import java.io.File;

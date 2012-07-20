@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint.engine;
+package jp.co.nssol.h5.tool.jslint.engine;
 
 import java.io.Reader;
 

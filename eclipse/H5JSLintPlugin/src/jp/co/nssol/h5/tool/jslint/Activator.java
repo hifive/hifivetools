@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package jp.co.nssol.h5.tool.jslint;
+package jp.co.nssol.h5.tool.jslint;
 
 import jp.co.nssol.h5.tool.jslint.logger.JSLintPluginLoggerFactory;
 import jp.co.nssol.h5.tool.jslint.logger.impl.JSLintPluginLoggerDefaultImpl;
@@ -49,7 +49,9 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	/*
 	 * (非 Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -63,7 +65,9 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
@@ -83,7 +87,8 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative path.
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path.
 	 * 
 	 * @param path the path
 	 * @return the image descriptor
