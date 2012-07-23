@@ -16,16 +16,12 @@
  */
 package jp.co.nssol.h5.tool.jslint.engine.option;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
+import jp.co.nssol.h5.tool.jslint.engine.option.xml.JaxbUtil;
 import jp.co.nssol.h5.tool.jslint.engine.option.xml.JsCheckOption;
 import jp.co.nssol.h5.tool.jslint.engine.option.xml.ObjectFactory;
 import jp.co.nssol.h5.tool.jslint.engine.option.xml.XmlOption;
@@ -35,7 +31,6 @@ import jp.co.nssol.h5.tool.jslint.messages.Messages;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -54,17 +49,12 @@ public class CheckOptionXmlWrapper implements CheckOptionFileWrapper {
 	/**
 	 * チェックオプション.
 	 */
-	private JsCheckOption checkOptions;
+	private final JsCheckOption checkOptions;
 
 	/**
 	 * オプションファイル(.xml).
 	 */
-	private IFile xmlOption;
-
-	/**
-	 * JAXBContext.
-	 */
-	private JAXBContext jc;
+	private final IFile xmlOption;
 
 	/**
 	 * コンストラクタ.
@@ -74,24 +64,26 @@ public class CheckOptionXmlWrapper implements CheckOptionFileWrapper {
 	 * @throws CoreException 生成例外.
 	 */
 	public CheckOptionXmlWrapper(IFile xmlOption) throws CoreException, JAXBException {
-
-		this(xmlOption.getContents());
+		if (!xmlOption.exists()) {
+			throw new IllegalArgumentException("ファイルが存在しません");
+		}
+		checkOptions = JaxbUtil.readJsCheckOption(xmlOption.getContents());
+		// this(xmlOption.getContents());
 		this.xmlOption = xmlOption;
 
 	}
 
-	/**
-	 * コンストラクタ.
-	 * 
-	 * @param optionXml .xmlのオプションファイル.
-	 * @throws JAXBException xml解析例外.
-	 */
-	public CheckOptionXmlWrapper(InputStream optionXml) throws JAXBException {
-
-		jc = JAXBContext.newInstance(JsCheckOption.class);
-		Unmarshaller um = jc.createUnmarshaller();
-		checkOptions = (JsCheckOption) um.unmarshal(optionXml);
-	}
+	// /**
+	// * コンストラクタ.
+	// *
+	// * @param optionXml .xmlのオプションファイル.
+	// * @throws JAXBException xml解析例外.
+	// */
+	// public CheckOptionXmlWrapper(InputStream optionXml) throws JAXBException
+	// {
+	//
+	// checkOptions = JaxbUtil.readJsCheckOption(optionXml);
+	// }
 
 	/*
 	 * (非 Javadoc)
@@ -174,19 +166,21 @@ public class CheckOptionXmlWrapper implements CheckOptionFileWrapper {
 	@Override
 	public void saveOption() {
 
-		try {
-			Marshaller marshall = jc.createMarshaller();
-			marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.valueOf(true));
-			marshall.marshal(checkOptions, new File(xmlOption.getLocationURI()));
-			xmlOption.refreshLocal(IResource.DEPTH_ONE, null);
-		} catch (JAXBException e) {
-			logger.put(Messages.EM0006, e, xmlOption.getName());
-			// throw new
-			// RuntimeException(Messages.EM0006.format(xmlOption.getName()), e);
-		} catch (CoreException e) {
-			logger.put(Messages.EM0100, e);
-			// throw new RuntimeException(Messages.EM0100.getText(), e);
-		}
+		JaxbUtil.saveJsCheckOption(checkOptions, xmlOption);
+		// try {
+		// Marshaller marshall = jc.createMarshaller();
+		// marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+		// Boolean.valueOf(true));
+		// marshall.marshal(checkOptions, new File(xmlOption.getLocationURI()));
+		// xmlOption.refreshLocal(IResource.DEPTH_ONE, null);
+		// } catch (JAXBException e) {
+		// logger.put(Messages.EM0006, e, xmlOption.getName());
+		// // throw new
+		// // RuntimeException(Messages.EM0006.format(xmlOption.getName()), e);
+		// } catch (CoreException e) {
+		// logger.put(Messages.EM0100, e);
+		// // throw new RuntimeException(Messages.EM0100.getText(), e);
+		// }
 	}
 
 	@Override

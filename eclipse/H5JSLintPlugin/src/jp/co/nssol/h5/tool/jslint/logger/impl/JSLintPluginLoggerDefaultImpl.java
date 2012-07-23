@@ -36,7 +36,7 @@ public class JSLintPluginLoggerDefaultImpl implements JSLintPluginLogger {
 	/**
 	 * 表示ログレベル.
 	 */
-	private static final LogLevel ENABLE = LogLevel.WARN;
+	private static final LogLevel ENABLE = LogLevel.DEBUG;
 
 	/**
 	 * 出力クラス.

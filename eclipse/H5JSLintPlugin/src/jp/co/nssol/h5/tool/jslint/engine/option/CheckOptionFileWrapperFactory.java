@@ -22,6 +22,8 @@ import java.util.Properties;
 import javax.xml.bind.JAXBException;
 
 import jp.co.nssol.h5.tool.jslint.Activator;
+import jp.co.nssol.h5.tool.jslint.engine.option.xml.JaxbUtil;
+import jp.co.nssol.h5.tool.jslint.engine.option.xml.JsCheckOption;
 import jp.co.nssol.h5.tool.jslint.messages.Messages;
 
 import org.apache.commons.lang.StringUtils;
@@ -87,6 +89,9 @@ public final class CheckOptionFileWrapperFactory {
 			throws CoreException {
 
 		try {
+			if (!file.exists()) {
+				JaxbUtil.saveJsCheckOption(new JsCheckOption(), file);
+			}
 			if (StringUtils.endsWith(extension, "xml")) {
 				return new CheckOptionXmlWrapper(file);
 			} else if (StringUtils.endsWith(extension, "properties")) {
