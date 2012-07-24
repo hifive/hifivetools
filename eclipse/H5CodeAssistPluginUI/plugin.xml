@@ -12,8 +12,8 @@
        point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer">
 		<javaCompletionProposalComputer
         activate="true"
-        categoryId="jp.co.nssol.h5.tools.codeassist.ui.H5CodeAssistUIPlugin.h5CodeAssist"
-        class="jp.co.nssol.h5.tools.codeassist.ui.H5ProposalComputer">
+        categoryId="com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin.h5CodeAssist"
+        class="com.htmlhifive.tools.codeassist.ui.H5ProposalComputer">
 			<partition type="__dftl_partition_content_type"/>
 			<partition type="__java_string"/>
 		</javaCompletionProposalComputer>
@@ -22,8 +22,8 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="jp.co.nssol.h5.tools.codeassist.ui.view.H5CodeAssistPropertyPage"
-            id="jp.co.nssol.h5.tools.codeassist.ui.codeassistPropertyPage"
+            class="com.htmlhifive.tools.codeassist.ui.view.H5CodeAssistPropertyPage"
+            id="com.htmlhifive.tools.codeassist.ui.codeassistPropertyPage"
             name="%page.name">
          <enabledWhen>
          <or>

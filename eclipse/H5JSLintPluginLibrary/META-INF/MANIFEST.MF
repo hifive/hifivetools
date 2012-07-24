@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: H5JSLintPluginLibrary
-Bundle-SymbolicName: jp.co.nssol.h5.tool.jslint.H5JSLintPluginLibrary
+Bundle-SymbolicName: com.htmlhifive.tools.jslint.H5JSLintPluginLibrary
 Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/commons-cli-1.2.jar,
@@ -11,8 +11,8 @@ Bundle-ClassPath: lib/commons-cli-1.2.jar,
  lib/jaxb/jaxb-api.jar,
  lib/jaxb/jaxb-impl.jar,
  lib/jaxb/jaxb-xjc.jar,
- lib/js1_7_R3.jar,
- lib/log4j-1.2.15.jar
+ lib/log4j-1.2.15.jar,
+ lib/js.jar
 Export-Package: com.sun.activation.registries,
  com.sun.activation.viewers,
  com.sun.codemodel,

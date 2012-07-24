@@ -1,21 +1,22 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: jp.co.nssol.h5.tool.jslint.H5JSLintPlugin;singleton:=true
+Bundle-SymbolicName: com.htmlhifive.tools.jslint.H5JSLintPlugin;singleton:=true
 Bundle-Version: 1.0.0.vqualifier
-Bundle-Activator: jp.co.nssol.h5.tool.jslint.Activator
+Bundle-Activator: com.htmlhifive.tools.jslint.Activator
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.ui;bundle-version="3.6.0",
  org.eclipse.jdt.core;bundle-version="3.6.0",
  org.eclipse.wst.jsdt.core,
- jp.co.nssol.h5.tool.jslint.H5JSLintPluginLibrary;bundle-version="0.9.0",
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
- com.ibm.icu
+ com.ibm.icu,
+ org.eclipse.wst.jsdt.ui,
+ com.htmlhifive.tools.jslint.H5JSLintPluginLibrary;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: 

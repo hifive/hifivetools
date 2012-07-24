@@ -18,13 +18,13 @@
          </menu>
          <action
                label="%action.label.clear"
-               class="jp.co.nssol.h5.tool.jslint.actions.ClearJavaScriptAction"
+               class="com.htmlhifive.toolss.jslint.actions.ClearJavaScriptAction"
                menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck"
                enablesFor="1"
                id="jp.co.nssol.javascript.parse.newAction1">
          </action>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.CheckJavaScriptAction"
+               class="com.htmlhifive.toolss.jslint.actions.CheckJavaScriptAction"
                enablesFor="1"
                id="jp.co.nssol.javascript.parse.newAction2"
                label="%action.label.check"
@@ -46,14 +46,14 @@
             </separator>
          </menu>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.ClearJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
                enablesFor="1"
                id="jp.co.nssol.javascript.parse.newAction1"
                label="%action.label.clear"
                menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.CheckJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
                enablesFor="1"
                id="jp.co.nssol.javascript.parse.newAction2"
                label="%action.label.check"
@@ -72,13 +72,13 @@
             </separator>
          </menu>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.ClearJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
                id="jp.co.nssol.javascript.parse.newAction3"
                label="%action.label.clear"
                menubarPath="jp.co.nssol.javascript.parse.editor.menu1/group1">
          </action>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.CheckJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
                id="jp.co.nssol.javascript.parse.newAction4"
                label="%action.label.check"
                menubarPath="jp.co.nssol.javascript.parse.editor.menu1/group1">
@@ -100,21 +100,21 @@
             </separator>
          </menu>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.ClearJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
                enablesFor="1"
                id="jp.co.nssol.javascript.parse.newAction1"
                label="%action.label.clear"
                menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.CheckJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
                enablesFor="1"
                id="jp.co.nssol.javascript.parse.newAction2"
                label="%action.label.check"
                menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.ActiveJSLintAction"
+               class="com.htmlhifive.tools.jslint.actions.ActiveJSLintAction"
                id="JSLintPlugin.action1"
                label="%action.label.autoCheck"
                menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintToggle">
@@ -125,7 +125,7 @@
             id="jp.co.nssol.javascript.parse.object.container"
             objectClass="org.eclipse.core.resources.IProject">
          <action
-               class="jp.co.nssol.h5.tool.jslint.actions.ActiveJSLintAction"
+               class="com.htmlhifive.tools.jslint.actions.ActiveJSLintAction"
                id="JSLintPlugin.action1"
                label="%action.label.autoCheck"
                menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintToggle">
@@ -149,8 +149,8 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="jp.co.nssol.h5.tool.jslint.view.JslintPropertyPage"
-            id="jp.co.nssol.h5.tool.jslint.view.Iproject"
+            class="com.htmlhifive.tools.jslint.view.JslintPropertyPage"
+            id="com.htmlhifive.tools.jslint.view.Iproject"
             name="%page.name">
          <enabledWhen>
             <instanceof
@@ -159,8 +159,8 @@
          </enabledWhen>
       </page>
       <page
-            class="jp.co.nssol.h5.tool.jslint.view.JslintPropertyPage"
-            id="jp.co.nssol.h5.tool.jslint.view.IJavaProject"
+            class="com.htmlhifive.tools.jslint.view.JslintPropertyPage"
+            id="com.htmlhifive.tools.jslint.view.IJavaProject"
             name="%page.name">
          <enabledWhen>
             <instanceof
@@ -175,11 +175,11 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="jp.co.nssol.h5.tool.jslint.JSLintPluginNature">
+               class="com.htmlhifive.tools.jslint.JSLintPluginNature">
          </run>
       </runtime>
       <builder
-            id="jp.co.nssol.h5.tool.jslint.H5JSLintPlugin.jslintbuilder">
+            id="com.htmlhifive.tools.jslint.H5JSLintPlugin.jslintbuilder">
       </builder>
    </extension>
    <extension
@@ -189,14 +189,14 @@
       <builder
             hasNature="true">
          <run
-               class="jp.co.nssol.h5.tool.jslint.JSLintPluginBuilder">
+               class="com.htmlhifive.tools.jslint.JSLintPluginBuilder">
          </run>
       </builder>
    </extension>
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="jp.co.nssol.h5.tool.jslint.Activator">
+            class="com.htmlhifive.tools.jslint.Activator">
       </startup>
    </extension>
 

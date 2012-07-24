@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: jp.co.nssol.h5.tool.codeassist.core.H5CodeAssistCorePlugin;singleton:=true
+Bundle-SymbolicName: com.htmlhifive.tool.codeassist.core.H5CodeAssistCorePlugin;singleton:=true
 Bundle-Version: 1.0.1.vqualifier
-Bundle-Activator: jp.co.nssol.h5.tools.codeassist.core.H5CodeAssistCorePlugin
+Bundle-Activator: com.htmlhifive.tools.codeassist.core.H5CodeAssistCorePlugin
 Require-Bundle: org.junit;bundle-version="4.8.2";resolution:=optional,
  org.eclipse.core.runtime;bundle-version="3.6.0",
- jp.co.nssol.h5.tool.codeassist.H5CodeAssistLibraryPlugin;bundle-version="1.0.0",
+ com.htmlhifive.tool.codeassist.H5CodeAssistLibraryPlugin;bundle-version="1.0.0",
  org.eclipse.ui;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.wst.jsdt.ui,
@@ -14,28 +14,28 @@ Require-Bundle: org.junit;bundle-version="4.8.2";resolution:=optional,
  org.eclipse.wst.jsdt.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: jp.co.nssol.h5.tools.codeassist.core;
+Export-Package: com.htmlhifive.tools.codeassist.core;
   uses:="org.eclipse.core.runtime,
-   jp.co.nssol.h5.tools.codeassist.core.proposal,
+   com.htmlhifive.tools.codeassist.core.proposal,
    org.eclipse.core.resources,
    org.osgi.framework",
- jp.co.nssol.h5.tools.codeassist.core.config;uses:="jp.co.nssol.h5.tools.codeassist.core.config.bean",
- jp.co.nssol.h5.tools.codeassist.core.config.bean;uses:="jp.co.nssol.h5.tools.codeassist.core.config.xml",
- jp.co.nssol.h5.tools.codeassist.core.config.xml,
- jp.co.nssol.h5.tools.codeassist.core.exception,
- jp.co.nssol.h5.tools.codeassist.core.logger;uses:="jp.co.nssol.h5.tools.codeassist.core.messages",
- jp.co.nssol.h5.tools.codeassist.core.logger.impl;uses:="jp.co.nssol.h5.tools.codeassist.core.messages,jp.co.nssol.h5.tools.codeassist.core.logger",
- jp.co.nssol.h5.tools.codeassist.core.messages;uses:="jp.co.nssol.h5.tools.codeassist.core.logger",
- jp.co.nssol.h5.tools.codeassist.core.proposal;uses:="org.eclipse.wst.jsdt.core,org.eclipse.jface.text,jp.co.nssol.h5.tools.codeassist.core.config.bean",
- jp.co.nssol.h5.tools.codeassist.core.proposal.build;uses:="jp.co.nssol.h5.tools.codeassist.core.proposal.checker,jp.co.nssol.h5.tools.codeassist.core.config.bean",
- jp.co.nssol.h5.tools.codeassist.core.proposal.checker;
+ com.htmlhifive.tools.codeassist.core.config;uses:="com.htmlhifive.tools.codeassist.core.config.bean",
+ com.htmlhifive.tools.codeassist.core.config.bean;uses:="com.htmlhifive.tools.codeassist.core.config.xml",
+ com.htmlhifive.tools.codeassist.core.config.xml,
+ com.htmlhifive.tools.codeassist.core.exception,
+ com.htmlhifive.tools.codeassist.core.logger;uses:="com.htmlhifive.tools.codeassist.core.messages",
+ com.htmlhifive.tools.codeassist.core.logger.impl;uses:="com.htmlhifive.tools.codeassist.core.messages,com.htmlhifive.tools.codeassist.core.logger",
+ com.htmlhifive.tools.codeassist.core.messages;uses:="com.htmlhifive.tools.codeassist.core.logger",
+ com.htmlhifive.tools.codeassist.core.proposal;uses:="org.eclipse.wst.jsdt.core,org.eclipse.jface.text,com.htmlhifive.tools.codeassist.core.config.bean",
+ com.htmlhifive.tools.codeassist.core.proposal.build;uses:="com.htmlhifive.tools.codeassist.core.proposal.checker,com.htmlhifive.tools.codeassist.core.config.bean",
+ com.htmlhifive.tools.codeassist.core.proposal.checker;
   uses:="org.eclipse.wst.jsdt.core,
-   jp.co.nssol.h5.tools.codeassist.core.proposal.build,
+   com.htmlhifive.tools.codeassist.core.proposal.build,
    org.eclipse.wst.jsdt.core.ast,
-   jp.co.nssol.h5.tools.codeassist.core.config.bean,
+   com.htmlhifive.tools.codeassist.core.config.bean,
    org.eclipse.wst.jsdt.internal.codeassist.complete",
- jp.co.nssol.h5.tools.codeassist.core.proposal.collector,
- jp.co.nssol.h5.tools.codeassist.core.proposal.wrapper;
+ com.htmlhifive.tools.codeassist.core.proposal.collector,
+ com.htmlhifive.tools.codeassist.core.proposal.wrapper;
   uses:="org.eclipse.jface.text,
    org.eclipse.wst.jsdt.core,
    org.eclipse.wst.jsdt.ui.text.java,

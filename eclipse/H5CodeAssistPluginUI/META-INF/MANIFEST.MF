@@ -1,38 +1,26 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: jp.co.nssol.h5.tools.codeassist.ui.H5CodeAssistUIPlugin;singleton:=true
+Bundle-SymbolicName: com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin;singleton:=true
 Bundle-Version: 1.0.1.vqualifier
-Bundle-Activator: jp.co.nssol.h5.tools.codeassist.ui.H5CodeAssistUIPlugin
+Bundle-Activator: com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin
 Require-Bundle: org.eclipse.ui;bundle-version="3.6.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.jface.text;bundle-version="3.6.0",
- jp.co.nssol.h5.tool.codeassist.H5CodeAssistLibraryPlugin;bundle-version="1.0.0",
- jp.co.nssol.h5.tool.codeassist.core.H5CodeAssistCorePlugin,
+ com.htmlhifive.tool.codeassist.H5CodeAssistLibraryPlugin;bundle-version="1.0.0",
+ com.htmlhifive.tool.codeassist.core.H5CodeAssistCorePlugin,
  org.eclipse.wst.jsdt.ui,
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.jdt.core;bundle-version="3.6.0",
  org.eclipse.wst.jsdt.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: jp.co.nssol.h5.tools.codeassist.ui;
-  uses:="org.eclipse.core.runtime,
-   org.eclipse.jface.resource,
-   org.eclipse.ui.plugin,
-   org.eclipse.wst.jsdt.ui.text.java,
-   org.osgi.framework",
- jp.co.nssol.h5.tools.codeassist.ui.context;
-  uses:="org.eclipse.wst.jsdt.core,
-   org.eclipse.jface.text,
-   jp.co.nssol.h5.tools.codeassist.core.proposal,
-   org.eclipse.wst.jsdt.ui.text.java",
- jp.co.nssol.h5.tools.codeassist.ui.dialog;uses:="org.eclipse.jface.viewers,org.eclipse.ui.dialogs,org.eclipse.swt.widgets",
- jp.co.nssol.h5.tools.codeassist.ui.logger,
- jp.co.nssol.h5.tools.codeassist.ui.messages;uses:="jp.co.nssol.h5.tools.codeassist.core.messages",
- jp.co.nssol.h5.tools.codeassist.ui.view;
-  uses:="jp.co.nssol.h5.tools.codeassist.ui.view.bean,
-   org.eclipse.core.resources,
-   org.eclipse.ui.dialogs,
-   org.eclipse.swt.widgets",
- jp.co.nssol.h5.tools.codeassist.ui.view.bean
+Export-Package: com.htmlhifive.tools.codeassist.ui,
+ com.htmlhifive.tools.codeassist.ui.config,
+ com.htmlhifive.tools.codeassist.ui.context,
+ com.htmlhifive.tools.codeassist.ui.dialog,
+ com.htmlhifive.tools.codeassist.ui.logger,
+ com.htmlhifive.tools.codeassist.ui.messages,
+ com.htmlhifive.tools.codeassist.ui.view,
+ com.htmlhifive.tools.codeassist.ui.view.bean
 Bundle-Vendor: %Bundle-Vendor

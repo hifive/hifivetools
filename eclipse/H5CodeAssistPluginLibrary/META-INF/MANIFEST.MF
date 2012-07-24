@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: jp.co.nssol.h5.tool.codeassist.H5CodeAssistLibraryPlugin
+Bundle-SymbolicName: com.htmlhifive.tool.codeassist.H5CodeAssistLibraryPlugin
 Bundle-Version: 1.0.0
 Bundle-ClassPath: lib/commons-cli-1.2.jar,
  lib/commons-io-2.0.1.jar,

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/jp.co.nssol.h5.tool.codeassist.h5codeassist_1.0.1.vqualifier.jar" id="jp.co.nssol.h5.tool.codeassist.h5codeassist" version="1.0.1.vqualifier">
-      <category name="hifive Plugins"/>
-   </feature>
    <feature url="features/org.eclipse.wst.jsdt.core.patch_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch" version="1.0.0.vqualifier" patch="true">
       <category name="hifive Plugins"/>
    </feature>
    <feature url="features/org.eclipse.wst.jsdt.core.patch.source_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch.source" version="1.0.0.vqualifier" patch="true">
       <category name="hifive Plugins"/>
    </feature>
-   <feature url="features/jp.co.nssol.h5.tool.jslint.feature_1.0.0.vqualifier.jar" id="jp.co.nssol.h5.tool.jslint.feature" version="1.0.0.vqualifier">
+   <feature url="features/com.htmlhifive.tools.codeassist.h5codeassist_1.0.1.vqualifier.jar" id="com.htmlhifive.tools.codeassist.h5codeassist" version="1.0.1.vqualifier">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/com.htmlhifive.tools.jslint.feature_1.0.0.vqualifier.jar" id="com.htmlhifive.tools.jslint.feature" version="1.0.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
    <category-def name="hifive Plugins" label="hifive プラグイン"/>
