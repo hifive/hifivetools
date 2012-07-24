@@ -1,17 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: com.htmlhifive.tool.codeassist.core.H5CodeAssistCorePlugin;singleton:=true
+Bundle-SymbolicName: com.htmlhifive.tools.codeassist.core.H5CodeAssistCorePlugin;singleton:=true
 Bundle-Version: 1.0.1.vqualifier
 Bundle-Activator: com.htmlhifive.tools.codeassist.core.H5CodeAssistCorePlugin
 Require-Bundle: org.junit;bundle-version="4.8.2";resolution:=optional,
  org.eclipse.core.runtime;bundle-version="3.6.0",
- com.htmlhifive.tool.codeassist.H5CodeAssistLibraryPlugin;bundle-version="1.0.0",
  org.eclipse.ui;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.wst.jsdt.ui,
  org.eclipse.jface.text;bundle-version="3.6.0",
- org.eclipse.wst.jsdt.core
+ org.eclipse.wst.jsdt.core,
+ com.htmlhifive.tools.codeassist.H5CodeAssistLibraryPlugin
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.htmlhifive.tools.codeassist.core;
