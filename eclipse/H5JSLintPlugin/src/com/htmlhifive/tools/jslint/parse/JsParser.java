@@ -38,12 +38,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.JSLintPluginConstant;
 import com.htmlhifive.tools.jslint.configure.ConfigBean;
 import com.htmlhifive.tools.jslint.configure.FilterBean;
+import com.htmlhifive.tools.jslint.configure.FilterBean.FilterLevel;
 import com.htmlhifive.tools.jslint.configure.JSLintConfigManager;
-import com.htmlhifive.tools.jslint.configure.FilterBean.FilterRevel;
 import com.htmlhifive.tools.jslint.engine.JSChecker;
 import com.htmlhifive.tools.jslint.engine.JSCheckerErrorBean;
 import com.htmlhifive.tools.jslint.engine.JSCheckerFactory;
@@ -141,6 +141,8 @@ public class JsParser implements Parser {
 		if (configBean.isUseOtherProject()) {
 			bean = JSLintConfigManager.getConfigBean((IProject) PluginResourceUtils.pathToContainer(configBean
 					.getOtherProjectPath()));
+			bean.setExternalLibPathList(configBean.getExternalLibPathList());
+			bean.setInternalLibPathList(configBean.getInternalLibPathList());
 		} else {
 			bean = configBean;
 		}
@@ -384,7 +386,7 @@ public class JsParser implements Parser {
 	 */
 	private void throwCoreException(int severity, Exception e) throws CoreException {
 
-		throw new CoreException(new Status(severity, Activator.PLUGIN_ID, null, e));
+		throw new CoreException(new Status(severity, JSLintPlugin.PLUGIN_ID, null, e));
 
 	}
 
@@ -397,9 +399,9 @@ public class JsParser implements Parser {
 	 */
 	private void throwCoreException(int severity, String... messages) throws CoreException {
 
-		MultiStatus multiStatus = new MultiStatus(Activator.PLUGIN_ID, IStatus.OK, Messages.EM0001.getText(), null);
+		MultiStatus multiStatus = new MultiStatus(JSLintPlugin.PLUGIN_ID, IStatus.OK, Messages.EM0001.getText(), null);
 		for (String string : messages) {
-			IStatus iStatus = new Status(severity, Activator.PLUGIN_ID, string, null);
+			IStatus iStatus = new Status(severity, JSLintPlugin.PLUGIN_ID, string, null);
 			multiStatus.add(iStatus);
 		}
 		throw new CoreException(multiStatus);
@@ -422,12 +424,12 @@ public class JsParser implements Parser {
 
 			if (jsLintError.getLine() > startPosition) {
 				// フィルタレベル判定用.
-				FilterRevel revel = matchExcludeFilter(jsLintError.getReason());
-				if (i < maxerr && !FilterRevel.IGNORE.equals(revel)) {
+				FilterLevel revel = matchExcludeFilter(jsLintError.getReason());
+				if (i < maxerr && !FilterLevel.IGNORE.equals(revel)) {
 					JsMarkingSupport support = new JsMarkingSupport(
 							iFile.createMarker(JSLintPluginConstant.JS_TYPE_MARKER));
 					support.putMessageAttribute(jsLintError.getReason());
-					if (FilterRevel.ERROR.equals(revel)) {
+					if (FilterLevel.ERROR.equals(revel)) {
 						support.putSeverityAttribute(IMarker.SEVERITY_ERROR);
 					} else {
 						support.putSeverityAttribute(IMarker.SEVERITY_WARNING);
@@ -449,7 +451,7 @@ public class JsParser implements Parser {
 	 */
 	private void mark(List<JsMarkingSupport> list) {
 		int i = 0;
-		int atFile = list.size() / 200;
+		int atFile = list.size() / 400;
 		if (atFile == 0) {
 			atFile = 1;
 		}
@@ -470,10 +472,10 @@ public class JsParser implements Parser {
 	 * @param reason エラー理由.
 	 * @return フィルターにマッチすれば該当するフィルターレベル,しなければnull.
 	 */
-	private FilterRevel matchExcludeFilter(String reason) {
+	private FilterLevel matchExcludeFilter(String reason) {
 
 		FilterBean[] filterBeans = bean.getFilterBeans();
-		FilterRevel revel = null;
+		FilterLevel revel = null;
 		for (FilterBean filterBean : filterBeans) {
 			if (!filterBean.isState()) {
 				continue;
@@ -483,7 +485,7 @@ public class JsParser implements Parser {
 			// エラーと無視が被った場合無視が優先
 			if (matcher.matches()) {
 				revel = filterBean.getRevel();
-				if (FilterRevel.IGNORE.equals(revel)) {
+				if (FilterLevel.IGNORE.equals(revel)) {
 					// レベルが無視だったら返す.
 					return revel;
 				}
@@ -507,6 +509,14 @@ public class JsParser implements Parser {
 	public void cansel() {
 
 		monitor.setCanceled(true);
+	}
 
+	/**
+	 * 設定ファイルビーンを取得する.
+	 * 
+	 * @return 設定ファイルビーン.
+	 */
+	protected ConfigBean getBean() {
+		return bean;
 	}
 }

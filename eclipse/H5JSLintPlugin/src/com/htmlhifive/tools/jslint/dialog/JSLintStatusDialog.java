@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.messages.Messages;
 
 /**
@@ -62,13 +62,13 @@ public class JSLintStatusDialog {
 		MultiStatus status = null;
 		if (!statusList.isOK()) {
 			if (statusList.matches(IStatus.INFO)) {
-				status = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, Messages.DM0002.getText(), null);
+				status = new MultiStatus(JSLintPlugin.PLUGIN_ID, IStatus.ERROR, Messages.DM0002.getText(), null);
 				openDialog(status, Messages.DT0005.getText());
 			} else if (statusList.matches(IStatus.WARNING)) {
-				status = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, Messages.EM0001.getText(), null);
+				status = new MultiStatus(JSLintPlugin.PLUGIN_ID, IStatus.ERROR, Messages.EM0001.getText(), null);
 				openDialog(status, Messages.DT0004.getText());
 			} else if (statusList.matches(IStatus.ERROR)) {
-				status = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, Messages.EM0100.getText(), null);
+				status = new MultiStatus(JSLintPlugin.PLUGIN_ID, IStatus.ERROR, Messages.EM0100.getText(), null);
 				openDialog(status, Messages.DT0003.getText());
 			}
 		}

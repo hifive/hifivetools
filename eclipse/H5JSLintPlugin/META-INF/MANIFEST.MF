@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.htmlhifive.tools.jslint.H5JSLintPlugin;singleton:=true
 Bundle-Version: 1.0.0.vqualifier
-Bundle-Activator: com.htmlhifive.tools.jslint.Activator
+Bundle-Activator: com.htmlhifive.tools.jslint.JSLintPlugin
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.6.0",
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",

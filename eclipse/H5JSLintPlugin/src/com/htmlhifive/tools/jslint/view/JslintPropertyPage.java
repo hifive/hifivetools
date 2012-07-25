@@ -16,6 +16,10 @@
  */
 package com.htmlhifive.tools.jslint.view;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -36,6 +40,7 @@ import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 
+import com.htmlhifive.tools.jslint.configure.ConfigBean;
 import com.htmlhifive.tools.jslint.configure.JSLintConfigManager;
 import com.htmlhifive.tools.jslint.event.ConfigBeanChangeEvent;
 import com.htmlhifive.tools.jslint.event.ConfigBeanChangeListener;
@@ -75,6 +80,11 @@ public class JslintPropertyPage extends PropertyPage {
 	 * タブフォルダー.
 	 */
 	private TabFolder tabFolder;
+
+	/**
+	 * 構成コンポジット.
+	 */
+	private TargetStructureComposite structureComposite;
 
 	/**
 	 * コンストラクタ.
@@ -127,8 +137,8 @@ public class JslintPropertyPage extends PropertyPage {
 		// 構成ページ
 		final TabItem targetStracture = new TabItem(tabFolder, SWT.NONE);
 		targetStracture.setText(Messages.TT0001.getText());
-		TargetStructureComposite structureComposite = new TargetStructureComposite(tabFolder,
-				JavaScriptCore.create(project), (IWorkbenchPreferenceContainer) getContainer());
+		structureComposite = new TargetStructureComposite(tabFolder, JavaScriptCore.create(project),
+				(IWorkbenchPreferenceContainer) getContainer());
 		structureComposite.setLayoutData(GridDataFactory.fillDefaults().create());
 		targetStracture.setControl(structureComposite);
 		tabFolder.addSelectionListener(new SelectionAdapter() {
@@ -168,7 +178,23 @@ public class JslintPropertyPage extends PropertyPage {
 	 */
 	@Override
 	public boolean performOk() {
+		ConfigBean bean = JSLintConfigManager.getConfigBean(project);
 
+		// 保存ビーンに画面の保存情報を追加する.
+		Set<String> checkedExternalLibElems = structureComposite.getModel().getCheckedExternalLibElement();
+		Set<String> checkedInternalLibElems = structureComposite.getModel().getCheckedInternalLibElement();
+		List<String> externalLibPathList = new ArrayList<String>();
+		for (String wv : checkedExternalLibElems) {
+			externalLibPathList.add(wv);
+		}
+		bean.setExternalLibPathList(externalLibPathList);
+		List<String> internalLibPathList = new ArrayList<String>();
+		for (String wv : checkedInternalLibElems) {
+			internalLibPathList.add(wv);
+		}
+		bean.setInternalLibPathList(internalLibPathList);
+
+		// 保存.
 		JSLintConfigManager.saveConfig(project);
 		if (JSLintConfigManager.getConfigBean(project).equals(JSLintConfigManager.getDefaultConfigBean(project))) {
 			return true;

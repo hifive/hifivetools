@@ -18,16 +18,17 @@ package com.htmlhifive.tools.jslint.actions;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.JSLintPluginNature;
 import com.htmlhifive.tools.jslint.dialog.StatusList;
+import com.htmlhifive.tools.jslint.logger.JSLintPluginLogger;
+import com.htmlhifive.tools.jslint.logger.JSLintPluginLoggerFactory;
+import com.htmlhifive.tools.jslint.messages.Messages;
 
 /**
  * JSLintのアクティブ/非アクティブを切り替えるアクションクラス.
@@ -38,9 +39,9 @@ import com.htmlhifive.tools.jslint.dialog.StatusList;
 public class ActiveJSLintAction extends AbstractJavaScriptAction {
 
 	/**
-	 * ネーチャー追加フラグ.
+	 * ロガー.
 	 */
-	private Boolean addflg = null;
+	private static JSLintPluginLogger logger = JSLintPluginLoggerFactory.getLogger(ActiveJSLintAction.class);
 
 	/*
 	 * (非 Javadoc)
@@ -52,52 +53,23 @@ public class ActiveJSLintAction extends AbstractJavaScriptAction {
 	@Override
 	protected void doRun(final IAction action, StatusList statusList) {
 
-		action.addPropertyChangeListener(new IPropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-
-				addflg = (Boolean) event.getNewValue();
-				action.setChecked((Boolean) event.getNewValue());
-			}
-		});
 		IResource resource = getResource();
 		IProject project = null;
 		if (resource instanceof IProject) {
 			project = (IProject) resource;
-			try {
-				IProjectDescription description = project.getDescription();
-				String[] natures = description.getNatureIds();
-				if (addflg == null || addflg) {
-					action.setChecked(true);
-					for (int i = 0; i < natures.length; ++i) {
-						if (JSLintPluginNature.NATURE_ID.equals(natures[i])) {
-							return;
-						}
-					}
-					// ネーチャー追加処理.
-					String[] newNatures = new String[natures.length + 1];
-					System.arraycopy(natures, 0, newNatures, 0, natures.length);
-					newNatures[natures.length] = JSLintPluginNature.NATURE_ID;
-					description.setNatureIds(newNatures);
-					project.setDescription(description, null);
-				} else {
-					for (int i = 0; i < natures.length; ++i) {
-						if (JSLintPluginNature.NATURE_ID.equals(natures[i])) {
-							// ネーチャー削除処理.
-							String[] newNatures = new String[natures.length - 1];
-							System.arraycopy(natures, 0, newNatures, 0, i);
-							System.arraycopy(natures, i + 1, newNatures, i, natures.length - i - 1);
-							description.setNatureIds(newNatures);
-							project.setDescription(description, null);
-							return;
-						}
-					}
-				}
-			} catch (CoreException e) {
-				statusList.add(e.getStatus());
-			}
+			// try {
+			if (JSLintPlugin.hasJSLintNature(project)) {
+				// natureが既にある場合は削除する.
+				JSLintPlugin.removeJSLintNature(project);
+				// 削除したのでチェックは外す.
+				action.setChecked(false);
 
+			} else {
+				// ない場合は追加する.
+				JSLintPlugin.addJSLintNature(project);
+				// 追加したのでチェックをつける.
+				action.setChecked(true);
+			}
 		}
 	}
 
@@ -122,7 +94,7 @@ public class ActiveJSLintAction extends AbstractJavaScriptAction {
 			}
 			action.setChecked(false);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			logger.put(Messages.EM0011, e, getResource().getProject().getName());
 		}
 
 	}

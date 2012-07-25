@@ -53,7 +53,7 @@ public class H5CodeAssistCorePlugin extends Plugin {
 	/**
 	 * プラグインIDを取得する.
 	 */
-	public static final String PLUGIN_ID = "com.htmlhifive.tool.codeassist.core.Hi5CodeAssistCorePlugin";
+	public static final String PLUGIN_ID = "com.htmlhifive.tools.codeassist.core.Hi5CodeAssistCorePlugin";
 	/**
 	 * ロガー.
 	 */
@@ -78,6 +78,7 @@ public class H5CodeAssistCorePlugin extends Plugin {
 	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 
+		plugin = null;
 		super.stop(bundleContext);
 	}
 

@@ -28,7 +28,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.dialog.StatusList;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLogger;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLoggerFactory;
@@ -82,7 +82,7 @@ public class CheckJavaScriptAction extends AbstractJavaScriptAction {
 					.showView("org.eclipse.ui.views.ProblemView");
 		} catch (InvocationTargetException e) {
 			logger.put(Messages.EM0001, e);
-			statusList.add(new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.EM0100.getText(), e));
+			statusList.add(new Status(IStatus.ERROR, JSLintPlugin.PLUGIN_ID, Messages.EM0100.getText(), e));
 		} catch (InterruptedException e) {
 			// ignore
 		} catch (PartInitException e) {

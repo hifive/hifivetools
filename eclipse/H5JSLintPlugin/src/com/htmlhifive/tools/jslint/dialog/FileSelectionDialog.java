@@ -25,7 +25,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.messages.Messages;
 
 /**
@@ -98,10 +98,10 @@ public class FileSelectionDialog extends AbstractResourceSelectionDialog {
 
 			for (Object select : selection) {
 				if (select instanceof IFile) {
-					return new Status(IStatus.OK, Activator.PLUGIN_ID, "");
+					return new Status(IStatus.OK, JSLintPlugin.PLUGIN_ID, "");
 				}
 			}
-			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.EM0002.getText());
+			return new Status(IStatus.ERROR, JSLintPlugin.PLUGIN_ID, Messages.EM0002.getText());
 		}
 
 	}

@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.htmlhifive.tools.jslint.configure.FilterBean;
-import com.htmlhifive.tools.jslint.configure.FilterBean.FilterRevel;
+import com.htmlhifive.tools.jslint.configure.FilterBean.FilterLevel;
 import com.htmlhifive.tools.jslint.event.FilterBeanListChangeEvent;
 import com.htmlhifive.tools.jslint.event.FilterBeanListChangeListener;
 import com.htmlhifive.tools.jslint.messages.Messages;
@@ -195,7 +195,7 @@ public class DescriptionGroupComposite {
 				FilterBean bean = (FilterBean) element;
 				Integer selectNum = (Integer) value;
 				// TODO 本当は設定したセルエディタから取りたい。。。
-				bean.setRevel(FilterRevel.getRevelFromLabel(FilterRevel.getAllLabels()[selectNum]));
+				bean.setLevel(FilterLevel.getRevelFromLabel(FilterLevel.getAllLabels()[selectNum]));
 				updateVariable();
 			}
 
@@ -203,13 +203,13 @@ public class DescriptionGroupComposite {
 			protected Object getValue(Object element) {
 
 				FilterBean bean = (FilterBean) element;
-				return ArrayUtils.indexOf(FilterRevel.getAllLabels(), bean.getRevel().getLabel());
+				return ArrayUtils.indexOf(FilterLevel.getAllLabels(), bean.getRevel().getLabel());
 			}
 
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 
-				CellEditor cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), FilterRevel.getAllLabels(),
+				CellEditor cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), FilterLevel.getAllLabels(),
 						SWT.READ_ONLY);
 				cellEditor.getLayoutData().minimumWidth = 10;
 				return cellEditor;
@@ -287,7 +287,6 @@ public class DescriptionGroupComposite {
 	 */
 	public void removeFilterBeanListChangeListener(FilterBeanListChangeListener listener) {
 
-		// TODO リスナ削除.
 		listenerList.remove(listener);
 	}
 

@@ -56,6 +56,12 @@ public final class Messages extends MessagesBase {
 	/** B0005=INFO,新規. */
 	public static final Message B0005 = createMessage("B0005");
 
+	/** B0006=INFO,全選択. */
+	public static final Message B0006 = createMessage("B0006");
+
+	/** B0007=INFO,全解除. */
+	public static final Message B0007 = createMessage("B0007");
+
 	// #ダイアログラベル
 	/** DL0000=INFO,利用プロジェクト. */
 	public static final Message DL0000 = createMessage("DL0000");
@@ -108,6 +114,13 @@ public final class Messages extends MessagesBase {
 	/** DL0016=INFO,http://www.jshint.com/. */
 	public static final Message DL0016 = createMessage("DL0016");
 
+	/** DL0017=INFO,ライブラリの除外設定を行います.. */
+	public static final Message DL0017 = createMessage("DL0017");
+
+	// #ダイアログツールチップ
+	/** DTT0000=INFO,チェック時にライブラリを考慮するかどうかを設定します。読み込むライブラリが多いとパフォーマンスに影響します。. */
+	public static final Message DTT0000 = createMessage("DTT0000");
+
 	// #ダイアログタイトル
 	/** DT0000=INFO,プロジェクトの選択. */
 	public static final Message DT0000 = createMessage("DT0000");
@@ -153,11 +166,14 @@ public final class Messages extends MessagesBase {
 	/** WT0003=INFO,構成. */
 	public static final Message WT0003 = createMessage("WT0003");
 
-	/** WT0004=INFO,ライブラリ. */
+	/** WT0004=INFO,内部参照ライブラリ. */
 	public static final Message WT0004 = createMessage("WT0004");
 
 	/** WT0005=INFO,プロジェクト参照. */
 	public static final Message WT0005 = createMessage("WT0005");
+
+	/** WT0006=INFO,外部参照ライブラリ. */
+	public static final Message WT0006 = createMessage("WT0006");
 
 	// #テーブルカラム名
 	/** TC0000=INFO,有効. */
@@ -259,6 +275,12 @@ public final class Messages extends MessagesBase {
 
 	/** EM0010=ERROR,ビューの反映中にエラーが発生しました. : {0}. */
 	public static final Message EM0010 = createMessage("EM0010");
+
+	/** EM0011=WARN,プロジェクト情報の取得に失敗しました. : {0}. */
+	public static final Message EM0011 = createMessage("EM0011");
+
+	/** EM0012=WARN,ライブラリ情報取得中に例外が発生しました. : {0}. */
+	public static final Message EM0012 = createMessage("EM0012");
 
 	/** EM0100=ERROR,予期せぬエラーが発生しました.. */
 	public static final Message EM0100 = createMessage("EM0100");

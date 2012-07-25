@@ -24,12 +24,11 @@ import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 
-import com.htmlhifive.tools.jslint.Activator;
 import com.htmlhifive.tools.jslint.JSLintPluginConstant;
 import com.htmlhifive.tools.jslint.library.LibraryManager;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLogger;
@@ -94,26 +93,34 @@ public class JsProjectParser extends JsParser {
 	}
 
 	@Override
-	protected JsFileInfo getLibrary() throws CoreException {
+	protected JsFileInfo getLibrary() {
 
-		try {
-			// LibraryManager manager = LibraryManager.getInstance();
-			File[] externalFiles = libManager.getExternalLibFiles();
-			IFile[] internalFiles = libManager.getInternalLibPaths();
-			JsFileInfo result = new JsFileInfo();
-			for (File file : externalFiles) {
-				logger.debug("appendExternalFile : " + file.getAbsolutePath());
-				result.append(file);
-				logger.debug("lib char count : " + result.getSourceStr().toCharArray().length);
+		JsFileInfo result = new JsFileInfo();
+		// LibraryManager manager = LibraryManager.getInstance()
+		String[] internalPaths = getBean().getInternalLibPaths();
+		for (String internalLibPath : internalPaths) {
+			IFile internalLib = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(internalLibPath));
+			try {
+				result.append(internalLib);
+			} catch (IOException e) {
+				logger.put(Messages.EM0012, e, internalLibPath);
+			} catch (CoreException e) {
+				logger.put(Messages.EM0012, e, internalLibPath);
 			}
-			for (IFile iFile : internalFiles) {
-				logger.debug("appendInternalFile : " + iFile.getFullPath());
-				result.append(iFile);
-			}
-			return result;
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.EM0100.getText(), e));
+			logger.debug("appendInternalFile : " + internalLib.getFullPath());
 		}
+		String[] externalPaths = getBean().getExternalLibPaths();
+		for (String externalLibPath : externalPaths) {
+			File file = new File(externalLibPath);
+			logger.debug("appendExternalFile : " + file.getAbsolutePath());
+			try {
+				result.append(file);
+			} catch (IOException e) {
+				logger.put(Messages.EM0012, e, externalLibPath);
+			}
+			logger.debug("lib char count : " + result.getSourceStr().toCharArray().length);
+		}
+		return result;
 
 	}
 

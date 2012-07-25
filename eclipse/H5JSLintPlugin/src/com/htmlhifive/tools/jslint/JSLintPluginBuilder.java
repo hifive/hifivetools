@@ -43,7 +43,7 @@ public class JSLintPluginBuilder extends IncrementalProjectBuilder {
 	/**
 	 * ビルダーID.
 	 */
-	public static final String BUILDER_ID = "com.htmlhifive.tool.jslint.H5JSLintPlugin.jslintbuilder";
+	public static final String BUILDER_ID = "com.htmlhifive.tools.jslint.H5JSLintPlugin.jslintbuilder";
 
 	/**
 	 * 

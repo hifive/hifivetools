@@ -27,7 +27,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.configure.ConfigBean;
 import com.htmlhifive.tools.jslint.configure.JSLintConfigManager;
 import com.htmlhifive.tools.jslint.dialog.JSLintStatusDialog;
@@ -133,7 +133,7 @@ public abstract class AbstractJsLintPropertyComposite extends Composite {
 			doSetup(initBean);
 		} catch (JSLintPluginException e) {
 			JSLintStatusDialog.openDialog(getShell(), Messages.DT0004.getText(), new Status(IStatus.INFO,
-					Activator.PLUGIN_ID, e.getMessage()));
+					JSLintPlugin.PLUGIN_ID, e.getMessage()));
 			throw new RuntimeException();
 		}
 	}

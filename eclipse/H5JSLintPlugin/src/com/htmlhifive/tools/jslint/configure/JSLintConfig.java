@@ -28,7 +28,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import com.htmlhifive.tools.jslint.configure.FilterBean.FilterRevel;
+import com.htmlhifive.tools.jslint.configure.FilterBean.FilterLevel;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLogger;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLoggerFactory;
 import com.htmlhifive.tools.jslint.messages.Messages;
@@ -67,9 +67,14 @@ public class JSLintConfig {
 	private static final String KEY_OTHER_PROJECT_PATH = CONFIG_KEY_PREFIX + "other.project";
 
 	/**
-	 * ライブラリファイルのパスリスト.
+	 * 内部参照ライブラリファイルのパスリスト.
 	 */
-	private static final String KEY_LIBRARY_LIST = CONFIG_KEY_PREFIX + "lib.list";
+	private static final String KEY_INTERNAL_LIBRARY_LIST = CONFIG_KEY_PREFIX + "lib.internal.list";
+
+	/**
+	 * 外部参照ライブラリファイルのパスリスト.
+	 */
+	private static final String KEY_EXTERNAL_LIBRARY_LIST = CONFIG_KEY_PREFIX + "lib.external.list";
 
 	/**
 	 * フィルタの正規表現.
@@ -126,7 +131,12 @@ public class JSLintConfig {
 				configBean.setUseOtherProject(Boolean.parseBoolean(properties.getProperty(KEY_USE_OTHER_PROJECT,
 						"false")));
 				configBean.setOtherProjectPath(properties.getProperty(KEY_OTHER_PROJECT_PATH, ""));
-				configBean.setLibList(StringUtils.split(properties.getProperty(KEY_LIBRARY_LIST, ""), ","));
+				configBean.setInternalLibPaths(StringUtils.split(properties.getProperty(KEY_INTERNAL_LIBRARY_LIST, ""),
+						","));
+				configBean.setExternalLibPaths(StringUtils.split(properties.getProperty(KEY_EXTERNAL_LIBRARY_LIST, ""),
+						","));
+				// configBean.setLibList(StringUtils.split(properties.getProperty(KEY_INTERNAL_LIBRARY_LIST,
+				// ""), ","));
 				int i = 0;
 				String filterStr = null;
 				while ((filterStr = properties.getProperty(KEY_FILTER_REGEX + i)) != null) {
@@ -155,7 +165,7 @@ public class JSLintConfig {
 		FilterBean bean = new FilterBean();
 		String[] strs = StringUtils.split(property, ",", 3);
 		bean.setState(Boolean.valueOf(strs[0]));
-		bean.setRevel(FilterRevel.valueOf(strs[1]));
+		bean.setLevel(FilterLevel.valueOf(strs[1]));
 		if (strs.length == 3) {
 			bean.setRegex(strs[2]);
 		} else {
@@ -175,7 +185,10 @@ public class JSLintConfig {
 		properties.setProperty(KEY_OPTION_PATH, configBean.getOptionFilePath());
 		properties.setProperty(KEY_USE_OTHER_PROJECT, Boolean.toString(configBean.isUseOtherProject()));
 		properties.setProperty(KEY_OTHER_PROJECT_PATH, configBean.getOtherProjectPath());
-		properties.setProperty(KEY_LIBRARY_LIST, StringUtils.join(configBean.getLibList(), ","));
+		properties.setProperty(KEY_INTERNAL_LIBRARY_LIST, StringUtils.join(configBean.getInternalLibPaths(), ','));
+		properties.setProperty(KEY_EXTERNAL_LIBRARY_LIST, StringUtils.join(configBean.getExternalLibPaths(), ','));
+		// properties.setProperty(KEY_LIBRARY_LIST,
+		// StringUtils.join(configBean.getLibList(), ","));
 		// properties.setProperty(KEY_USE_FILTER,
 		// Boolean.toString(configBean.isUseFilter()));
 		FilterBean[] beans = configBean.getFilterBeans();

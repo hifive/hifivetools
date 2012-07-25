@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLogger;
 import com.htmlhifive.tools.jslint.logger.LogLevel;
 import com.htmlhifive.tools.jslint.messages.MessagesBase.Message;
@@ -36,7 +36,7 @@ public class JSLintPluginLoggerDefaultImpl implements JSLintPluginLogger {
 	/**
 	 * 表示ログレベル.
 	 */
-	private static final LogLevel ENABLE = LogLevel.DEBUG;
+	private static final LogLevel ENABLE = LogLevel.WARN;
 
 	/**
 	 * 出力クラス.
@@ -56,9 +56,9 @@ public class JSLintPluginLoggerDefaultImpl implements JSLintPluginLogger {
 	@Override
 	public void put(Message message, Throwable e, Object... params) {
 
-		ILog log = Activator.getDefault().getLog();
+		ILog log = JSLintPlugin.getDefault().getLog();
 		if (isEnableFor(message)) {
-			log.log(new Status(convertInnerLogLevel(message.getLevel()), Activator.PLUGIN_ID, outputClass.getName()
+			log.log(new Status(convertInnerLogLevel(message.getLevel()), JSLintPlugin.PLUGIN_ID, outputClass.getName()
 					+ message.format(params), e));
 		}
 
@@ -98,9 +98,9 @@ public class JSLintPluginLoggerDefaultImpl implements JSLintPluginLogger {
 	@Override
 	public void debug(Object message) {
 
-		ILog log = Activator.getDefault().getLog();
+		ILog log = JSLintPlugin.getDefault().getLog();
 		if (LogLevel.INFO.isPriorThan(ENABLE)) {
-			log.log(new Status(IStatus.INFO, Activator.PLUGIN_ID, message.toString(), null));
+			log.log(new Status(IStatus.INFO, JSLintPlugin.PLUGIN_ID, message.toString(), null));
 		}
 	}
 

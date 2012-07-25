@@ -117,7 +117,8 @@
                class="com.htmlhifive.tools.jslint.actions.ActiveJSLintAction"
                id="JSLintPlugin.action1"
                label="%action.label.autoCheck"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintToggle">
+               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintToggle"
+               style="toggle">
          </action>
       </objectContribution>
       <objectContribution
@@ -192,12 +193,6 @@
                class="com.htmlhifive.tools.jslint.JSLintPluginBuilder">
          </run>
       </builder>
-   </extension>
-   <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="com.htmlhifive.tools.jslint.Activator">
-      </startup>
    </extension>
 
 </plugin>

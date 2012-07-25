@@ -19,7 +19,7 @@ package com.htmlhifive.tools.jslint.dialog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 
 /**
  * IStatusをリストとして保持するクラス.
@@ -39,7 +39,7 @@ public class StatusList {
 	 */
 	public StatusList() {
 
-		multistatus = new MultiStatus(Activator.PLUGIN_ID, IStatus.OK, null, null);
+		multistatus = new MultiStatus(JSLintPlugin.PLUGIN_ID, IStatus.OK, null, null);
 	}
 
 	/**

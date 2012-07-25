@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
-import com.htmlhifive.tools.jslint.Activator;
+import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.engine.option.xml.JaxbUtil;
 import com.htmlhifive.tools.jslint.engine.option.xml.JsCheckOption;
 import com.htmlhifive.tools.jslint.messages.Messages;
@@ -103,7 +103,7 @@ public final class CheckOptionFileWrapperFactory {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (JAXBException e) {
-			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.EM0008.getText(), e));
+			throw new CoreException(new Status(IStatus.ERROR, JSLintPlugin.PLUGIN_ID, Messages.EM0008.getText(), e));
 		}
 		return null;
 	}

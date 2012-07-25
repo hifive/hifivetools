@@ -34,7 +34,7 @@ public class JSLintPluginNature implements IProjectNature {
 	/**
 	 * ネーチャーID.
 	 */
-	public static final String NATURE_ID = "com.htmlhifive.tool.jslint.H5JSLintPlugin.JSLintPluginNature";
+	public static final String NATURE_ID = "com.htmlhifive.tools.jslint.H5JSLintPlugin.JSLintPluginNature";
 
 	/**
 	 * プロジェクト.

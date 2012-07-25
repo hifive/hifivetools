@@ -39,7 +39,7 @@ public class FilterBean implements Cloneable {
 	/**
 	 * フィルタレベル.
 	 */
-	private FilterRevel revel = FilterRevel.IGNORE;
+	private FilterLevel revel = FilterLevel.IGNORE;
 
 	/**
 	 * 有効かどうかを取得する.
@@ -86,7 +86,7 @@ public class FilterBean implements Cloneable {
 	 * 
 	 * @return フィルタレベル
 	 */
-	public FilterRevel getRevel() {
+	public FilterLevel getRevel() {
 
 		return revel;
 	}
@@ -96,7 +96,7 @@ public class FilterBean implements Cloneable {
 	 * 
 	 * @param revel フィルタレベル
 	 */
-	public void setRevel(FilterRevel revel) {
+	public void setLevel(FilterLevel revel) {
 
 		this.revel = revel;
 	}
@@ -120,7 +120,7 @@ public class FilterBean implements Cloneable {
 		try {
 			FilterBean bean = (FilterBean) super.clone();
 			bean.setRegex(regex);
-			bean.setRevel(revel);
+			bean.setLevel(revel);
 			bean.setState(state);
 			return bean;
 		} catch (CloneNotSupportedException e) {
@@ -135,7 +135,7 @@ public class FilterBean implements Cloneable {
 	 * @author NS Solutions Corporation
 	 * 
 	 */
-	public enum FilterRevel {
+	public enum FilterLevel {
 		/**
 		 * 無視.
 		 */
@@ -154,7 +154,7 @@ public class FilterBean implements Cloneable {
 		private final String label;
 
 		static {
-			FilterRevel[] revels = values();
+			FilterLevel[] revels = values();
 			FILTER_LABELS = new String[revels.length];
 			for (int i = 0; i < revels.length; i++) {
 				FILTER_LABELS[i] = revels[i].getLabel();
@@ -167,7 +167,7 @@ public class FilterBean implements Cloneable {
 		 * 
 		 * @param label 表記.
 		 */
-		private FilterRevel(String label) {
+		private FilterLevel(String label) {
 
 			this.label = label;
 		}
@@ -198,10 +198,10 @@ public class FilterBean implements Cloneable {
 		 * @param label ラベル.
 		 * @return フィルタレベル.
 		 */
-		public static FilterRevel getRevelFromLabel(String label) {
+		public static FilterLevel getRevelFromLabel(String label) {
 
-			FilterRevel[] revels = values();
-			for (FilterRevel filterRevel : revels) {
+			FilterLevel[] revels = values();
+			for (FilterLevel filterRevel : revels) {
 				if (filterRevel.getLabel().equals(label)) {
 					return filterRevel;
 				}

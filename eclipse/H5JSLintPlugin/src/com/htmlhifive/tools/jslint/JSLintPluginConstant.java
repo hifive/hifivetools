@@ -28,7 +28,7 @@ public final class JSLintPluginConstant {
 	/**
 	 * マーカーID.
 	 */
-	public static final String JS_TYPE_MARKER = "com.htmlhifive.tool.jslint.H5JSLintPlugin.javascriptMarker";
+	public static final String JS_TYPE_MARKER = "com.htmlhifive.tools.jslint.H5JSLintPlugin.javascriptMarker";
 
 	/**
 	 * オプション設定ファイルの拡張子.
