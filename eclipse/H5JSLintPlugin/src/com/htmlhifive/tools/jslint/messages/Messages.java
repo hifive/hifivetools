@@ -117,6 +117,21 @@ public final class Messages extends MessagesBase {
 	/** DL0017=INFO,ライブラリの除外設定を行います.. */
 	public static final Message DL0017 = createMessage("DL0017");
 
+	/** DL0018=INFO,生成ファイルの指定. */
+	public static final Message DL0018 = createMessage("DL0018");
+
+	/** DL0019=INFO,生成する種別を選択し、設定ファイルの名前を入力してください.. */
+	public static final Message DL0019 = createMessage("DL0019");
+
+	/** DL0020=INFO,出力ディレクトリ. */
+	public static final Message DL0020 = createMessage("DL0020");
+
+	/** DL0021=INFO,設定ファイル名. */
+	public static final Message DL0021 = createMessage("DL0021");
+
+	/** DL0022=INFO,設定ファイルを生成するディレクトリを選択してください.. */
+	public static final Message DL0022 = createMessage("DL0022");
+
 	// #ダイアログツールチップ
 	/** DTT0000=INFO,チェック時にライブラリを考慮するかどうかを設定します。読み込むライブラリが多いとパフォーマンスに影響します。. */
 	public static final Message DTT0000 = createMessage("DTT0000");
@@ -145,6 +160,9 @@ public final class Messages extends MessagesBase {
 
 	/** DT0007=INFO,設定ファイルの生成. */
 	public static final Message DT0007 = createMessage("DT0007");
+
+	/** DT0008=INFO,生成するディレクトリの選択. */
+	public static final Message DT0008 = createMessage("DT0008");
 
 	// #タブタイトル
 	/** TT0000=INFO,JSLint設定. */
@@ -281,6 +299,9 @@ public final class Messages extends MessagesBase {
 
 	/** EM0012=WARN,ライブラリ情報取得中に例外が発生しました. : {0}. */
 	public static final Message EM0012 = createMessage("EM0012");
+
+	/** EM0013=WARN,指定したパスにファイルが既に存在します.. */
+	public static final Message EM0013 = createMessage("EM0013");
 
 	/** EM0100=ERROR,予期せぬエラーが発生しました.. */
 	public static final Message EM0100 = createMessage("EM0100");

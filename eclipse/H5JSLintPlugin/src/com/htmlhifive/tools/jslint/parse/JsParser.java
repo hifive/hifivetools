@@ -183,13 +183,16 @@ public class JsParser implements Parser {
 			if (StringUtils.isNotEmpty(bean.getOptionFilePath())) {
 				IFile propFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(bean.getOptionFilePath());
 				option = CheckOptionFileWrapperFactory.createCheckOptionFileWrapper(propFile);
-				// 最大エラー数を取得.
-				String maxerrStr = option.getOption("maxerr", engine.getKey()).getValue();
-				if (maxerrStr != null) {
-					maxerr = Integer.parseInt(maxerrStr);
+				if (option.getOptions(engine).length != 0) {
+					// 最大エラー数を取得.
+					String maxerrStr = option.getOption("maxerr", engine.getKey()).getValue();
+					if (maxerrStr != null) {
+						maxerr = Integer.parseInt(maxerrStr);
+					}
+					CheckOption[] options = option.getEnableOptions(engine);
+					newOptions = handleMaxerr(options);
 				}
-				CheckOption[] options = option.getEnableOptions(engine);
-				newOptions = handleMaxerr(options);
+
 			}
 
 			logger.debug("jslint file is " + bean.getJsLintPath());
@@ -228,12 +231,8 @@ public class JsParser implements Parser {
 				long parseAtFileStart = System.currentTimeMillis();
 				result = jsLint.lint(target.getSourceStr());
 				logger.debug("parse at file time" + String.valueOf(System.currentTimeMillis() - parseAtFileStart));
-				// markJsFile(iFile, result.getErrors(), libStr != null ?
-				// libStr.getLineCount() : 0);
 				addMakingList(markList, iFile, result.getErrors(), libStr != null ? libStr.getLineCount() : 0);
 				// １ファイルあたりのタスク量を進める
-				// monitor.worked((TASK_ALL - TASK_LOAD_JSLINT - TASK_SERCH_JS)
-				// / jsFiles.length);
 				monitor.worked(TASK_PARSE_JS / jsFiles.length);
 			}
 			monitor.setTaskName(Messages.T0007.getText());
@@ -245,11 +244,6 @@ public class JsParser implements Parser {
 		} catch (ScriptException e) {
 			throwCoreException(IStatus.WARNING, Messages.EM0003.format(e.getFileName()));
 		}
-		// catch (RuntimeException e) {
-		// // TODO RuntimeExceptionの扱い
-		// // throwCoreException(IStatus.WARNING, Messages.EM0004.getText());
-		// throwCoreException(IStatus.ERROR, e);
-		// }
 		monitor.subTask(Messages.T0004.getText());
 		monitor.done();
 		ParserManager.clearCurrentParser();

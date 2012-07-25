@@ -21,7 +21,6 @@ $(function() {
 			// child1StartボタンのselfBlockイベント、child2Startボタンのclickイベントをトリガ.
 			$('#child1Start').trigger('selfBlock');
 			$('#child2Start').trigger('click');
-			this.
 		},
 
 		'#parentBlock click': function() {

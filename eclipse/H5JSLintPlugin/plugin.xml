@@ -5,37 +5,37 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
-            id="jp.co.nssol.javascript.parse.object.jsfile"
+            id="com.htmlhifive.javascript.parse.object.jsfile"
             nameFilter="*.js"
             objectClass="org.eclipse.core.resources.IFile">
          <menu
                label="%menu.label"
                path="additions"
-               id="jp.co.nssol.javascript.parse.object.menu1">
+               id="com.htmlhifive.javascript.parse.object.menu1">
             <separator
                   name="groupJSLintCheck">
             </separator>
          </menu>
          <action
                label="%action.label.clear"
-               class="com.htmlhifive.toolss.jslint.actions.ClearJavaScriptAction"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck"
+               class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintCheck"
                enablesFor="1"
-               id="jp.co.nssol.javascript.parse.newAction1">
+               id="com.htmlhifive.javascript.parse.newAction1">
          </action>
          <action
-               class="com.htmlhifive.toolss.jslint.actions.CheckJavaScriptAction"
+               class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
                enablesFor="1"
-               id="jp.co.nssol.javascript.parse.newAction2"
+               id="com.htmlhifive.javascript.parse.newAction2"
                label="%action.label.check"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
       </objectContribution>
       <objectContribution
-            id="jp.co.nssol.javascript.parse.object.container"
+            id="com.htmlhifive.javascript.parse.object.container"
             objectClass="org.eclipse.core.resources.IContainer">
          <menu
-               id="jp.co.nssol.javascript.parse.object.menu1"
+               id="com.htmlhifive.javascript.parse.object.menu1"
                label="%menu.label"
                path="additions">
             <separator
@@ -48,23 +48,23 @@
          <action
                class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
                enablesFor="1"
-               id="jp.co.nssol.javascript.parse.newAction1"
+               id="com.htmlhifive.javascript.parse.newAction1"
                label="%action.label.clear"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
          <action
                class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
                enablesFor="1"
-               id="jp.co.nssol.javascript.parse.newAction2"
+               id="com.htmlhifive.javascript.parse.newAction2"
                label="%action.label.check"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
       </objectContribution>
       <viewerContribution
-            id="jp.co.nssol.javascript.parse.jseditor"
+            id="com.htmlhifive.javascript.parse.jseditor"
             targetID="#JavaScriptEditorContext">
          <menu
-               id="jp.co.nssol.javascript.parse.editor.menu1"
+               id="com.htmlhifive.javascript.parse.editor.menu1"
                label="%menu.label"
                path="additions">
             <separator
@@ -73,23 +73,23 @@
          </menu>
          <action
                class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
-               id="jp.co.nssol.javascript.parse.newAction3"
+               id="com.htmlhifive.javascript.parse.newAction3"
                label="%action.label.clear"
-               menubarPath="jp.co.nssol.javascript.parse.editor.menu1/group1">
+               menubarPath="com.htmlhifive.javascript.parse.editor.menu1/group1">
          </action>
          <action
                class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
-               id="jp.co.nssol.javascript.parse.newAction4"
+               id="com.htmlhifive.javascript.parse.newAction4"
                label="%action.label.check"
-               menubarPath="jp.co.nssol.javascript.parse.editor.menu1/group1">
+               menubarPath="com.htmlhifive.javascript.parse.editor.menu1/group1">
          </action>
       </viewerContribution>
       <objectContribution
             adaptable="false"
-            id="jp.co.nssol.javascript.parse.object.JavaProject"
+            id="com.htmlhifive.javascript.parse.object.JavaProject"
             objectClass="org.eclipse.jdt.core.IJavaProject">
          <menu
-               id="jp.co.nssol.javascript.parse.object.menu1"
+               id="com.htmlhifive.javascript.parse.object.menu1"
                label="%menu.label"
                path="additions">
             <separator
@@ -102,34 +102,34 @@
          <action
                class="com.htmlhifive.tools.jslint.actions.ClearJavaScriptAction"
                enablesFor="1"
-               id="jp.co.nssol.javascript.parse.newAction1"
+               id="com.htmlhifive.javascript.parse.newAction1"
                label="%action.label.clear"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
          <action
                class="com.htmlhifive.tools.jslint.actions.CheckJavaScriptAction"
                enablesFor="1"
-               id="jp.co.nssol.javascript.parse.newAction2"
+               id="com.htmlhifive.javascript.parse.newAction2"
                label="%action.label.check"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintCheck">
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintCheck">
          </action>
          <action
                class="com.htmlhifive.tools.jslint.actions.ActiveJSLintAction"
                id="JSLintPlugin.action1"
                label="%action.label.autoCheck"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintToggle"
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintToggle"
                style="toggle">
          </action>
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="jp.co.nssol.javascript.parse.object.container"
+            id="com.htmlhifive.javascript.parse.object.container"
             objectClass="org.eclipse.core.resources.IProject">
          <action
                class="com.htmlhifive.tools.jslint.actions.ActiveJSLintAction"
                id="JSLintPlugin.action1"
                label="%action.label.autoCheck"
-               menubarPath="jp.co.nssol.javascript.parse.object.menu1/groupJSLintToggle">
+               menubarPath="com.htmlhifive.javascript.parse.object.menu1/groupJSLintToggle">
          </action>
       </objectContribution>
    </extension>
@@ -138,7 +138,7 @@
          name="%extension.name"
          point="org.eclipse.core.resources.markers">
       <attribute
-            name="jp.co.nssol.javascript.check.jslintAttribute">
+            name="com.htmlhifive.javascript.check.jslintAttribute">
       </attribute>
       <persistent
             value="true">

@@ -46,6 +46,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.htmlhifive.tools.jslint.messages.Messages;
+
 /**
  * 入力ダイアログ.
  * 
@@ -115,23 +117,16 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("生成ファイルの指定");
-		setMessage("生成する種別を選択し、設定ファイルの名前を入力してください。");
+		setTitle(Messages.DL0018.getText());
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(area, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(2, false));
 
 		Label labelOutputDir = new Label(composite, SWT.NONE);
-		labelOutputDir.setText("出力ディレクトリ");
-
-		Label label4 = new Label(composite, SWT.NONE);
-		GridData gdLabel4 = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gdLabel4.heightHint = 18;
-		label4.setLayoutData(gdLabel4);
-		label4.setText("：");
+		labelOutputDir.setText(Messages.DL0020.getText());
 
 		Composite outputDircomp = new Composite(composite, SWT.NONE);
 		outputDircomp.setLayout(new GridLayout(2, false));
@@ -144,13 +139,13 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 		GridData gdBtnOutPut = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gdBtnOutPut.widthHint = 60;
 		btnOutPut.setLayoutData(gdBtnOutPut);
-		btnOutPut.setText("選択");
+		btnOutPut.setText(Messages.B0001.getText());
 		btnOutPut.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FolderSelectionDialog dialog = new FolderSelectionDialog(getShell(), "生成するディレクトリの選択",
-						"設定ファイルを生成するディレクトリを選択してください.");
+				FolderSelectionDialog dialog = new FolderSelectionDialog(getShell(), Messages.DT0008.getText(),
+						Messages.DL0022.getText());
 				if (dialog.open() != Window.OK) {
 					return;
 				}
@@ -160,10 +155,7 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 		});
 
 		Label labelOptionFileName = new Label(composite, SWT.NONE);
-		labelOptionFileName.setText("設定ファイル名");
-
-		Label label2 = new Label(composite, SWT.NONE);
-		label2.setText("：");
+		labelOptionFileName.setText(Messages.DL0021.getText());
 
 		Composite inputComp = new Composite(composite, SWT.NONE);
 		inputComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
@@ -173,6 +165,7 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 		textOptionFileName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		initializeDataBindings();
+		setMessage(Messages.DL0019.getText());
 		return area;
 	}
 
@@ -189,30 +182,30 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 				StringBuilder sb = new StringBuilder();
 				String optionFileName = (String) wvOptionFileName.getValue();
 				if (StringUtils.isEmpty(optionFileName)) {
-					sb.append("設定ファイル名を入力してください.");
+					sb.append(Messages.EM0009.format(Messages.DL0021.getText()));
 				} else if (!FilenameUtils.isExtension(optionFileName, "xml")) {
 					optionFileName += ".xml";
 				}
 				String outputDir = (String) wvOutpuDir.getValue();
 
 				if (StringUtils.isEmpty(outputDir)) {
-					sb.append("出力先ディレクトリを指定してください。");
+					sb.append(Messages.EM0009.format(Messages.DL0020.getText()));
 				} else {
 					IPath path = new Path(outputDir);
 					if (!ResourcesPlugin.getWorkspace().getRoot().exists(path)) {
-						sb.append("出力先ディレクトリが存在しません。");
+						sb.append(Messages.EM0000.format(Messages.DL0020.getText()));
 					}
 				}
 
 				if (StringUtils.isNotEmpty(optionFileName) && StringUtils.isNotEmpty(outputDir)) {
 					IPath path = new Path(outputDir + "/" + optionFileName);
 					if (ResourcesPlugin.getWorkspace().getRoot().exists(path)) {
-						sb.append("指定したパスにファイルが既に存在します。");
+						sb.append(Messages.EM0013.getText());
 					}
 				}
 				if (StringUtils.isEmpty(sb.toString())) {
 					getButton(IDialogConstants.OK_ID).setEnabled(true);
-					return ValidationStatus.info("生成する種別を選択し、設定ファイルの名前を入力してください。");
+					return ValidationStatus.info(Messages.DL0019.getText());
 				}
 
 				if (getButton(IDialogConstants.OK_ID) != null) {
@@ -231,7 +224,6 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 		context.bindValue(optionFileName, wvOptionFileName, null, null);
 
 		context.addValidationStatusProvider(validator);
-
 		TitleAreaDialogSupport.create(this, context);
 
 	}
