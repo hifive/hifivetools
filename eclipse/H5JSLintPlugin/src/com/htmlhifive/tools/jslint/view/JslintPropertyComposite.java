@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -52,6 +53,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 import com.htmlhifive.tools.jslint.JSLintPluginConstant;
 import com.htmlhifive.tools.jslint.configure.ConfigBean;
+import com.htmlhifive.tools.jslint.dialog.CreateEngineDialog;
 import com.htmlhifive.tools.jslint.dialog.CreateOptionFileDialog;
 import com.htmlhifive.tools.jslint.dialog.FileSelectionDialog;
 import com.htmlhifive.tools.jslint.dialog.OptionSettingDialog;
@@ -140,6 +142,8 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	 * 新規ボタン.
 	 */
 	private Button buttonNewOption;
+
+	private Button buttonNewJslint;
 
 	/**
 	 * コンストラクタ.
@@ -271,9 +275,9 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	 */
 	private void createGroup1() {
 
-		Group group = createGroup(createBaseComposite(2), Messages.DL0001.getText(), 2, 2);
+		Group group = createGroup(createBaseComposite(1), Messages.DL0001.getText(), 1, 1);
 		textOptionPath = new Text(group, SWT.BORDER);
-		GridData gridOptionPath = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
+		GridData gridOptionPath = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		textOptionPath.setLayoutData(gridOptionPath);
 		textOptionPath.setText(getConfigBean().getOptionFilePath());
 		textOptionPath.addModifyListener(new ModifyListener() {
@@ -287,8 +291,8 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 		});
 		// ボタン用コンポジット
 		Composite buttonComp = new Composite(group, SWT.None);
-		buttonComp.setLayout(new GridLayout(3, false));
-		buttonComp.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		buttonComp.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
+		buttonComp.setLayoutData(GridDataFactory.fillDefaults().create());
 
 		buttonNewOption = locateButton(buttonComp, 1, Messages.B0005.getText());
 		buttonNewOption.addSelectionListener(new SelectionAdapter() {
@@ -399,7 +403,28 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 				updateVariable();
 			}
 		});
-		buttonJslintPath = locateButton(group, 1, Messages.B0001.getText());
+
+		// 新規と選択ボタンコンポジット.
+		Composite buttonComposite = new Composite(group, SWT.NONE);
+		buttonComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+
+		// 新規ダウンロードボタン
+		buttonNewJslint = locateButton(buttonComposite, 1, "ダウンロード");
+		buttonNewJslint.setLayoutData(GridDataFactory.fillDefaults().create());
+		buttonNewJslint.setToolTipText("ネット上から最新のJSLint(又はJSHint)のjsファイルを取得します。同名のファイルがある場合は上書きをします。");
+		buttonNewJslint.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				CreateEngineDialog dialog = new CreateEngineDialog(getShell(), getProject(), "JSLintファイルの取得");
+				if (dialog.open() == Dialog.OK) {
+					textJslintPath.setText(dialog.getEngineFilePath());
+					updateVariable();
+				}
+			}
+		});
+
+		buttonJslintPath = locateButton(buttonComposite, 1, Messages.B0001.getText());
 		buttonJslintPath.addSelectionListener(new SelectionAdapter() {
 
 			@Override

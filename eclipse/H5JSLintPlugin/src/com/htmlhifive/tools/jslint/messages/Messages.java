@@ -120,7 +120,7 @@ public final class Messages extends MessagesBase {
 	/** DL0018=INFO,生成ファイルの指定. */
 	public static final Message DL0018 = createMessage("DL0018");
 
-	/** DL0019=INFO,生成する種別を選択し、設定ファイルの名前を入力してください.. */
+	/** DL0019=INFO,出力ディレクトリを指定し、設定ファイルの名前を入力してください.. */
 	public static final Message DL0019 = createMessage("DL0019");
 
 	/** DL0020=INFO,出力ディレクトリ. */

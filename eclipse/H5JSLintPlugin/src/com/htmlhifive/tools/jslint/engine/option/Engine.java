@@ -63,6 +63,15 @@ public enum Engine {
 	}
 
 	/**
+	 * エンジンのファイル名を取得する.
+	 * 
+	 * @return
+	 */
+	public String getFileName() {
+		return key + ".js";
+	}
+
+	/**
 	 * パスからエンジンを取得する. 該当しない場合はnullを返す.
 	 * 
 	 * @param jsLintPath エンジンファイルのパス.

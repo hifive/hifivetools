@@ -289,7 +289,9 @@ public class TargetStructureComposite extends Group {
 
 		treeViewerSource = new TreeViewer(group, SWT.BORDER);
 		Tree treeSource = treeViewerSource.getTree();
-		treeSource.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_treeSource = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_treeSource.widthHint = 300;
+		treeSource.setLayoutData(gd_treeSource);
 
 		IListProperty childrenProperty = new MultiListProperty(new IListProperty[] { PojoProperties.list("children") });
 		ObservableListTreeContentProvider contentProvider = new ObservableListTreeContentProvider(
@@ -335,7 +337,9 @@ public class TargetStructureComposite extends Group {
 		// SWT.CHECK |
 		// SWT.FULL_SELECTION);
 		Table table = tableViewerInternalLib.getTable();
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gridData.widthHint = 300;
+		table.setLayoutData(gridData);
 
 		Composite compInternalLibButton = new Composite(grpInternalLibrary, SWT.NONE);
 		compInternalLibButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -393,7 +397,9 @@ public class TargetStructureComposite extends Group {
 
 		tableViewerExternalLib = CheckboxTableViewer.newCheckList(grpExternalLibrary, SWT.BORDER | SWT.FULL_SELECTION);
 		Table tableExternalLib = tableViewerExternalLib.getTable();
-		tableExternalLib.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_tableExternalLib = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_tableExternalLib.widthHint = 300;
+		tableExternalLib.setLayoutData(gd_tableExternalLib);
 
 		Composite compExternalLibButton = new Composite(grpExternalLibrary, SWT.NONE);
 		compExternalLibButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));

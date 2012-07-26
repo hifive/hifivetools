@@ -16,7 +16,9 @@ Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.core.databinding.property,
  com.ibm.icu,
  org.eclipse.wst.jsdt.ui,
- com.htmlhifive.tools.jslint.H5JSLintPluginLibrary;bundle-version="1.0.0"
+ com.htmlhifive.tools.jslint.H5JSLintPluginLibrary;bundle-version="1.0.0",
+ org.apache.commons.httpclient,
+ org.eclipse.core.net
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: 

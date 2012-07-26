@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.databinding.dialog.TitleAreaDialogSupport;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -165,7 +166,7 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 		textOptionFileName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		initializeDataBindings();
-		setMessage(Messages.DL0019.getText());
+		setMessage(Messages.DL0019.getText(), IMessageProvider.INFORMATION);
 		return area;
 	}
 
@@ -174,7 +175,7 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 	 */
 	private void initializeDataBindings() {
 		DataBindingContext context = new DataBindingContext();
-
+		// validator
 		MultiValidator validator = new MultiValidator() {
 
 			@Override
@@ -248,7 +249,7 @@ public class CreateOptionFileDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(488, 279);
+		return new Point(515, 279);
 	}
 
 	/**
