@@ -65,7 +65,7 @@ public enum Engine {
 	/**
 	 * エンジンのファイル名を取得する.
 	 * 
-	 * @return
+	 * @return エンジンファイル名.
 	 */
 	public String getFileName() {
 		return key + ".js";

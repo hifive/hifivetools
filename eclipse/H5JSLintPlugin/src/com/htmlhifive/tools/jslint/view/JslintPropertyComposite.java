@@ -143,6 +143,9 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 	 */
 	private Button buttonNewOption;
 
+	/**
+	 * JslintDownloadボタン.
+	 */
 	private Button buttonNewJslint;
 
 	/**
@@ -409,14 +412,14 @@ public class JslintPropertyComposite extends AbstractJsLintPropertyComposite {
 		buttonComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 
 		// 新規ダウンロードボタン
-		buttonNewJslint = locateButton(buttonComposite, 1, "ダウンロード");
+		buttonNewJslint = locateButton(buttonComposite, 1, Messages.B0008.getText());
 		buttonNewJslint.setLayoutData(GridDataFactory.fillDefaults().create());
-		buttonNewJslint.setToolTipText("ネット上から最新のJSLint(又はJSHint)のjsファイルを取得します。同名のファイルがある場合は上書きをします。");
+		buttonNewJslint.setToolTipText(Messages.DTT0001.getText());
 		buttonNewJslint.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				CreateEngineDialog dialog = new CreateEngineDialog(getShell(), getProject(), "JSLintファイルの取得");
+				CreateEngineDialog dialog = new CreateEngineDialog(getShell(), getProject(), Messages.DT0010.getText());
 				if (dialog.open() == Dialog.OK) {
 					textJslintPath.setText(dialog.getEngineFilePath());
 					updateVariable();

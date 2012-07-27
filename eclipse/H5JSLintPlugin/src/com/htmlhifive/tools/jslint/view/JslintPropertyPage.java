@@ -55,9 +55,9 @@ import com.htmlhifive.tools.jslint.util.ConfigBeanUtil;
 
 /**
  * Jslint設定ページ.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class JslintPropertyPage extends PropertyPage {
 
@@ -96,7 +96,7 @@ public class JslintPropertyPage extends PropertyPage {
 
 	/*
 	 * (非 Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse
 	 * .swt.widgets.Composite)
@@ -160,7 +160,7 @@ public class JslintPropertyPage extends PropertyPage {
 
 	/*
 	 * (非 Javadoc)
-	 *
+	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
 	 */
 	@Override
@@ -173,7 +173,7 @@ public class JslintPropertyPage extends PropertyPage {
 
 	/*
 	 * (非 Javadoc)
-	 *
+	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performOk()
 	 */
 	@Override
@@ -236,7 +236,7 @@ public class JslintPropertyPage extends PropertyPage {
 
 	/*
 	 * (非 Javadoc)
-	 *
+	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performApply()
 	 */
 	@Override
@@ -257,7 +257,7 @@ public class JslintPropertyPage extends PropertyPage {
 
 	/**
 	 * メッセージリストを組み立てる.
-	 *
+	 * 
 	 * @param errorMessages メッセージ.
 	 * @return 組立後のメッセージ.
 	 */

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2012 NS Solutions Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package com.htmlhifive.tools.jslint.dialog;
 
 import java.io.ByteArrayInputStream;
@@ -10,7 +26,6 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -45,7 +60,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.util.tracker.ServiceTracker;
 
 import com.htmlhifive.tools.jslint.JSLintPlugin;
 import com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport;
@@ -56,20 +70,48 @@ import com.htmlhifive.tools.jslint.logger.JSLintPluginLogger;
 import com.htmlhifive.tools.jslint.logger.JSLintPluginLoggerFactory;
 import com.htmlhifive.tools.jslint.messages.Messages;
 
+/**
+ * エンジンファイル(jslint.js等)をダウンロードするダイアログ.
+ * 
+ * @author NS Solutions Corporation
+ * 
+ */
 public class CreateEngineDialog extends TitleAreaDialog {
+	/**
+	 * 
+	 * ダウンロード実行Runnable.
+	 * 
+	 * @author NS Solutions Corporation
+	 * 
+	 */
 	private static class DownloadRunnable implements IRunnableWithProgress {
 
-		private static JSLintPluginLogger logger = JSLintPluginLoggerFactory
-				.getLogger(CreateEngineDialog.DownloadRunnable.class);
-
+		/**
+		 * エンジンファイル情報.
+		 */
 		private EngineInfo result;
 
+		/**
+		 * ダウンロード支援クラス.
+		 */
 		private DownloadEngineSupport support;
 
+		/**
+		 * コンストラクタ.
+		 * 
+		 * @param support ダウンロード支援クラス.
+		 */
 		public DownloadRunnable(DownloadEngineSupport support) {
 			this.support = support;
 		}
 
+		/*
+		 * (非 Javadoc)
+		 * 
+		 * @see
+		 * org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse
+		 * .core.runtime.IProgressMonitor)
+		 */
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
@@ -80,37 +122,69 @@ public class CreateEngineDialog extends TitleAreaDialog {
 			}
 		}
 
+		/**
+		 * ダウンロード結果を取得する.
+		 * 
+		 * @return ダウンロード結果.
+		 */
 		public EngineInfo getResult() {
 			return result;
 		}
 
 	}
 
-	private final ServiceTracker<IProxyService, IProxyService> proxyTracker;
+	/**
+	 * ロガー.
+	 */
 	private static JSLintPluginLogger logger = JSLintPluginLoggerFactory.getLogger(CreateEngineDialog.class);
+	/**
+	 * 出力先ディレクトリ.
+	 */
 	private Text textOutputDir;
+	/**
+	 * 出力先ディレクトリWritableValue.
+	 */
 	private WritableValue wvOutputDir = new WritableValue("", String.class);
+	/**
+	 * JSLintラジオボタン.
+	 */
 	private Button btnRadioJSLint;
+	/**
+	 * JSLint選択WritableValue.
+	 */
 	private WritableValue wvJslint = new WritableValue(true, Boolean.class);
+	/**
+	 * JSHint選択ラジオボタン.
+	 */
 	private Button btnRadioJSHint;
+	/**
+	 * JSHint選択WritableValue.
+	 */
 	private WritableValue wvJshint = new WritableValue(false, Boolean.class);
+	/**
+	 * 選択プロジェクト.
+	 */
 	private IProject project;
+	/**
+	 * エンジンファイルパス.
+	 */
 	private String engineFilePath;
+	/**
+	 * ダイアログタイトル.
+	 */
 	private String title;
 
 	/**
-	 * Create the dialog.
+	 * コンストラクタ.
 	 * 
-	 * @param parentShell
-	 * @param title
+	 * @param parentShell 親シェル.
+	 * @param project 選択プロジェクト.
+	 * @param title ダイアログタイトル.
 	 */
 	public CreateEngineDialog(Shell parentShell, IProject project, String title) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.CLOSE | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
-		this.proxyTracker = new ServiceTracker<IProxyService, IProxyService>(JSLintPlugin.getDefault().getBundle()
-				.getBundleContext(), IProxyService.class, null);
-		proxyTracker.open();
 		this.project = project;
 		this.title = title;
 	}
@@ -121,14 +195,16 @@ public class CreateEngineDialog extends TitleAreaDialog {
 		newShell.setText(title);
 	}
 
-	/**
-	 * Create contents of the dialog.
+	/*
+	 * (非 Javadoc)
 	 * 
-	 * @param parent
+	 * @see
+	 * org.eclipse.jface.dialogs.TitleAreaDialog#createDialogArea(org.eclipse
+	 * .swt.widgets.Composite)
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("JSLint.js又はJSHint.jsの取得");
+		setTitle(Messages.DL0023.getText());
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -140,7 +216,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 		baseComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		Label lblType = new Label(baseComposite, SWT.NONE);
-		lblType.setText("タイプ種別");
+		lblType.setText(Messages.DL0024.getText());
 
 		Composite compositeSelectionType = new Composite(baseComposite, SWT.NONE);
 		compositeSelectionType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -149,10 +225,10 @@ public class CreateEngineDialog extends TitleAreaDialog {
 		compositeSelectionType.setLayout(glCompositeSelectionType);
 
 		btnRadioJSLint = new Button(compositeSelectionType, SWT.RADIO);
-		btnRadioJSLint.setText("JSLint");
+		btnRadioJSLint.setText(Messages.DL0025.getText());
 
 		btnRadioJSHint = new Button(compositeSelectionType, SWT.RADIO);
-		btnRadioJSHint.setText("JSHint");
+		btnRadioJSHint.setText(Messages.DL0026.getText());
 
 		Label labelOutputDir = new Label(baseComposite, SWT.NONE);
 		labelOutputDir.setBounds(0, 0, 61, 18);
@@ -176,6 +252,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 			public void widgetSelected(SelectionEvent e) {
 				FolderSelectionDialog dialog = new FolderSelectionDialog(getShell(), Messages.DT0008.getText(),
 						Messages.DL0022.getText());
+				dialog.setInitialSelection(project);
 				if (dialog.open() != Window.OK) {
 					return;
 				}
@@ -188,19 +265,24 @@ public class CreateEngineDialog extends TitleAreaDialog {
 		return area;
 	}
 
-	/**
-	 * Create contents of the button bar.
+	/*
+	 * (非 Javadoc)
 	 * 
-	 * @param parent
+	 * @see
+	 * org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse
+	 * .swt.widgets.Composite)
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 		initialDataBinding();
-		setMessage("種別と出力先ディレクトリを指定しJSLintファイルを取得します。", IMessageProvider.INFORMATION);
+		setMessage(Messages.DL0027.getText(), IMessageProvider.INFORMATION);
 	}
 
+	/**
+	 * データバインド初期化.
+	 */
 	private void initialDataBinding() {
 
 		DataBindingContext context = new DataBindingContext();
@@ -213,7 +295,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 				StringBuilder sb = new StringBuilder();
 
 				if ((Boolean) wvJshint.getValue() && (Boolean) wvJslint.getValue()) {
-					sb.append("どちらか選択してください。");
+					sb.append(Messages.EM0014.getText());
 				}
 				String outputPath = (String) wvOutputDir.getValue();
 				if (StringUtils.isEmpty(outputPath)) {
@@ -227,7 +309,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 
 				if (StringUtils.isEmpty(sb.toString())) {
 					getButton(IDialogConstants.OK_ID).setEnabled(true);
-					return ValidationStatus.info("種別と出力先ディレクトリを指定しJSLintファイルを取得します。");
+					return ValidationStatus.info(Messages.DL0027.getText());
 				}
 
 				if (getButton(IDialogConstants.OK_ID) != null) {
@@ -255,8 +337,10 @@ public class CreateEngineDialog extends TitleAreaDialog {
 
 	}
 
-	/**
-	 * Return the initial size of the dialog.
+	/*
+	 * (非 Javadoc)
+	 * 
+	 * @see org.eclipse.jface.dialogs.TitleAreaDialog#getInitialSize()
 	 */
 	@Override
 	protected Point getInitialSize() {
@@ -272,7 +356,8 @@ public class CreateEngineDialog extends TitleAreaDialog {
 					.getFile(new Path(wvOutputDir.getValue() + "/" + support.getEngine().getFileName()));
 			if (file.exists()) {
 				MessageBox box = new MessageBox(getShell(), SWT.OK | SWT.CANCEL | SWT.ICON_QUESTION);
-				box.setMessage("既にファイルが存在しています。上書きしますか？");
+				box.setMessage(Messages.DM0004.getText());
+				box.setText(Messages.DT0011.getText());
 				if (box.open() == SWT.CANCEL) {
 					return;
 				}
@@ -281,7 +366,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 			progressDialog.run(true, false, progress);
 			EngineInfo info = progress.getResult();
 			ConfirmLicenseDialog dialog = new ConfirmLicenseDialog(getShell(), StringUtils.trim(info.getLicenseStr()),
-					"ライセンスの確認");
+					Messages.DT0009.getText());
 
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				if (file.exists()) {
@@ -294,20 +379,29 @@ public class CreateEngineDialog extends TitleAreaDialog {
 				return;
 			}
 		} catch (InvocationTargetException e) {
-			ErrorDialog.openError(getShell(), "エラーダイアログ", "情報取得中に例外が発生しました", new Status(IStatus.ERROR,
-					JSLintPlugin.PLUGIN_ID, e.getMessage(), e));
+			ErrorDialog.openError(getShell(), Messages.DT0003.getText(), Messages.EM0015.getText(), new Status(
+					IStatus.ERROR, JSLintPlugin.PLUGIN_ID, e.getMessage(), e));
 			logger.put(Messages.EM0100, e);
 		} catch (InterruptedException e) {
 			// キャンセル無視しているので来ない.
 			throw new AssertionError();
 		} catch (CoreException e) {
-			ErrorDialog.openError(getShell(), "エラーダイアログ", "ファイル出力中に例外が発生しました", e.getStatus());
+			ErrorDialog.openError(getShell(), Messages.DT0003.getText(), Messages.EM0016.getText(), e.getStatus());
 			logger.put(Messages.EM0100, e);
 		}
 
 		super.okPressed();
 	}
 
+	/**
+	 * Download支援クラスを取得する.
+	 * 
+	 * @See {@link DownloadJSHintSupport}
+	 * @See {@link DownloadJSLintSupport}
+	 * 
+	 * @param isJslint JSLintかどうか.
+	 * @return Download支援クラス.
+	 */
 	private DownloadEngineSupport createEngineDownload(boolean isJslint) {
 		if (isJslint) {
 			return new DownloadJSLintSupport();
@@ -315,14 +409,11 @@ public class CreateEngineDialog extends TitleAreaDialog {
 		return new DownloadJSHintSupport();
 	}
 
-	public Button getBtnRadioJSLint() {
-		return btnRadioJSLint;
-	}
-
-	public Button getBtnRadioJSHint() {
-		return btnRadioJSHint;
-	}
-
+	/**
+	 * ダウンロードしファイル生成後のエンジンファイルのパス.
+	 * 
+	 * @return エンジンファイルのパス.
+	 */
 	public String getEngineFilePath() {
 		return engineFilePath;
 	}

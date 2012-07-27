@@ -62,6 +62,9 @@ public final class Messages extends MessagesBase {
 	/** B0007=INFO,全解除. */
 	public static final Message B0007 = createMessage("B0007");
 
+	/** B0008=INFO,ダウンロード. */
+	public static final Message B0008 = createMessage("B0008");
+
 	// #ダイアログラベル
 	/** DL0000=INFO,利用プロジェクト. */
 	public static final Message DL0000 = createMessage("DL0000");
@@ -93,7 +96,7 @@ public final class Messages extends MessagesBase {
 	/** DL0009=INFO,JSLintプラグインの設定を行います.. */
 	public static final Message DL0009 = createMessage("DL0009");
 
-	/** DL0010=INFO,JSLintヘルプページは<a>こちら</a>. */
+	/** DL0010=INFO,JSLintプラグインヘルプページは<a>こちら</a>. */
 	public static final Message DL0010 = createMessage("DL0010");
 
 	/** DL0011=INFO,http://www.htmlhifive.com/conts/web/view/reference/eclipseplugins#HJSLint30D730E930B030A430F3. */
@@ -132,9 +135,36 @@ public final class Messages extends MessagesBase {
 	/** DL0022=INFO,設定ファイルを生成するディレクトリを選択してください.. */
 	public static final Message DL0022 = createMessage("DL0022");
 
+	/** DL0023=INFO,JSLint.js又はJSHint.jsの取得. */
+	public static final Message DL0023 = createMessage("DL0023");
+
+	/** DL0024=INFO,タイプ種別. */
+	public static final Message DL0024 = createMessage("DL0024");
+
+	/** DL0025=INFO,JSLint. */
+	public static final Message DL0025 = createMessage("DL0025");
+
+	/** DL0026=INFO,JSHint. */
+	public static final Message DL0026 = createMessage("DL0026");
+
+	/** DL0027=INFO,種別と出力先ディレクトリを指定しJSLintファイルを取得します.. */
+	public static final Message DL0027 = createMessage("DL0027");
+
+	/** DL0028=INFO,ライセンスの確認. */
+	public static final Message DL0028 = createMessage("DL0028");
+
+	/** DL0029=INFO,ライセンスに同意します. */
+	public static final Message DL0029 = createMessage("DL0029");
+
+	/** DL0030=INFO,ライセンスに同意しません. */
+	public static final Message DL0030 = createMessage("DL0030");
+
 	// #ダイアログツールチップ
 	/** DTT0000=INFO,チェック時にライブラリを考慮するかどうかを設定します。読み込むライブラリが多いとパフォーマンスに影響します。. */
 	public static final Message DTT0000 = createMessage("DTT0000");
+
+	/** DTT0001=INFO,インターネット上から最新のJSLint(又はJSHint)のjsファイルを取得します。同名のファイルがある場合は上書きをします。. */
+	public static final Message DTT0001 = createMessage("DTT0001");
 
 	// #ダイアログタイトル
 	/** DT0000=INFO,プロジェクトの選択. */
@@ -163,6 +193,15 @@ public final class Messages extends MessagesBase {
 
 	/** DT0008=INFO,生成するディレクトリの選択. */
 	public static final Message DT0008 = createMessage("DT0008");
+
+	/** DT0009=INFO,ライセンスの確認. */
+	public static final Message DT0009 = createMessage("DT0009");
+
+	/** DT0010=INFO,JSLintファイルの取得. */
+	public static final Message DT0010 = createMessage("DT0010");
+
+	/** DT0011=INFO,確認ダイアログ. */
+	public static final Message DT0011 = createMessage("DT0011");
 
 	// #タブタイトル
 	/** TT0000=INFO,JSLint設定. */
@@ -225,6 +264,9 @@ public final class Messages extends MessagesBase {
 	/** DM0003=INFO,警告があります.. */
 	public static final Message DM0003 = createMessage("DM0003");
 
+	/** DM0004=INFO,既にファイルが存在しています。上書きしますか？. */
+	public static final Message DM0004 = createMessage("DM0004");
+
 	// #タスクメッセージ
 	/** T0000=INFO,jsファイルチェックの準備中.... */
 	public static final Message T0000 = createMessage("T0000");
@@ -252,6 +294,15 @@ public final class Messages extends MessagesBase {
 
 	/** T0008=INFO,問題ビューに反映中... {0}件 / {1}件中. */
 	public static final Message T0008 = createMessage("T0008");
+
+	/** T0009=INFO,タスクを開始しています.... */
+	public static final Message T0009 = createMessage("T0009");
+
+	/** T0010=INFO,情報を取得中です.... */
+	public static final Message T0010 = createMessage("T0010");
+
+	/** T0011=INFO,進捗 : {0} b / {1} b. */
+	public static final Message T0011 = createMessage("T0011");
 
 	// #コンボボックステキスト
 	/** CT0000=INFO,無視. */
@@ -302,6 +353,15 @@ public final class Messages extends MessagesBase {
 
 	/** EM0013=WARN,指定したパスにファイルが既に存在します.. */
 	public static final Message EM0013 = createMessage("EM0013");
+
+	/** EM0014=WARN,種別のどちらかを選択してください.. */
+	public static final Message EM0014 = createMessage("EM0014");
+
+	/** EM0015=ERROR,情報取得中にエラーが発生しました.. */
+	public static final Message EM0015 = createMessage("EM0015");
+
+	/** EM0016=ERROR,ファイル出力中にエラーが発生しました.. */
+	public static final Message EM0016 = createMessage("EM0016");
 
 	/** EM0100=ERROR,予期せぬエラーが発生しました.. */
 	public static final Message EM0100 = createMessage("EM0100");

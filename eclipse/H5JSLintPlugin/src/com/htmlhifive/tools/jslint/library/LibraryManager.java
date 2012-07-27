@@ -370,10 +370,7 @@ public final class LibraryManager {
 											JSLintPluginConstant.EXTENTION_JS)) {
 										return true;
 									}
-									if (null == includePaths || includePaths.length == 0) {
-										// excludeFileList.add((IFile)
-										// resource);
-									} else {
+									if (!(null == includePaths || includePaths.length == 0)) {
 										for (IPath iPath : includePaths) {
 											char[] include = iPath.toString().toCharArray();
 											if (!CharOperation.pathMatch(include, resource.getFullPath().toString()
