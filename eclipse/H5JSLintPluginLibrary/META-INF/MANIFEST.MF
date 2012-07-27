@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: H5JSLintPluginLibrary
 Bundle-SymbolicName: com.htmlhifive.tools.jslint.H5JSLintPluginLibrary
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1.vqualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/commons-cli-1.2.jar,
  lib/commons-io-2.0.1.jar,
