@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar" sourcepath="lib/source/commons-lang-2.6-sources.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/ant-1.8.3.jar"/>
+	<classpathentry kind="lib" path="lib/rhino-1.7R3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

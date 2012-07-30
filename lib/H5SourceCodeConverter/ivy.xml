@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file
+	distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under
+	the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may
+	obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to
+	in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF
+	ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under
+	the License. -->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+
+	<!--
+		ライブラリは、http://mvnrepository.com で検索可能
+	-->
+
+	<info organisation="ivy" module="reference-library" revision="1.0.0" />
+
+	<configurations>
+		<conf name="lib" />
+	</configurations>
+
+	<dependencies>
+		<!-- commons -->
+		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="lib->*" transitive="false" />
+		<dependency org="commons-io" name="commons-io" rev="2.1" conf="lib->*" transitive="false" />
+
+		<!-- etc -->
+		<dependency org="org.apache.ant" name="ant" rev="1.8.3" conf="lib->*" transitive="false"/>
+
+		<!-- h5Tools -->
+		<dependency org="org.mozilla" name="rhino" rev="1.7R3" conf="lib->*" transitive="false"/>
+
+		<!-- log -->
+		<dependency org="log4j" name="log4j" rev="1.2.16" conf="lib->*" transitive="false" />
+		<dependency org="org.slf4j" name="slf4j-api" rev="1.6.4" conf="lib->*" transitive="false" />
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.4" conf="lib->*" transitive="false" />
+
+	</dependencies>
+</ivy-module>
