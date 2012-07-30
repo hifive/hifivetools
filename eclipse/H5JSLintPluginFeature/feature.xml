@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.htmlhifive.tools.jslint.feature"
+      label="%feature.name"
+      version="1.1.0.vqualifier"
+      provider-name="%feature.vendor"
+      plugin="com.htmlhifive.tools.jslint.H5JSLintPlugin">
+
+   <description>
+      %feature.description
+   </description>
+
+   <copyright>
+      %feature.copyright.notice
+   </copyright>
+
+   <license url="">
+      %feature.license.agreement
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.wst.jsdt.core"/>
+      <import plugin="org.eclipse.jface.databinding"/>
+      <import plugin="org.eclipse.core.databinding"/>
+      <import plugin="org.eclipse.core.databinding.beans"/>
+      <import plugin="org.eclipse.core.databinding.property"/>
+      <import plugin="com.ibm.icu"/>
+      <import plugin="org.eclipse.wst.jsdt.ui"/>
+      <import plugin="com.htmlhifive.tools.jslint.H5JSLintPluginLibrary" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.httpclient" version="3.1.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.htmlhifive.tools.jslint.H5JSLintPlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.htmlhifive.tools.jslint.H5JSLintPluginLibrary"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

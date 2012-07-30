@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+    <xs:element name="h5-code-assist">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element name="codeassists" type="codeassists" maxOccurs="unbounded" minOccurs="0"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType></xs:element>
+
+
+    <xs:complexType name="codeassist">
+        <xs:sequence>
+            <xs:element name="argument" type="argument" maxOccurs="unbounded" minOccurs="0"></xs:element>
+            <xs:element name="helpdoc" type="xs:string" maxOccurs="1" minOccurs="0">
+    		</xs:element>
+        </xs:sequence>
+    	<xs:attribute name="method" type="xs:string" use="required"></xs:attribute>
+    	<xs:attribute name="returnType" type="xs:string" use="required"></xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="codeassists">
+    	<xs:sequence>
+    		<xs:element name="codeassist" type="codeassist" maxOccurs="unbounded" minOccurs="1"></xs:element>
+    	</xs:sequence>
+    	<xs:attribute name="suffix" type="xs:string" use="required"></xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="argument">
+    	<xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+    	<xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
+    </xs:complexType>
+</xs:schema>
+

@@ -1,0 +1,54 @@
+Unless otherwise stated, all source files are licensed under
+the Apache License, Version 2.0(http://www.apache.org/licenses/LICENSE-2.0).
+
+-----
+Code in:
+lib/jaxb
+
+JAXB
+URL:http://jaxb.java.net/
+License:CDDL v1.1 and GPL v2
+	http://glassfish.java.net/public/CDDL+GPL_1_1.html
+Local Modifications: None.
+
+-----
+Code in:
+lib/commons-cli-1.2.jar
+
+Commons CLI
+URL:http://commons.apache.org/cli/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----
+Code in:
+lib/commons-io-2.0.1.jar
+
+Commons IO
+URL:http://commons.apache.org/io/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----
+Code in:
+lib/commons-lang-2.6.jar
+
+Commons Lang
+URL:http://commons.apache.org/lang/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----
+Code in:
+lib/js1_7_R3.jar
+
+Rhino
+URL:http://www.mozilla.org/rhino/
+License:MPL 1.1 and GPL 2.0
+	https://developer.mozilla.org/en/Rhino_License
+Local Modifications: None.
+-----
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+	      id="h5CodeAssist"
+	      name="hifiveコード補完"
+	      point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer">
+	      <proposalCategory icon="icons/face.png"/>
+	</extension>
+	<extension
+       id="h5CodeAssist"
+       point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer">
+		<javaCompletionProposalComputer
+        activate="true"
+        categoryId="com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin.h5CodeAssist"
+        class="com.htmlhifive.tools.codeassist.ui.H5ProposalComputer">
+			<partition type="__dftl_partition_content_type"/>
+			<partition type="__java_string"/>
+		</javaCompletionProposalComputer>
+
+	</extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="com.htmlhifive.tools.codeassist.ui.view.H5CodeAssistPropertyPage"
+            id="com.htmlhifive.tools.codeassist.ui.codeassistPropertyPage"
+            name="%page.name">
+         <enabledWhen>
+         <or>
+         <instanceof
+                  value="org.eclipse.core.resources.IProject">
+         </instanceof>
+         <instanceof
+               value="org.eclipse.jdt.core.IJavaProject">
+         </instanceof>
+         </or>
+         </enabledWhen>
+      </page>
+   </extension>
+
+</plugin>

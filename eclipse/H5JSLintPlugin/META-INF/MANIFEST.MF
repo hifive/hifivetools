@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: com.htmlhifive.tools.jslint.H5JSLintPlugin;singleton:=true
+Bundle-Version: 1.1.0.vqualifier
+Bundle-Activator: com.htmlhifive.tools.jslint.JSLintPlugin
+Require-Bundle: org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.wst.jsdt.core,
+ org.eclipse.jface.databinding,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.property,
+ com.ibm.icu,
+ org.eclipse.wst.jsdt.ui,
+ com.htmlhifive.tools.jslint.H5JSLintPluginLibrary;bundle-version="1.0.0",
+ org.apache.commons.httpclient,
+ org.eclipse.core.net
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: 
+ lib/log4j-1.2.15.jar,
+ .
+Bundle-Vendor: %Bundle-Vendor

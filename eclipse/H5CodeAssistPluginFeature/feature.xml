@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.htmlhifive.tools.codeassist.h5codeassist"
+      label="%feature.name"
+      version="1.0.1.vqualifier"
+      provider-name="%feature.vendor"
+      plugin="com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin">
+
+   <description>
+      %feature.description
+   </description>
+
+   <copyright>
+      %feature.copyright.notice
+   </copyright>
+
+   <license url="">
+      %feature.license.agreement
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.wst.jsdt.ui"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.wst.jsdt.core"/>
+   </requires>
+
+   <plugin
+         id="com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.htmlhifive.tools.codeassist.H5CodeAssistLibraryPlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.htmlhifive.tools.codeassist.core.H5CodeAssistCorePlugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,70 @@
+LF
+	/**
+	 * <H3>メッセージを表すクラス.</H3>
+	 * 
+	 * @author MessageGenerator
+	 */
+	public static final class Message {
+LF
+		/**
+		 * バンドル名.
+		 */
+		private static final String BUNDLE_NAME = "$$bundle_file_name$$"; //$NON-NLS-1$
+LF
+		/**
+		 * リソースバンドル.
+		 */
+		private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+LF
+		/**
+		 * メッセージキー.
+		 */
+		private final String key_;
+LF
+		/**
+		 * メッセージ内容.
+		 */
+		private final String text_;
+LF
+		/**
+		 * コンストラクタ.
+		 * 
+		 * @param key メッセージkey
+		 */
+		private Message(String key) {
+LF
+			this.key_ = key;
+			this.text_ = RESOURCE_BUNDLE.getString(key);
+		}
+LF
+		/**
+		 * メッセージキーを取得する.
+		 * 
+		 * @return メッセージキー
+		 */
+		public String getKey() {
+LF
+			return key_;
+		}
+LF
+		/**
+		 * フォーマットされていないメッセージを返す.
+		 * 
+		 * @return フォーマットされていないメッセージ.
+		 */
+		public String getText() {
+LF
+			return text_;
+		}
+LF
+		/**
+		 * フォーマットされたメッセージを返す.
+		 * 
+		 * @param params パラメータ.
+		 * @return フォーマットされたメッセージ.
+		 */
+		public String format(Object... params) {
+LF
+			return MessageFormat.format(text_, params);
+		}
+	}
