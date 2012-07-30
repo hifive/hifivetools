@@ -14,15 +14,15 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.view.bean;
+package com.htmlhifive.tools.codeassist.ui.view.bean;
 
 import com.htmlhifive.tools.codeassist.ui.view.bean.BeanChangeEvent.CompositeBean;
 
 /**
  * オプションファイル設定コンポジットのビーンクラス.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class OptionConfigureBean implements CompositeBean {
 
@@ -33,7 +33,7 @@ public class OptionConfigureBean implements CompositeBean {
 
 	/**
 	 * オプションファイルパスを取得する.
-	 *
+	 * 
 	 * @return オプションファイルパス
 	 */
 	public String getOptionFilePath() {
@@ -43,7 +43,7 @@ public class OptionConfigureBean implements CompositeBean {
 
 	/**
 	 * オプションファイルパスを設定する.
-	 *
+	 * 
 	 * @param optionFilePath オプションファイルパス
 	 */
 	public void setOptionFilePath(String optionFilePath) {

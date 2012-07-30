@@ -14,8 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.dialog;
-
+package com.htmlhifive.tools.codeassist.ui.dialog;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -30,9 +29,9 @@ import com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin;
 
 /**
  * リソース選択ダイアログ.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class FileSelectionDialog extends AbstractResourceSelectionDialog {
 
@@ -42,9 +41,9 @@ public class FileSelectionDialog extends AbstractResourceSelectionDialog {
 	private String[] extensions;
 
 	/**
-	 *
+	 * 
 	 * コンストラクタ.
-	 *
+	 * 
 	 * @param parent シェル
 	 * @param title ダイアログタイトル
 	 * @param message ダイアログメッセージ
@@ -58,11 +57,11 @@ public class FileSelectionDialog extends AbstractResourceSelectionDialog {
 	}
 
 	/**
-	 *
+	 * 
 	 * ダイアログに表示される要素のフィルター.
-	 *
+	 * 
 	 * @author NS Solutions Corporation
-	 *
+	 * 
 	 */
 	private class FileSelectionFilter extends ViewerFilter {
 
@@ -87,9 +86,9 @@ public class FileSelectionDialog extends AbstractResourceSelectionDialog {
 
 	/**
 	 * ファイル選択ダイアログのバリデータクラス.
-	 *
+	 * 
 	 * @author NS Solutions Corporation
-	 *
+	 * 
 	 */
 	private static class FileSelectionValidator implements ISelectionStatusValidator {
 

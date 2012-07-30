@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.config;
+package com.htmlhifive.tools.codeassist.ui.config;
 
 import java.util.HashMap;
 import java.util.Map;
