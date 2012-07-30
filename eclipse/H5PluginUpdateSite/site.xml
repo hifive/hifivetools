@@ -9,5 +9,8 @@
    <feature url="features/com.htmlhifive.tools.codeassist.h5codeassist_1.1.0.vqualifier.jar" id="com.htmlhifive.tools.codeassist.h5codeassist" version="1.1.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
+   <feature url="features/com.htmlhifive.tools.wizard_1.0.0.vqualifier.jar" id="com.htmlhifive.tools.wizard" version="1.0.0.vqualifier">
+      <category name="hifive Plugins"/>
+   </feature>
    <category-def name="hifive Plugins" label="hifive プラグイン"/>
 </site>
