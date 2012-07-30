@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.htmlhifive.tomcat.feature"
+      label="Tomcat Plugin Feature"
+      version="3.3.0.vqualifier"
+      plugin="com.sysdeo.eclipse.tomcat">
+
+   <description>
+      hifive tomcat plugin
+   </description>
+
+   <copyright>
+      -TomcatPlugin
+    (c) Copyright Sysdeo SA 2001, 2002.
+    All Rights Reserved.
+  -Tomcat Feature
+    Copyright (C) 2012 NS Solutions Corporation.
+   </copyright>
+
+   <license url="">
+      -TomcatPlugin
+      License
+    Sysdeo makes available all content in this plug-in. The plug-in is provided to you under the terms and conditions of the MIT License. For purposes of the MIT License,
+    &quot;Software&quot; will mean the plug-in.
+      The MIT License
+      Copyright (c) 2002 Sysdeo
+      Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+      &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute,
+      sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following
+      conditions:
+      The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+      THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+      THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+      THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+      CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+      DEALINGS IN THE SOFTWARE.
+
+  -TomcatFeature
+    Copyright (C) 2012 NS Solutions Corporation.
+    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+   </requires>
+
+   <plugin
+         id="com.sysdeo.eclipse.tomcat"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
