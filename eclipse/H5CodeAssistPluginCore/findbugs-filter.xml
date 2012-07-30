@@ -1,0 +1,7 @@
+<FindBugsFilter>
+  <Match>
+    <Or>
+      <Package name="~.*"/>
+    </Or>
+  </Match>
+</FindBugsFilter>

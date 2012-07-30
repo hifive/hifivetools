@@ -1,0 +1,6 @@
+#
+#Thu Jul 21 15:18:08 JST 2011
+hi5.tool.jslint.option=/JSLintPlugin/config/check.properties
+hi5.tool.jslint.use.other.project=false
+hi5.tool.jslint.other.project=
+hi5.tool.jslint.jslint=/JSLintPlugin/config/jslint.js

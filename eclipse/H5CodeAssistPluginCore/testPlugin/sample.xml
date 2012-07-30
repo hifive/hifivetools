@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h5-code-assist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="h5-code-assist.xsd">
+	<codeassists suffix="Controller">
+		<codeassist method="test1" returnType="ReturnType1">
+			<argument name="arg1" type="Object" />
+			<argument name="arg2" type="Object" />
+			<helpdoc><![CDATA[<b>テストテスト</b>]]></helpdoc>
+		</codeassist>
+	</codeassists>
+	<codeassists suffix="View">
+		<codeassist returnType="ReturnType2" method="Test2">
+			<argument name="arg" type="String" />
+			<helpdoc>ああああああ</helpdoc>
+		</codeassist>
+	</codeassists>
+</h5-code-assist>

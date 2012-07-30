@@ -1,0 +1,42 @@
+#
+# Copyright (C) 2012 NS Solutions Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+#エラーメッセージ
+EM0001=ERROR,オプションファイルの解析に失敗しました.[オプションファイル:{0}]
+EM0002=ERROR,コード補完情報生成に失敗しました.
+EM0003=ERROR,xmlファイルの解析に失敗しました.
+EM0004=ERROR,インスタンスの生成に失敗しました.
+EM0005=ERROR,コード補完呼び出しに失敗しました.
+EM0006=ERROR,コード補完の振り分け処理で失敗しました.
+EM0007=DEBUG,コードビルダータイプが{0}の場合はダミーコード情報はDelegateDummyCodeInfoインスタンスである必要があります.
+
+#デバッグメッセージ
+DB0001=DEBUG,DummyCreateflg : [{0}]
+DB0002=DEBUG,DefaultAssistExistFlg : [{0}]
+DB0003=DEBUG,addedMethodName : [{0}]
+DB0004=DEBUG,CheckCodeAssistNodeFlg : [{0}]
+DB0005=DEBUG,MemberAccessStr : [{0}]
+DB0006=DEBUG,ObjType : [xxxController]
+DB0007=DEBUG,ObjType : [this]
+DB0008=DEBUG,ObjType : [Other]
+
+#情報メッセージ.
+IF0001=INFO,suffix [{0}] start.
+IF0002=INFO,suffix [{0}] end.
+
+#デスクリプションメッセージ
+DES0001=INFO,パラメータ:
+DES0002=INFO,戻り値:

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h5-code-assist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="h5-code-assist.xsd">
+	<controller suffix="Controller">
+		<varRef key="rootElement" className="Element" />
+		<varRef key="initPromise" className="Promise" />
+		<varRef key="readyPromise" className="Promise" />
+		<varRef key="isInit" className="Boolean" />
+		<varRef key="isReady" className="Boolean" />
+		<varRef key="log" className="Log" />
+		<varRef key="rootController" className="Controller" />
+		<varRef key="parentController" className="Controller" />
+		<varRef key="view" className="View" />
+		<function name="$find" returnType="jQuery" returnDescription="jQueryオブジェクト">
+			<argument name="selector" type="String" description="セレクタ" />
+			<description>コントローラがバインドされた要素内から要素を選択します</description>
+		</function>
+		<function name="deferred" returnType="Deferred"
+			returnDescription="Deferredオブジェクト">
+			<description>Deferredオブジェクトを返します。</description>
+		</function>
+		<function name="enableListeners" returnType="void">
+			<description>コントローラに定義されているリスナーの実行を許可します。</description>
+		</function>
+		<function name="disableListeners" returnType="void">
+			<description>コントローラに定義されているリスナーの実行を禁止します。</description>
+		</function>
+		<function name="trigger" returnType="void">
+			<argument name="eventName" type="String" description="イベント名" />
+			<argument name="parameter" type="Object"
+				description="パラメータ。パラメータはオブジェクトを指定してください。" />
+			<description>ルート要素を起点に指定されたイベントを実行します。</description>
+		</function>
+		<function name="triggerIndicator" returnType="void">
+			<argument name="opt" type="Object" description="オプション(message, percent, block)" />
+			<argument name="eventName" type="String" description="イベント名" />
+			<description>
+			コントローラのインジケータイベントを実行します。
+			</description>
+		</function>
+		<function name="own" returnType="Function">
+			<argument name="func" type="Function" description="コンテキストを変更したい関数" />
+			<description>指定された関数に対して、コンテキスト(this)をコントローラに変更して実行する関数を返します。</description>
+		</function>
+		<function name="ownWithOrg" returnType="Function">
+			<argument name="func" type="Function" description="コンテキストを変更したい関数" />
+			<description>指定された関数に対して、コンテキスト(this)をコントローラに変更し、元々のthisを第1引数に加えて実行する関数を返します。</description>
+		</function>
+		<function name="bind" returnType="Controller">
+			<argument name="element" type="Object" description="セレクタ、DOM要素、もしくはjQueryオブジェクト" />
+			<argument name="param" type="Object" description="初期化パラメータ" />
+			<description>コントローラを要素へバインドします。</description>
+		</function>
+		<function name="unbind" returnType="void">
+			<description>コントローラの要素へのバインドを解除します。</description>
+		</function>
+		<function name="dispose" returnType="void">
+			<description>コントローラのリソースをすべて削除します。Controller#unbind()の処理を包含しています。</description>
+		</function>
+		<function name="indicator" returnType="void">
+			<argument name="opt" type="Object"
+				description="オプション(message, percent, block, promises, cssClass)" />
+			<description>
+			指定された要素に対して、インジケータ(メッセージ・画面ブロック・進捗)の表示や非表示を行うためのオブジェクトを取得します。
+			&lt;br /&gt;
+			targetには、インジケータを表示するDOMオブジェクト、またはセレクタを指定して下さい。
+			&lt;br /&gt;
+			targetを指定しない場合、コントローラを割り当てた要素(rootElement)に対してインジケータを表示します。
+			&lt;br /&gt;
+			詳細は http://dbato.sysrdc.ns-sol.co.jp:8080/hifive/doc/Controller.html#indicator を参照してください。
+			</description>
+		</function>
+		<function name="throwError" returnType="void">
+			<argument name="parameter" type="String|Object"
+				description="文字列の場合、第2引数以降をパラメータとしてフォーマットします。オブジェクトの場合、そのままErrorクラスへ格納します。" />
+			<argument name="var_args" type="Any" description="第1引数が文字列の場合のパラメータ" />
+			<description>
+			第1引数が文字列の場合、第2引数以降をパラメータとしてフォーマットしたメッセージを格納してエラーを送出します。
+			&lt;br /&gt;
+			第1引数がオブジェクトの場合、そのまま格納してエラーを送出します。
+			</description>
+		</function>
+		<function name="throwCustomError" returnType="void">
+			<argument name="customType" type="String" description="エラータイプ" />
+			<argument name="parameter" type="String|Object"
+				description="文字列の場合、第3引数以降をパラメータとしてフォーマットします。オブジェクトの場合、そのままErrorクラスへ格納します。" />
+			<argument name="var_args" type="Any" description="第2引数が文字列の場合のパラメータ" />
+			<description>
+			第2引数が文字列の場合、第3引数以降をパラメータとしてフォーマットしたメッセージとエラータイプを格納してエラーを送出します。
+			&lt;br /&gt;
+			第2引数がオブジェクトの場合、そのオブジェクトとエラータイプを格納してエラーを送出します。
+			</description>
+		</function>
+	</controller>
+	<logic suffix="Logic" controllerSuffix="Logic">
+		<varRef key="log" className="Log" />
+		<function name="deferred" returnType="String"
+			returnDescription="Deferredオブジェクト">
+			<description>Deferredオブジェクトを返します。</description>
+		</function>
+	</logic>
+	<eventcontext controllerSuffix="Controller">
+		<varRef key="controller" className="Controller" />
+		<varRef key="rootElement" className="Object" />
+		<varRef key="event" className="Object" />
+		<varRef key="evArg" className="Object" />
+	</eventcontext>
+	<initcontext controllerSuffix="Controller">
+		<varRef key="args" className="Object" />
+	</initcontext>
+</h5-code-assist>
