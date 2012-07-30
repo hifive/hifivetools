@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.htmlhifive.tools.codeassist.h5codeassist_1.0.1.vqualifier.jar" id="com.htmlhifive.tools.codeassist.h5codeassist" version="1.0.1.vqualifier">
-      <category name="hifive Plugins"/>
-   </feature>
    <feature url="features/com.htmlhifive.tools.jslint.feature_1.1.0.vqualifier.jar" id="com.htmlhifive.tools.jslint.feature" version="1.1.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
    <feature url="features/com.htmlhifive.tomcat.feature_3.3.0.vqualifier.jar" id="com.htmlhifive.tomcat.feature" version="3.3.0.vqualifier">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/com.htmlhifive.tools.codeassist.h5codeassist_1.1.0.vqualifier.jar" id="com.htmlhifive.tools.codeassist.h5codeassist" version="1.1.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
    <category-def name="hifive Plugins" label="hifive プラグイン"/>
