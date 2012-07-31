@@ -36,10 +36,14 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
+import com.htmlhifive.tools.wizard.RemoteContentManager;
+import com.htmlhifive.tools.wizard.library.model.LibraryList;
 import com.htmlhifive.tools.wizard.library.model.xml.Category;
+import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
+import com.htmlhifive.tools.wizard.utils.H5LogUtils;
 
 /**
  * <H3>ライセンス確認コンポジット.</H3>
@@ -49,6 +53,7 @@ import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
 public class ConfirmLicenseComposite extends Composite {
 
 	private final TabFolder tabFolder;
+	private Button btnRadioAccept = null;
 	final Set<Category> categorySet = new LinkedHashSet<Category>();
 
 	/**
@@ -75,7 +80,7 @@ public class ConfirmLicenseComposite extends Composite {
 		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
 
-		Button btnRadioAccept = new Button(composite, SWT.RADIO);
+		btnRadioAccept = new Button(composite, SWT.RADIO);
 		btnRadioAccept.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -99,69 +104,81 @@ public class ConfirmLicenseComposite extends Composite {
 	 */
 	void setLiceseContents() {
 
-		for (LibraryNode libraryNode : H5WizardPlugin.getInstance().getSelectedLibrarySet()) {
-			CategoryNode categoryNode = libraryNode.getParent();
-			Category category = categoryNode.getValue();
-			// Category category = H5WizardPlugin.getInstance().getLibraryList().getCategoryMap().get(library);
+		LibraryList libraryList = RemoteContentManager.getLibraryList();
 
-			if (!categorySet.contains(category) && libraryNode.isAddable()) {
-				// 無い場合に追加.
-				TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-				tabItem.setText(categoryNode.getLabel());
-				tabItem.setData(category);
-				categorySet.add(category);
+		for (Category category : libraryList.getLibraries().getSiteLibraries().getCategory()) {
+			boolean isShow = false;
+			for (LibraryNode libraryNode : H5WizardPlugin.getInstance().getSelectedLibrarySet()) {
+				if (category == libraryNode.getParent().getValue()){
+					// 今までに表示してなくて、追加するもののみが表示する対象.
+					isShow = true;
+					if (!categorySet.contains(category) && libraryNode.isAddable()) {
+						CategoryNode categoryNode = libraryNode.getParent();
 
-				if (category.getLicenseUrl() != null) {
-					Composite composite = new Composite(tabFolder, SWT.NONE);
-					composite.setLayout(new GridLayout(1, false));
-					tabItem.setControl(composite);
+						// 無い場合に追加.
+						TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+						tabItem.setText(categoryNode.getLabel());
+						tabItem.setData(category);
 
-					ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-					// new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-					scrolledComposite.setExpandHorizontal(true);
-					scrolledComposite.setExpandVertical(true);
-					scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+						if (category.getLicenseUrl() != null) {
+							Composite composite = new Composite(tabFolder, SWT.NONE);
+							composite.setLayout(new GridLayout(1, false));
+							tabItem.setControl(composite);
 
-					Link link = new Link(composite, SWT.NONE);
-					link.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-					link.setText("URL: <a>" + category.getLicenseUrl() + "</a>");
-					link.addSelectionListener(new SelectionAdapter() {
+							ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.H_SCROLL | SWT.V_SCROLL);
+							// new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+							scrolledComposite.setExpandHorizontal(true);
+							scrolledComposite.setExpandVertical(true);
+							scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-						@Override
-						public void widgetSelected(SelectionEvent e) {
+							Link link = new Link(composite, SWT.NONE);
+							link.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+							link.setText("URL: <a>" + category.getLicenseUrl() + "</a>");
+							link.addSelectionListener(new SelectionAdapter() {
 
-							if (e.text.startsWith("http://") || e.text.startsWith("https://")) {
-								// 安全のためとりあえずは、http, httpsだけ
-								Program.launch(e.text);
+								@Override
+								public void widgetSelected(SelectionEvent e) {
+
+									if (e.text.startsWith("http://") || e.text.startsWith("https://")) {
+										// 安全のためとりあえずは、http, httpsだけ
+										Program.launch(e.text);
+									}
+								}
+							});
+
+							// Browser browser = new Browser(scrolledComposite, SWT.BORDER);
+							Browser browser = new Browser(scrolledComposite, SWT.NONE);
+							scrolledComposite.setContent(browser);
+							scrolledComposite.setMinSize(browser.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+							boolean result = browser.setUrl(category.getLicenseUrl());
+							//H5LogUtils.putLog(null, Messages.PI0136,category.getLicenseUrl(), result);
+							browser.setVisible(result);
+						} else {
+							Link link = new Link(tabFolder, SWT.NONE);
+							// link.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+							tabItem.setControl(link);
+							if (category.getLicense() != null) {
+								link.setText(category.getLicense());
 							}
+							link.addSelectionListener(new SelectionAdapter() {
+
+								@Override
+								public void widgetSelected(SelectionEvent e) {
+
+									if (e.text.startsWith("http://") || e.text.startsWith("https://")) {
+										// 安全のためとりあえずは、http, httpsだけ
+										Program.launch(e.text);
+									}
+								}
+							});
 						}
-					});
-
-					// Browser browser = new Browser(scrolledComposite, SWT.BORDER);
-					Browser browser = new Browser(scrolledComposite, SWT.NONE);
-					scrolledComposite.setContent(browser);
-					scrolledComposite.setMinSize(browser.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-					browser.setUrl(category.getLicenseUrl());
-				} else {
-					Link link = new Link(tabFolder, SWT.NONE);
-					// link.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-					tabItem.setControl(link);
-					if (category.getLicense() != null) {
-						link.setText(category.getLicense());
+						categorySet.add(category);
 					}
-					link.addSelectionListener(new SelectionAdapter() {
-
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-
-							if (e.text.startsWith("http://") || e.text.startsWith("https://")) {
-								// 安全のためとりあえずは、http, httpsだけ
-								Program.launch(e.text);
-							}
-						}
-					});
 				}
+			}
+			if (!isShow) {
+				categorySet.remove(category);
 			}
 		}
 
@@ -206,5 +223,15 @@ public class ConfirmLicenseComposite extends Composite {
 		event.type = SWT.ERROR_UNSPECIFIED;
 		event.doit = status;
 		notifyListeners(event.type, event);
+	}
+
+	/**
+	 * 選択されているかどうか.バグ対策.
+	 * 
+	 * @return 選択されているかどうか.
+	 */
+	public boolean isAccepted() {
+
+		return btnRadioAccept.getSelection();
 	}
 }

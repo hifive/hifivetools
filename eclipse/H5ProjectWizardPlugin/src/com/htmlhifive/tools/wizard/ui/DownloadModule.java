@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -42,6 +43,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.TreeNode;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -373,11 +375,10 @@ public class DownloadModule {
 	 * @param logger ロガー
 	 * @param selectedLibrarySet 選択済ライブラリ
 	 * @param projectRoot プロジェクトルートフォルダ
-	 * @param defaultJsLibPath 規定のJSインストール先
 	 * @return 処理が成功したかどうか
 	 */
 	public boolean downloadLibrary(IProgressMonitor monitor, ResultStatus logger, Set<LibraryNode> selectedLibrarySet,
-			IContainer projectRoot, String defaultJsLibPath) {
+			IContainer projectRoot) {
 
 		if (H5WizardPlugin.getInstance().getSelectedLibrarySet().size() == 0) {
 			return true;
@@ -417,27 +418,33 @@ public class DownloadModule {
 						for (String fileName : libraryNode.getFileList()) {
 
 							IFile iFile = folder.getFile(Path.fromOSString(fileName));
-							if (iFile.exists()) {
-								// 削除.
-								logger.log(Messages.SE0095, iFile.getFullPath());
-								iFile.delete(true, true, monitor);
-								logger.log(Messages.SE0096, iFile.getFullPath());
 
-								// フォルダが空なら削除.
-								IContainer parentFolder = iFile.getParent();
-								while (parentFolder.exists() && parentFolder.members().length == 0) {
+							if (iFile.exists()) {
+								// 他で利用されているかどうかチェック.
+								if (isOtherLibraryResources(libraryNode, folder, fileName)) {
+									logger.log(Messages.SE0102, iFile.getFullPath());
+								} else {
 									// 削除.
-									logger.log(Messages.SE0095, parentFolder.getFullPath());
-									((IFolder) parentFolder).delete(true, true, monitor);
-									logger.log(Messages.SE0096, parentFolder.getFullPath());
-									parentFolder = parentFolder.getParent();
+									logger.log(Messages.SE0095, iFile.getFullPath());
+									iFile.delete(true, true, monitor);
+									logger.log(Messages.SE0096, iFile.getFullPath());
+
+									// フォルダが空なら削除.
+									IContainer parentFolder = iFile.getParent();
+									while (parentFolder.exists() && parentFolder.members().length == 0) {
+										// 削除.
+										logger.log(Messages.SE0095, parentFolder.getFullPath());
+										((IFolder) parentFolder).delete(true, true, monitor);
+										logger.log(Messages.SE0096, parentFolder.getFullPath());
+										parentFolder = parentFolder.getParent();
+									}
 								}
 							}
 						}
 						monitor.worked(perLibWork);
 					} else if (libraryNode.isAddable()) {
 						// 追加処理.
-						if (downloadZip(libraryNode, perLibWork, folder, monitor, logger)) {
+						if (!downloadZip(libraryNode, perLibWork, folder, monitor, logger)) {
 							logger.setSuccess(false);
 						}
 					}
@@ -448,18 +455,7 @@ public class DownloadModule {
 					// SE0072=INFO,ライブラリ更新処理が完了しました。
 					logger.log(Messages.SE0072);
 
-				} catch (URISyntaxException e) {
-					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
-
-					H5LogUtils.putLog(e, Messages.SE0044);
-				} catch (CoreException e) {
-
-					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
-
-					H5LogUtils.putLog(e, Messages.SE0044);
-				} catch (IOException e) {
+				} catch (Exception e) { // URISyntaxException, CoreException. IOException
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);
 
@@ -483,6 +479,17 @@ public class DownloadModule {
 			int perSiteWork = Math.max(1, perLibWork / library.getSite().size());
 
 			for (Site site : library.getSite()) {
+				String siteUrl = null;
+				try {
+					siteUrl = new URL(site.getUrl()).getPath();
+				} catch (MalformedURLException e) {
+					// エラー.
+					logger.log(e, Messages.SE0082, site.getUrl());
+				}
+				if (siteUrl == null) {
+					continue;
+				}
+
 				boolean setWorked = false;
 
 				IContainer savedFolder = folder;
@@ -492,12 +499,12 @@ public class DownloadModule {
 
 				// ファイルのダウンロード.
 				IFile iFile = null;
-				if (site.getUrl().endsWith(".zip") || site.getUrl().endsWith(".jar") || site.getFilePattern() != null) {
+				if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || site.getFilePattern() != null) {
 
 					// Zipダウンロード
 
 					// 同じファイルはそのまま使う.
-					if (!site.getUrl().equals(cachedSite)) {
+					if (!siteUrl.equals(cachedSite)) {
 						cachedZipFile = download(monitor, logger, null, site.getUrl(), perSiteWork);
 						setWorked = true;
 						if (!lastDownloadStatus || cachedZipFile == null) {
@@ -505,7 +512,7 @@ public class DownloadModule {
 							result = false;
 							break;
 						}
-						cachedSite = site.getUrl();
+						cachedSite = siteUrl;
 					}
 
 					final ZipFile zipFile = cachedZipFile;
@@ -581,9 +588,8 @@ public class DownloadModule {
 					if (site.getReplaceFileName() != null) {
 						iFile = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
 					} else {
-						iFile =
-								savedFolder
-								.getFile(Path.fromOSString(StringUtils.substringAfterLast(site.getUrl(), "/")));
+						// ファイル部分.
+						iFile = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(siteUrl, "/")));
 					}
 
 					// 追加.
@@ -592,7 +598,10 @@ public class DownloadModule {
 					if (!lastDownloadStatus) {
 
 						// SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}
-						logger.log(Messages.SE0101, site.getUrl(), site.getFilePattern());
+						logger.log(
+								Messages.SE0101,
+								iFile != null ? iFile.getFullPath().toString() : StringUtils.defaultString(site
+										.getFilePattern()), site.getUrl(), site.getFilePattern());
 						libraryNode.setState(LibraryState.DOWNLOAD_ERROR);
 					} else {
 						addStatus = true;
@@ -622,6 +631,36 @@ public class DownloadModule {
 		}
 
 		return result;
+	}
+
+
+	/**
+	 * 他で利用しているリソースかどうか.
+	 * 
+	 * @param targetLibraryNode ライブラリノード.
+	 * @param folder フォルダ
+	 * @param targetFileName ターゲット名
+	 * @return 他で利用しているリソースかどうか.
+	 */
+	private boolean isOtherLibraryResources(LibraryNode targetLibraryNode, IContainer folder, String targetFileName) {
+
+		for (TreeNode node : targetLibraryNode.getParent().getParent().getChildren()){
+			CategoryNode categoryNode = (CategoryNode)node;
+			if (folder.equals(categoryNode.getInstallFullPath())){
+				for (TreeNode node2 : categoryNode.getChildren()){
+					LibraryNode libraryNode = (LibraryNode)node2;
+					if (libraryNode != targetLibraryNode && libraryNode.isExists()) {
+						for (String fileName: libraryNode.getFileList()){
+							if (targetFileName.equals(fileName)){
+								return true;
+							}
+						}
+					}
+				}
+
+			}
+		}
+		return false;
 	}
 
 	/**

@@ -149,6 +149,9 @@ public abstract class Messages extends MessagesBase {
 	/** SE0081=ERROR,リソース({0})が見つかりません。. */
 	public static final Message SE0081 = createMessage("SE0081");
 
+	/** SE0082=ERROR,リソース({0})は正しいURLではありません。. */
+	public static final Message SE0082 = createMessage("SE0082");
+
 	// #ファイル操作(ResultStatus)
 	/** SE0091=INFO,リソース({0})を作成します。. */
 	public static final Message SE0091 = createMessage("SE0091");
@@ -182,6 +185,9 @@ public abstract class Messages extends MessagesBase {
 
 	/** SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}. */
 	public static final Message SE0101 = createMessage("SE0101");
+
+	/** SE0102=WARN,リソース({0})は他で利用されているため削除しませんでした。. */
+	public static final Message SE0102 = createMessage("SE0102");
 
 	// #その他
 	/** SE0103=INFO,ライブラリの状態を最新化しました。. */
@@ -236,10 +242,16 @@ public abstract class Messages extends MessagesBase {
 	/** PI0131=INFO,処理結果. */
 	public static final Message PI0131 = createMessage("PI0131");
 
-	/** PI0132=ERROR,ライブラリ更新処理が完了しました。. */
+	/** PI0132=INFO,ライブラリ更新処理が完了しました。. */
 	public static final Message PI0132 = createMessage("PI0132");
 
-	/** PI0133=ERROR,ライブラリ更新処理が完了しました。一部、エラーが発生している箇所があります。. */
+	/** PI0133=WARN,ライブラリ更新処理が完了しましたが、\n一部でエラーが発生しています。. */
 	public static final Message PI0133 = createMessage("PI0133");
+
+	/** PI0135=INFO,{0}. */
+	public static final Message PI0135 = createMessage("PI0135");
+
+	/** PI0136=INFO,URL{0}の結果は{1}でした。. */
+	public static final Message PI0136 = createMessage("PI0136");
 
 }

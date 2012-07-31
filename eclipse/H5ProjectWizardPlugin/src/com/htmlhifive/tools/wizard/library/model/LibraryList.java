@@ -15,6 +15,8 @@
  */
 package com.htmlhifive.tools.wizard.library.model;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -69,8 +71,12 @@ public class LibraryList {
 	/** infoBaseProjectMap. */
 	private final Map<String, BaseProject> infoBaseProjectMap = new LinkedHashMap<String, BaseProject>();
 
-	/** defaultJsLibPath. */
-	private String defaultJsLibPath = null;
+	//
+	//	/** defaultJsLibPath. */
+	//	private String defaultJsLibPath = null;
+	//
+	//	/** projectName. */
+	//	private String projectName = null;
 
 	/**
 	 * コンストラクタ.
@@ -201,10 +207,13 @@ public class LibraryList {
 	/**
 	 * ライブラリ存在チェック.<br>
 	 * 
-	 * @param jsProject 対象JSプロジェクト
+	 * @param jsProject JSプロジェクト
+	 * @param projectName プロジェクト名
+	 * @param defaultJsLibPath JSライブラリ
 	 * @param rootNode ルートノード
 	 */
-	public void checkLibrary(IJavaScriptProject jsProject, RootNode rootNode) {
+	public void checkLibrary(IJavaScriptProject jsProject, String projectName, String defaultJsLibPath,
+			RootNode rootNode) {
 
 		IContainer defaultInstallContainer = null;
 
@@ -218,11 +227,13 @@ public class LibraryList {
 				// JavaScriptのライブラリを検索する.
 				Set<IContainer> set = new LinkedHashSet<IContainer>();
 				for (IIncludePathEntry entry : jsProject.getResolvedIncludepath(true)) {
-					// Includeの指定がないものを優先的にインストール先として利用する
-					if (defaultInstallContainer == null && entry.getInclusionPatterns().length == 0) {
-						defaultInstallContainer = ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
+					if (entry.getContentKind() == IPackageFragmentRoot.K_SOURCE) {
+						// Includeの指定がないものを優先的にインストール先として利用する
+						if (defaultInstallContainer == null && entry.getInclusionPatterns().length == 0) {
+							defaultInstallContainer = ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
+						}
+						set.add(ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath()));
 					}
-					set.add(jsProject.getProject().getFolder(entry.getPath()));
 				}
 				set.add(jsProject.getProject()); // 一応追加しておく.
 
@@ -236,8 +247,11 @@ public class LibraryList {
 				H5LogUtils.putLog(e, Messages.SE0022);
 			}
 		} else if (defaultJsLibPath != null) {
+			// 存在していないので、単なる文字列としておく.
 			defaultInstallContainer =
-					ResourcesPlugin.getWorkspace().getRoot().getFolder(Path.fromOSString(defaultJsLibPath));
+					ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)
+					.getFolder(Path.fromOSString(defaultJsLibPath));
+
 		}
 
 		for (TreeNode node : rootNode.getChildren()) {
@@ -248,208 +262,192 @@ public class LibraryList {
 				categoryNode.setParentPath(defaultInstallContainer, null);
 			}
 
+			// LibraryNode単位ここから
 			for (TreeNode node2 : node.getChildren()) {
-				if (node2 instanceof LibraryNode) {
-					LibraryNode libraryNode = (LibraryNode) node2;
+				LibraryNode libraryNode = (LibraryNode) node2;
 
-					// 推奨チェック.
-					libraryNode.setRecommended(libraryRefMap.containsValue(libraryNode.getValue()));
+				// 推奨チェック.
+				libraryNode.setRecommended(libraryRefMap.containsValue(libraryNode.getValue()));
 
-					// 存在チェック.
-					if (jsProject != null) {
-						libraryNode.setExists(false);
-						libraryNode.setState(LibraryState.DEFAULT);
+				// 存在チェック.
+				if (jsProject != null) {
+					libraryNode.setExists(false);
+					libraryNode.setState(LibraryState.DEFAULT);
 
-						boolean libraryFullExists = false;
-						boolean libraryExists = false;
+					boolean libraryFullExists = false;
+					boolean libraryExists = false;
+					IContainer lastContainer = null;
+					List<String> lastExistsFileList = null;
+					List<String> lastNoExistsFileList = null;
 
-						IContainer lastContainer = null;
-						List<String> lastExistsFileList = null;
-						List<String> lastNoExistsFileList = null;
-						for (IContainer container : checkContainers) {
+					// Container単位ここから
+					for (IContainer container : checkContainers) {
+						IContainer folder = container;
+						if (StringUtils.isNotEmpty(categoryNode.getInstallSubPath())) {
+							folder = container.getFolder(Path.fromOSString(categoryNode.getInstallSubPath()));
+						}
+
+						List<String> existsFileList = new ArrayList<String>();
+						List<String> noExistsFileList = new ArrayList<String>();
+
+						if (folder.getRawLocation() != null) {
+							// Site単位ここから
 							boolean allExists = true;
-							libraryExists = false;
-							List<String> existsFileList = new ArrayList<String>();
-							List<String> noExistsFileList = new ArrayList<String>();
-
-							IContainer entryFolder = container;
-							if (StringUtils.isNotEmpty(categoryNode.getInstallSubPath())) {
-								entryFolder = container.getFolder(Path.fromOSString(categoryNode.getInstallSubPath()));
-							}
-
-							if (entryFolder.getRawLocation() != null) {
-								for (Site site : libraryNode.getValue().getSite()) {
-									IContainer folder;
-									if (site.getExtractPath() != null) {
-										folder = entryFolder.getFolder(Path.fromOSString(site.getExtractPath()));// .getRawLocation().toFile();
-									} else {
-										folder = entryFolder;// .getRawLocation().toFile();
-									}
-
-									String[] fileList = null;
-
-									String wildCardStr = site.getFilePattern();
-									if (site.getUrl().endsWith(".zip") || site.getUrl().endsWith(".jar")
-											|| site.getFilePattern() != null) {
-										// ZIPとか用
-										String wildCardPath = "";
-										if (wildCardStr != null && wildCardStr.contains("/")) {
-											// パス以外を取得.
-											wildCardStr = StringUtils.substringAfterLast(site.getFilePattern(), "/");
-
-											// パスを取得.
-											if (!wildCardStr.contains("*")) { // *の時はパスを除去するので
-												wildCardPath =
-														StringUtils.substringBeforeLast(site.getFilePattern(), "/");
-												// folder = new File(folder, wildCardPath);
-												folder = entryFolder.getFolder(Path.fromOSString(wildCardPath));
-											}
-										}
-
-										if (site.getReplaceFileName() != null) {
-											fileList =
-													folder.getRawLocation().toFile()
-													.list(new WildcardFileFilter(site.getReplaceFileName()));
-										} else if (folder != null) {
-											if (wildCardStr != null) {
-												fileList =
-														folder.getRawLocation().toFile()
-														.list(new WildcardFileFilter(wildCardStr));
-											} else {
-												fileList = folder.getRawLocation().toFile().list();
-											}
-										}
-										if (fileList != null && fileList.length > 0) {
-											if (!wildCardPath.isEmpty()) {
-												for (String fileName : fileList) {
-													existsFileList.add(wildCardPath + "/" + fileName);
-												}
-											} else {
-												existsFileList.addAll(Arrays.asList(fileList));
-											}
-										} else {
-											noExistsFileList.add(folder.getFullPath().toString() + "/" + wildCardStr);
-										}
-									} else {
-										// zip以外.
-										IFile file = null;
-										if (site.getReplaceFileName() != null) {
-											file = folder.getFile(Path.fromOSString(site.getReplaceFileName()));
-										} else {
-											file =
-													folder.getFile(Path.fromOSString(StringUtils.substringAfterLast(
-															site.getUrl(), "/")));
-										}
-										if (file.exists()) {
-											fileList = new String[] { file.getName() };
-											existsFileList.add(file.getName());
-										} else {
-											noExistsFileList.add(file.getFullPath().toString());
-										}
-									}
-
-									// ここで一部不足しているかどうか判る
-									if (fileList != null && fileList.length > 0) {
-										// 1つ以上は存在している.
-										libraryExists = true;
-										lastExistsFileList = existsFileList;
-										lastNoExistsFileList = noExistsFileList;
-										lastContainer = container;
-									} else {
-										allExists = false;
-									}
-								}
-								if (allExists) {
-									// 全て存在しているので終了.
-									libraryFullExists = true;
+							for (Site site : libraryNode.getValue().getSite()) {
+								// ここで一部不足しているかどうか判る
+								if (checkSite(site, folder, existsFileList, noExistsFileList)) {
+									// 存在している.
+									libraryExists = true;
+									lastExistsFileList = existsFileList;
+									lastNoExistsFileList = noExistsFileList;
 									lastContainer = container;
-									break;
+								} else {
+									// 存在していない.
+									allExists = false;
 								}
 							}
-						}
-						if (libraryFullExists) {
-							// 全て存在している場合.
-							categoryNode.setParentPath(lastContainer, null);
-							libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
-							libraryNode.setExists(true);
-							libraryNode.setState(LibraryState.EXISTS);
-						} else if (libraryExists) {
-							// 一部存在している場合.
-							categoryNode.setParentPath(lastContainer, null);
-							libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
-							libraryNode.setExists(false);
-							libraryNode.setState(LibraryState.INCOMPLETE);
-							for (String name : lastNoExistsFileList) {
-								H5LogUtils.putLog(null, Messages.SE0081, name);
+							// Site単位ここまで
+							if (allExists) {
+								// 全て存在しているので終了.
+								libraryFullExists = true;
+								lastContainer = container;
+								break;
 							}
-						} else {
-							// 存在していない場合.
-							// categoryNode.setParentPath(defaultInstallContainer, jsProject.getProject());
-							// libraryNode.setExists(false);
-							// libraryNode.setState(LibraryState.DEFAULT);
 						}
+					}
+					// Container単位ここまで
 
-						// try {
-						// JSのライブラリでループ.
-						// for (IPackageFragmentRoot entry : jsProject.getPackageFragmentRoots()) {
-						// // IFolder libFolder = jsProject.getProject().getParent().getFolder(((IPackageFragmentRoot)
-						// // entry).getPath()); // TODO:
-						//
-						// jsProject.
-						//
-						// entry.getPath().toFile()
-						//
-						// IFolder libFolder = ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
-						// IFolder entryFolder = libFolder.getFolder(libraryNode.getParent().getValue().getPath()); //
-						// if (entryFolder.getRawLocation() != null) {
-						// for (Site site : libraryNode.getValue().getSite()) {
-						// File file = entryFolder.getRawLocation().toFile();
-						// String[] fileList = null;
-						// if (file != null) {
-						// fileList = file.list(new WildcardFileFilter(site.getFilePattern()));
-						// }
-						// if (fileList != null && fileList.length > 0) {
-						// // if (FilenameUtils.wildcardMatch(entryFolder.getFullPath().toString(),
-						// // site.getFilePattern())) {
-						// // 存在している.
-						// allExists = true;
-						// } else {
-						// allExists = false;
-						// break;
-						// }
-						// }
-						// }
-						// if (allExists) {
-						// libraryNode.setExists(true);
-						// libraryNode.setState(LibraryState.EXISTS);
-						// break;
-						// }
-						// }
-						// } catch (JavaScriptModelException e) {
-						// // TODO 自動生成された catch ブロック
-						// e.printStackTrace();
-						// }
+					if (libraryFullExists) {
+						// 全て存在している場合.
+						categoryNode.setParentPath(lastContainer, null);
+						libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
+						libraryNode.setExists(true);
+						libraryNode.setState(LibraryState.EXISTS);
+					} else if (libraryExists) {
+						// 一部存在している場合.
+						categoryNode.setParentPath(lastContainer, null);
+						libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
+						libraryNode.setExists(false);
+						libraryNode.setState(LibraryState.INCOMPLETE);
+						for (String name : lastNoExistsFileList) {
+							H5LogUtils.putLog(null, Messages.SE0081, name);
+						}
+					} else {
+						// 存在していない場合.
+						// categoryNode.setParentPath(defaultInstallContainer, jsProject.getProject());
+						// libraryNode.setExists(false);
+						// libraryNode.setState(LibraryState.DEFAULT);
 					}
 				}
 			}
+			// LibraryNode単位ここまで
 		}
 	}
 
 	/**
-	 * defaultJsLibPath.を取得します.
+	 * サイトごとのファイル存在チェックを行う.
 	 * 
-	 * @return defaultJsLibPath.
+	 * @param site サイト
+	 * @param folder フォルダ
+	 * @param existsFileList 存在しているファイルリスト
+	 * @param noExistsFileList 存在していないファイルリスト
+	 * @return 存在していればtrueを返す
 	 */
-	public String getDefaultJsLibPath() {
-		return defaultJsLibPath;
-	}
+	private boolean checkSite(Site site, IContainer folder, List<String> existsFileList, List<String> noExistsFileList) {
 
-	/**
-	 * defaultJsLibPath.を設定します.
-	 * 
-	 * @param defaultJsLibPath defaultJsLibPath.
-	 */
-	public void setDefaultJsLibPath(String defaultJsLibPath) {
-		this.defaultJsLibPath = defaultJsLibPath;
+		String siteUrl = null;
+		try {
+			siteUrl = new URL(site.getUrl()).getPath();
+		} catch (MalformedURLException ignore) {
+			// 無視.
+		}
+		if (siteUrl == null) {
+			return false;
+		}
+
+		IContainer savedFolder = folder;
+		if (site.getExtractPath() != null) {
+			savedFolder = folder.getFolder(Path.fromOSString(site.getExtractPath()));// .getRawLocation().toFile();
+		}
+
+		String[] fileList = null;
+
+		String wildCardStr = site.getFilePattern();
+		if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || site.getFilePattern() != null) {
+
+			// ZIPとか用
+			String wildCardPath = "";
+			if (wildCardStr != null && wildCardStr.contains("/")) {
+				// パス以外を取得.
+				wildCardStr = StringUtils.substringAfterLast(site.getFilePattern(), "/");
+
+				// パスを取得.
+				if (!wildCardStr.contains("*")) { // *の時はパスを除去するので
+					wildCardPath = StringUtils.substringBeforeLast(site.getFilePattern(), "/");
+					// folder = new File(folder, wildCardPath);
+					savedFolder = folder.getFolder(Path.fromOSString(wildCardPath));
+				}
+			}
+
+			if (site.getReplaceFileName() != null) {
+				fileList =
+						savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(site.getReplaceFileName()));
+			} else if (savedFolder != null) {
+				if (wildCardStr != null) {
+					fileList = savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(wildCardStr));
+				} else {
+					fileList = savedFolder.getRawLocation().toFile().list();
+				}
+			}
+			if (fileList != null && fileList.length > 0) {
+				if (!wildCardPath.isEmpty()) {
+					for (String fileName : fileList) {
+						existsFileList.add(wildCardPath + "/" + fileName);
+					}
+				} else {
+					existsFileList.addAll(Arrays.asList(fileList));
+				}
+			} else {
+				noExistsFileList.add(savedFolder.getFullPath().toString() + "/" + wildCardStr);
+			}
+
+		} else {
+			// zip以外.
+			IFile file = null;
+			if (site.getReplaceFileName() != null) {
+				file = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
+			} else {
+				file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(siteUrl, "/")));
+			}
+			if (file.exists()) {
+				fileList = new String[] { file.getName() };
+				existsFileList.add(file.getName());
+			} else {
+				noExistsFileList.add(file.getFullPath().toString());
+			}
+		}
+		// ここで一部不足しているかどうか判る
+		if (fileList != null && fileList.length > 0) {
+			return true;
+		}
+		return false;
 	}
+	//
+	//	/**
+	//	 * defaultJsLibPath.を設定します.
+	//	 *
+	//	 * @param projectName projectName
+	//	 * @param defaultJsLibPath defaultJsLibPath
+	//	 * @return 以前と値が異なる
+	//	 */
+	//	public boolean setProjectInfo(String projectName, String defaultJsLibPath) {
+	//
+	//		if (StringUtils.equals(this.projectName, projectName)
+	//				&& StringUtils.equals(this.defaultJsLibPath, defaultJsLibPath)) {
+	//			return false;
+	//		}
+	//		this.projectName = projectName;
+	//		this.defaultJsLibPath = defaultJsLibPath;
+	//		return true;
+	//	}
 }

@@ -103,8 +103,9 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	public void createControl(Composite parent) {
 
 		super.createControl(parent);
+
 		// 初期化.
-		container.initialize(getJavaScriptProject());
+		container.initialize(getJavaScriptProject(), null, null);
 	}
 
 	@Override
@@ -279,7 +280,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					// ダウンロードの実行
 					DownloadModule downloadModule = new DownloadModule();
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySet(), jsProject.getProject(), null);
+							.getSelectedLibrarySet(), jsProject.getProject());
 
 					// ワークスペースとの同期.
 					jsProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
@@ -287,8 +288,8 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					logger.log(Messages.SE0104);
 					monitor.worked(1);
 
-					// ファイルの存在チェック更新.
-					container.refreshTreeLibrary(false, false);
+					// ファイルの存在チェック更新(チェックを戻す).
+					container.refreshTreeLibrary(false, true);
 					// SE0103=INFO,ライブラリの状態を最新化しました。
 					logger.log(Messages.SE0103);
 

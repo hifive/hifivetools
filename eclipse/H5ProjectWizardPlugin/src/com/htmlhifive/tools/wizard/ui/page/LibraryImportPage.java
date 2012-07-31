@@ -15,7 +15,6 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -60,7 +59,7 @@ public class LibraryImportPage extends WizardPage {
 		setControl(container);
 
 		// 初期化.
-		container.initialize(null);
+		//container.initialize(null);
 
 	}
 
@@ -84,22 +83,20 @@ public class LibraryImportPage extends WizardPage {
 	public void setVisible(boolean visible) {
 
 		super.setVisible(visible);
-
 		if (visible) {
-
 			// libraryListのnull対応.
 			LibraryList libraryList = RemoteContentManager.getLibraryList();
 			if (libraryList != null) {
 				BaseProject baseProject = ((StructureSelectPage) getPreviousPage()).getBaseProject();
 				if (baseProject != null) {
-					if (!StringUtils.equals(libraryList.getDefaultJsLibPath(), baseProject.getDefaultJsLibPath())) {
-						libraryList.setDefaultJsLibPath(((StructureSelectPage) getPreviousPage()).getProjectName()
-								+ "/" + baseProject.getDefaultJsLibPath());
-						//container.refreshTreeLibrary(false, false);
-						container.initialize(null);
+					if (container.initialize(null, ((StructureSelectPage) getPreviousPage()).getProjectName(),
+							baseProject.getDefaultJsLibPath())) {
+						// 変更あり.
+						((ConfirmLicensePage) getNextPage()).clearCategory();
 					}
 				}
 			}
 		}
+
 	}
 }

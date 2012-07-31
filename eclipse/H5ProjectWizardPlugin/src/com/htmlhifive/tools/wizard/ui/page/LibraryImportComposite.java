@@ -15,6 +15,8 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +55,7 @@ import com.htmlhifive.tools.wizard.library.model.LibraryState;
 import com.htmlhifive.tools.wizard.library.model.xml.Category;
 import com.htmlhifive.tools.wizard.library.model.xml.Library;
 import com.htmlhifive.tools.wizard.library.model.xml.Site;
+import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
@@ -73,6 +76,8 @@ public class LibraryImportComposite extends Composite {
 	// private final TableViewer tableViewerSelection;
 	private final Link linkDetail;
 	private IJavaScriptProject jsProject = null;
+	private String wizardProjectName = null;
+	private String defaultJsLibPath = null;
 	private ScrolledComposite scrolledComposite = null;
 
 	/**
@@ -141,6 +146,7 @@ public class LibraryImportComposite extends Composite {
 
 		treeLibrary.setHeaderVisible(true);
 		treeLibrary.setLinesVisible(true);
+		treeLibrary.setEnabled(false);
 
 		treeViewerLibrary.setAutoExpandLevel(3);
 		Tree treeLibrary = treeViewerLibrary.getTree();
@@ -236,16 +242,28 @@ public class LibraryImportComposite extends Composite {
 	 * 初期化.
 	 * 
 	 * @param jsProject プロジェクト
+	 * @param wizardProjectName プロジェクト名
+	 * @param defaultJsLibPath JSパス
+	 * @return 変更あり
 	 */
-	public void initialize(IJavaScriptProject jsProject) {
+	public boolean initialize(IJavaScriptProject jsProject, String wizardProjectName, String defaultJsLibPath) {
+
+		if (jsProject == null && StringUtils.equals(this.wizardProjectName, wizardProjectName)
+				&& StringUtils.equals(this.defaultJsLibPath, defaultJsLibPath)) {
+			// 変更不可.
+			return false;
+		}
 
 		this.jsProject = jsProject;
+		this.wizardProjectName = wizardProjectName;
+		this.defaultJsLibPath = defaultJsLibPath;
 
 		// 選択を除去.
 		H5WizardPlugin.getInstance().getSelectedLibrarySet().clear();
 
 		// // 一覧をダウンロード.
 		refreshTreeLibrary(jsProject == null, true);
+		return true;
 	}
 
 	/**
@@ -269,12 +287,14 @@ public class LibraryImportComposite extends Composite {
 		// libraryListのnull対応.
 		if (libraryList == null) {
 			treeViewerLibrary.setInput(null);
+			treeLibrary.setEnabled(false);
 			return;
 		}
+		treeLibrary.setEnabled(true);
 
 		// チェック.
 		RootNode rootNode = new RootNode(libraryList);
-		libraryList.checkLibrary(jsProject, rootNode);
+		libraryList.checkLibrary(jsProject, wizardProjectName, defaultJsLibPath, rootNode);
 		treeViewerLibrary.setInput(rootNode.getChildren());
 
 		treeViewerLibrary.refresh(true);
@@ -315,26 +335,34 @@ public class LibraryImportComposite extends Composite {
 	 */
 	protected void do_treeLibrary_widgetSelected(SelectionEvent e) {
 
+		// 詳細更新.
+
 		TreeItem treeItem = (TreeItem) e.item;
 		CategoryNode categoryNode = null;
 		if (treeItem.getData() instanceof CategoryNode) {
 			categoryNode = (CategoryNode) treeItem.getData();
 		} else if (treeItem.getData() instanceof LibraryNode) {
-			categoryNode = ((LibraryNode) treeItem.getData()).getParent();
+			LibraryNode libraryNode = (LibraryNode) treeItem.getData();
+			treeLibrary.setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
+			treeItem.getParent().setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
+			categoryNode = libraryNode.getParent();
 		}
 
-		// 詳細更新.
-		String detail = null;
+		StringBuilder detail = new StringBuilder();
 		if (categoryNode != null) {
-			detail = categoryNode.getDescription();
-			if (detail == null) {
-				detail = categoryNode.getLabel();
+			if (StringUtils.isNotEmpty(categoryNode.getDescription())) {
+				detail.append(categoryNode.getDescription());
+			} else {
+				detail.append(categoryNode.getLabel());
 			}
 		}
-		linkDetail.setText(StringUtils.defaultString(detail));
+		linkDetail.setText(detail.toString());
 		scrolledComposite.setMinSize(linkDetail.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		if (e.detail == SWT.CHECK) {
+			if (treeLibrary.getSelection().length == 1 && treeLibrary.getSelection()[0] != treeItem) {
+				treeLibrary.setSelection(treeItem); // 選択状態にしておく.
+			}
 			if (treeItem.getData() instanceof LibraryNode) {
 				LibraryNode libraryNode = (LibraryNode) treeItem.getData();
 				if (treeItem.getChecked()) {
@@ -638,7 +666,18 @@ public class LibraryImportComposite extends Composite {
 		tableItem.setText(3, categoryNode.getPathLable());
 		List<String> files = new ArrayList<String>();
 		for (Site site : library.getSite()) {
-			files.add(site.getFilePattern());
+			if (site.getReplaceFileName() != null) {
+				files.add(site.getReplaceFileName());
+			} else if (site.getFilePattern() != null) {
+				files.add(site.getFilePattern());
+			} else {
+				try {
+					files.add(StringUtils.substringAfterLast(new URL(site.getUrl()).getPath(), "/"));
+				} catch (MalformedURLException e) {
+					// 無視.
+					files.add("---");
+				}
+			}
 		}
 		tableItem.setText(4, StringUtils.join(files, ","));
 		if (!library.getSite().isEmpty()) {

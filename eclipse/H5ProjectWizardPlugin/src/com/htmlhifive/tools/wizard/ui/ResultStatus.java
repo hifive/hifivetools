@@ -64,10 +64,12 @@ public class ResultStatus {
 				break;
 			default:
 		}
-		if (status != null) {
+		if (status != null ) {
 			statusList.add(status);
-			// .metadata/.logにログを出力
-			H5WizardPlugin.getInstance().getLog().log(status);
+			if (status.getSeverity() != IStatus.INFO) { // Info以外を出力
+				// .metadata/.logにログを出力
+				H5WizardPlugin.getInstance().getLog().log(status);
+			}
 		}
 		allLog.append(msg);
 	}
@@ -143,7 +145,8 @@ public class ResultStatus {
 			//					| IStatus.WARNING | IStatus.ERROR);
 
 			ErrorDialog.openError(null, Messages.PI0131.format(), null,
-					getMultiStatus(IStatus.INFO, Messages.PI0133.format()), IStatus.OK | IStatus.INFO | IStatus.WARNING
+					getMultiStatus(IStatus.WARNING, Messages.PI0133.format()), IStatus.OK | IStatus.INFO
+					| IStatus.WARNING
 					| IStatus.ERROR);
 		}
 	}

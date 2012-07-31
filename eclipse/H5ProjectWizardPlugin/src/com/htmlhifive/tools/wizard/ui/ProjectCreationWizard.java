@@ -319,7 +319,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 					// ダウンロードの実行
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySet(), project, baseProject.getDefaultJsLibPath());
+							.getSelectedLibrarySet(), project);
 
 					// ワークスペースとの同期.
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
