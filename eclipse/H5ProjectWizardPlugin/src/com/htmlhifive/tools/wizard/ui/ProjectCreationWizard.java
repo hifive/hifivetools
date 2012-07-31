@@ -124,13 +124,12 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 			final IRunnableWithProgress runnable = getExtractRunnnable(logger);
 			getContainer().run(false, false, runnable);
 
-			if (!logger.isSuccess()) {
-				return false;
+			if (logger.isSuccess()) {
+				// 成功時のみ.
+				// ライブラリダウンロード.
+				final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
+				getContainer().run(false, false, downloadRunnable);
 			}
-
-			// ライブラリダウンロード.
-			final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
-			getContainer().run(false, false, downloadRunnable);
 
 		} catch (InvocationTargetException e) {
 			final Throwable ex = e.getTargetException();
@@ -158,7 +157,9 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 		}
 
-		return logger.isSuccess();
+		// Wizardの場合は結果に関わらず終了する.
+		//return logger.isSuccess();
+		return true;
 	}
 
 	/**
@@ -250,8 +251,10 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 								// SE0066=INFO,Nature{0}を追加しました。
 								logger.log(Messages.SE0066, nature.getId());
 							} catch (CoreException e) {
+
+								// 失敗にはしない.
 								// SE0067=INFO,Nature{0}追加に失敗しました。
-								logger.log(e, Messages.SE0067, nature.getId());
+								logger.logIgnoreSetSuccess(e, Messages.SE0067, nature.getId());
 
 								// SE0031=ERROR,プラグインがインストールされていない可能性があります。name={0}, natureId={1}
 								//H5LogUtils.putLog(e, Messages.SE0031, nature.getName(), nature.getId());
@@ -264,7 +267,8 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 					logger.log(Messages.SE0062);
 
 					proj.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					logger.log(Messages.SE0102);
+					// SE0104=INFO,ワークスペースを更新しました。
+					logger.log(Messages.SE0104);
 
 					monitor.worked(100);
 
@@ -319,7 +323,8 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 					// ワークスペースとの同期.
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					logger.log(Messages.SE0102);
+					// SE0104=INFO,ワークスペースを更新しました。
+					logger.log(Messages.SE0104);
 					monitor.worked(100);
 
 				} catch (OperationCanceledException e) {

@@ -90,6 +90,20 @@ public class ResultStatus {
 	 * @param message メッセージ
 	 * @param params パラメータ
 	 */
+	public void logIgnoreSetSuccess(Throwable e, Message message, Object... params) {
+
+		boolean oldSuccess = isSuccess();
+		log(e, message, params);
+		setSuccess(oldSuccess);
+	}
+
+	/**
+	 * ログ追加処理.
+	 * 
+	 * @param e 例外
+	 * @param message メッセージ
+	 * @param params パラメータ
+	 */
 	public void log(Throwable e, Message message, Object... params) {
 
 		StringBuilder log = new StringBuilder();

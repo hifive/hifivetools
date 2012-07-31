@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.TreeNode;
+import org.eclipse.wst.jsdt.core.IIncludePathEntry;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.IPackageFragmentRoot;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
@@ -175,11 +176,11 @@ public class LibraryList {
 		if (jsProject != null) {
 			try {
 				// JavaScriptのライブラリを検索する.
-				IPackageFragmentRoot noIncudeEntry = null;
-				for (IPackageFragmentRoot entry : jsProject.getPackageFragmentRoots()) {
-					if (entry.getResource() instanceof IContainer) {
+				IIncludePathEntry noIncudeEntry = null;
+				for (IIncludePathEntry entry : jsProject.getResolvedIncludepath(true)) {
+					if (entry.getContentKind() == IPackageFragmentRoot.K_SOURCE) {
 						// Includeの指定がないものを優先的にインストール先として利用する
-						if (entry.getRawIncludepathEntry().getInclusionPatterns().length == 0) {
+						if (entry.getInclusionPatterns().length == 0) {
 							noIncudeEntry = entry;
 							break;
 						}
@@ -187,7 +188,7 @@ public class LibraryList {
 					}
 				}
 				if (noIncudeEntry != null) {
-					return (IContainer) noIncudeEntry.getResource();
+					return ResourcesPlugin.getWorkspace().getRoot().getFolder(noIncudeEntry.getPath());
 				}
 			} catch (JavaScriptModelException e) {
 				H5LogUtils.putLog(e, Messages.SE0022);
@@ -206,27 +207,22 @@ public class LibraryList {
 	public void checkLibrary(IJavaScriptProject jsProject, RootNode rootNode) {
 
 		IContainer defaultInstallContainer = null;
-		if (defaultJsLibPath != null) {
-			defaultInstallContainer =
-					ResourcesPlugin.getWorkspace().getRoot().getFolder(Path.fromOSString(defaultJsLibPath));
-		}
+
 
 		IContainer[] checkContainers = new IContainer[0];
 		if (jsProject != null) {
+			defaultInstallContainer = getDefaultInstallPath(jsProject);
 			checkContainers = new IContainer[] { jsProject.getProject() }; // プロジェクト直下.
 
 			try {
 				// JavaScriptのライブラリを検索する.
 				Set<IContainer> set = new LinkedHashSet<IContainer>();
-				for (IPackageFragmentRoot entry : jsProject.getPackageFragmentRoots()) {
-					if (entry.getResource() instanceof IContainer) {
-						// Includeの指定がないものを優先的にインストール先として利用する
-						if (defaultInstallContainer == null
-								&& entry.getRawIncludepathEntry().getInclusionPatterns().length == 0) {
-							defaultInstallContainer = (IContainer) entry.getResource();
-						}
-						set.add((IContainer) entry.getResource());
+				for (IIncludePathEntry entry : jsProject.getResolvedIncludepath(true)) {
+					// Includeの指定がないものを優先的にインストール先として利用する
+					if (defaultInstallContainer == null && entry.getInclusionPatterns().length == 0) {
+						defaultInstallContainer = ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
 					}
+					set.add(jsProject.getProject().getFolder(entry.getPath()));
 				}
 				set.add(jsProject.getProject()); // 一応追加しておく.
 
@@ -239,6 +235,9 @@ public class LibraryList {
 			} catch (JavaScriptModelException e) {
 				H5LogUtils.putLog(e, Messages.SE0022);
 			}
+		} else if (defaultJsLibPath != null) {
+			defaultInstallContainer =
+					ResourcesPlugin.getWorkspace().getRoot().getFolder(Path.fromOSString(defaultJsLibPath));
 		}
 
 		for (TreeNode node : rootNode.getChildren()) {

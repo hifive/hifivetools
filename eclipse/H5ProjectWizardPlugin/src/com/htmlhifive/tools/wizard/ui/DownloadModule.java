@@ -255,7 +255,6 @@ public class DownloadModule {
 				ret = 1;
 			} catch (IOException e) {
 				// つながりません.
-				// TODO:メッセージ対応
 				MessageDialog dialog =
 						new MessageDialog(null, Messages.SE0115.format(),
 								Dialog.getImage(Dialog.DLG_IMG_MESSAGE_WARNING), Messages.SE0116.format(siteUrl),
@@ -591,6 +590,9 @@ public class DownloadModule {
 					download(monitor, logger, iFile, site.getUrl(), perSiteWork);
 					setWorked = true;
 					if (!lastDownloadStatus) {
+
+						// SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}
+						logger.log(Messages.SE0101, site.getUrl(), site.getFilePattern());
 						libraryNode.setState(LibraryState.DOWNLOAD_ERROR);
 					} else {
 						addStatus = true;
@@ -601,15 +603,9 @@ public class DownloadModule {
 
 				// 更新.
 				if (!addStatus) {
-					// ファイル追加失敗.
-					logger.log(Messages.SE0099, site.getUrl(), site.getFilePattern());
-					H5LogUtils.showLog(
-							null,
-							Messages.SE0047,
-							Messages.SE0045,
-							site.getUrl(),
-							iFile != null ? iFile.getFullPath().toString() : StringUtils.defaultString(site
-									.getFilePattern()));
+					// SE0099=ERROR,ファイルの作成に失敗しました。URL={1}, File={2}
+					logger.log(Messages.SE0099, site.getUrl(), iFile != null ? iFile.getFullPath().toString()
+							: StringUtils.defaultString(site.getFilePattern()));
 					libraryNode.setState(LibraryState.EXTRACT_ERROR);
 					result = false;
 				}

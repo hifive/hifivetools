@@ -101,6 +101,9 @@ public abstract class Messages extends MessagesBase {
 	/** SE0052=ERROR,既にプロジェクトが存在します。. */
 	public static final Message SE0052 = createMessage("SE0052");
 
+	/** SE0053=ERROR,定義ファイルが取得できません。Eclipseのネットワーク接続設定を確認して下さい。. */
+	public static final Message SE0053 = createMessage("SE0053");
+
 	/** SE0061=INFO,プロジェクト構成を作成します。. */
 	public static final Message SE0061 = createMessage("SE0061");
 
@@ -177,12 +180,15 @@ public abstract class Messages extends MessagesBase {
 	/** SE0100=ERROR,プロジェクト({0})削除処理中にエラーが発生しました。. */
 	public static final Message SE0100 = createMessage("SE0100");
 
-	// #その他
-	/** SE0101=INFO,ライブラリの状態を最新化しました。. */
+	/** SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}. */
 	public static final Message SE0101 = createMessage("SE0101");
 
-	/** SE0102=INFO,ワークスペースを更新しました。. */
-	public static final Message SE0102 = createMessage("SE0102");
+	// #その他
+	/** SE0103=INFO,ライブラリの状態を最新化しました。. */
+	public static final Message SE0103 = createMessage("SE0103");
+
+	/** SE0104=INFO,ワークスペースを更新しました。. */
+	public static final Message SE0104 = createMessage("SE0104");
 
 	// #ダイアログ
 	/** SE0111=INFO,確認. */
@@ -197,7 +203,7 @@ public abstract class Messages extends MessagesBase {
 	/** SE0114=WARN,{0}は既に存在しています。. */
 	public static final Message SE0114 = createMessage("SE0114");
 
-	/** SE0115=ERROR, ダウンロードエラー. */
+	/** SE0115=ERROR,ダウンロードエラー. */
 	public static final Message SE0115 = createMessage("SE0115");
 
 	/** SE0116=ERROR,{0}のダウンロードに失敗しました。. */
@@ -233,7 +239,7 @@ public abstract class Messages extends MessagesBase {
 	/** PI0132=ERROR,ライブラリ更新処理が完了しました。. */
 	public static final Message PI0132 = createMessage("PI0132");
 
-	/** PI0133=ERROR,ライブラリ更新処理に失敗しました。. */
+	/** PI0133=ERROR,ライブラリ更新処理が完了しました。一部、エラーが発生している箇所があります。. */
 	public static final Message PI0133 = createMessage("PI0133");
 
 }

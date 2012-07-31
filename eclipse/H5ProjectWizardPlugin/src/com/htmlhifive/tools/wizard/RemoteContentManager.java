@@ -101,11 +101,11 @@ public abstract class RemoteContentManager {
 			libraryList.setDefaultJsLibPath(defaultJsLibPath);
 			return libraryList;
 		} catch (ParseException ex) {
-			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
+			H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
 		} catch (MalformedURLException ex) {
-			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
+			H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
 		} catch (IOException ex) {
-			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
+			H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
 		} finally {
 			IOUtils.closeQuietly(is);
 		}
@@ -113,7 +113,6 @@ public abstract class RemoteContentManager {
 		if (status != null) {
 			// メインのサイトのエラーをダイアログに表示する.
 			H5LogUtils.showLog(Messages.SE0041, status);
-			//throw new CoreException(status);
 		}
 
 		return null;

@@ -93,7 +93,8 @@ public class LibraryImportPage extends WizardPage {
 				BaseProject baseProject = ((StructureSelectPage) getPreviousPage()).getBaseProject();
 				if (baseProject != null) {
 					if (!StringUtils.equals(libraryList.getDefaultJsLibPath(), baseProject.getDefaultJsLibPath())) {
-						libraryList.setDefaultJsLibPath(baseProject.getDefaultJsLibPath());
+						libraryList.setDefaultJsLibPath(((StructureSelectPage) getPreviousPage()).getProjectName()
+								+ "/" + baseProject.getDefaultJsLibPath());
 						//container.refreshTreeLibrary(false, false);
 						container.initialize(null);
 					}

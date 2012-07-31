@@ -283,13 +283,14 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 					// ワークスペースとの同期.
 					jsProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					logger.log(Messages.SE0102);
+					// SE0104=INFO,ワークスペースを更新しました。
+					logger.log(Messages.SE0104);
 					monitor.worked(1);
 
 					// ファイルの存在チェック更新.
 					container.refreshTreeLibrary(false, false);
-					// SE0101=INFO,ライブラリの状態を最新化しました。
-					logger.log(Messages.SE0101);
+					// SE0103=INFO,ライブラリの状態を最新化しました。
+					logger.log(Messages.SE0103);
 
 				} catch (OperationCanceledException e) {
 					throw new InterruptedException();
