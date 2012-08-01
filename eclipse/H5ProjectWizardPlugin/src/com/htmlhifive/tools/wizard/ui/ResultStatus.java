@@ -64,10 +64,12 @@ public class ResultStatus {
 				break;
 			default:
 		}
-		if (status != null) {
+		if (status != null ) {
 			statusList.add(status);
-			// .metadata/.logにログを出力
-			H5WizardPlugin.getInstance().getLog().log(status);
+			if (status.getSeverity() != IStatus.INFO) { // Info以外を出力
+				// .metadata/.logにログを出力
+				H5WizardPlugin.getInstance().getLog().log(status);
+			}
 		}
 		allLog.append(msg);
 	}
@@ -81,6 +83,20 @@ public class ResultStatus {
 	public void log(Message message, Object... params) {
 
 		log(null, message, params);
+	}
+
+	/**
+	 * ログ追加処理.
+	 * 
+	 * @param e 例外
+	 * @param message メッセージ
+	 * @param params パラメータ
+	 */
+	public void logIgnoreSetSuccess(Throwable e, Message message, Object... params) {
+
+		boolean oldSuccess = isSuccess();
+		log(e, message, params);
+		setSuccess(oldSuccess);
 	}
 
 	/**
@@ -112,25 +128,17 @@ public class ResultStatus {
 
 	/**
 	 * 結果.を取得します。
+	 * 
+	 * @param method 処理名用メッセージ
 	 */
-	public void showDialog() {
+	public void showDialog(Message method) {
 
-		// TODO:結果表示.
 		if (isSuccess()) {
-			//			ErrorDialog.openError(null, Messages.PI0131.format(), null,
-			//					getMultiStatus(IStatus.INFO, Messages.PI0132.format()), IStatus.OK | IStatus.INFO | IStatus.WARNING
-			//					| IStatus.ERROR);
 			ErrorDialog.openError(null, Messages.PI0131.format(), null,
-					getMultiStatus(IStatus.INFO, Messages.PI0132.format()), IStatus.OK | IStatus.INFO | IStatus.WARNING
-					| IStatus.ERROR);
+					getMultiStatus(IStatus.INFO, Messages.PI0132.format(method.format())));
 		} else {
-			//			ErrorDialog.openError(null, Messages.PI0131.format(), "null",
-			//					getMultiStatus(IStatus.WARNING, Messages.PI0133.format()), IStatus.OK | IStatus.ERROR
-			//					| IStatus.WARNING | IStatus.ERROR);
-
 			ErrorDialog.openError(null, Messages.PI0131.format(), null,
-					getMultiStatus(IStatus.INFO, Messages.PI0133.format()), IStatus.OK | IStatus.INFO | IStatus.WARNING
-					| IStatus.ERROR);
+					getMultiStatus(IStatus.WARNING, Messages.PI0133.format(method.format())));
 		}
 	}
 
@@ -179,9 +187,15 @@ public class ResultStatus {
 	 * 
 	 * @return 結果.
 	 */
-	private MultiStatus getMultiStatus(int level, String message) {
+	private MultiStatus getMultiStatus(final int level, String message) {
 
-		return new MultiStatus(H5WizardPlugin.getId(), level, statusList.toArray(new IStatus[0]), message, null);
+		return new MultiStatus(H5WizardPlugin.getId(), level, statusList.toArray(new IStatus[0]), message, null) {
+			@Override
+			public int getSeverity() {
+				// 内部のStatusの最大がセットされるのを防ぐ.
+				return level;
+			}
+		};
 	}
 
 }

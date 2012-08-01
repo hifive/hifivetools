@@ -18,6 +18,7 @@ package com.htmlhifive.tools.wizard.ui.page.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.viewers.TreeNode;
 
 import com.htmlhifive.tools.wizard.library.model.LibraryList;
@@ -30,6 +31,12 @@ import com.htmlhifive.tools.wizard.ui.UIMessages;
  * @author fkubo
  */
 public class RootNode extends TreeNode implements LibraryTreeNode {
+
+	/** defaultInstallPath. */
+	private String defaultInstallPath;
+
+	/** defaultProjectPath. */
+	private IContainer defaultProjectPath;
 
 	/**
 	 * コンストラクタ.
@@ -57,6 +64,42 @@ public class RootNode extends TreeNode implements LibraryTreeNode {
 	public String getLabel() {
 
 		return UIMessages.LibraryImportPageComposite_tree_root_text;
+	}
+
+	/**
+	 * defaultInstallPath.を取得します.
+	 * 
+	 * @return defaultInstallPath.
+	 */
+	public String getDefaultInstallPath() {
+		return defaultInstallPath;
+	}
+
+	/**
+	 * defaultInstallPath.を設定します.
+	 * 
+	 * @param defaultInstallPath defaultInstallPath.
+	 */
+	public void setDefaultInstallPath(String defaultInstallPath) {
+		this.defaultInstallPath = defaultInstallPath;
+	}
+
+	/**
+	 * defaultProjectPath.を取得します.
+	 * 
+	 * @return defaultProjectPath.
+	 */
+	public IContainer getDefaultProjectPath() {
+		return defaultProjectPath;
+	}
+
+	/**
+	 * defaultProjectPath.を設定します.
+	 * 
+	 * @param defaultProjectPath defaultProjectPath.
+	 */
+	public void setDefaultProjectPath(IContainer defaultProjectPath) {
+		this.defaultProjectPath = defaultProjectPath;
 	}
 
 }

@@ -68,7 +68,6 @@ public class StructureSelectPage extends WizardPage {
 			public void handleEvent(Event event) {
 
 				// メッセージを設定.
-				// setMessage(event.text); // DialogPage
 				setErrorMessage(event.text); // WizardPage
 
 				setPageComplete(event.text == null);

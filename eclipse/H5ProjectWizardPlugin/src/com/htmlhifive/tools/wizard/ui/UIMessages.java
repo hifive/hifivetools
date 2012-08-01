@@ -38,7 +38,6 @@ public class UIMessages extends NLS {
 	public static String LibraryImportComposite_lblNewLabel_text;
 	public static String LibraryImportComposite_tblclmnCategory_text;
 	public static String LibraryImportComposite_tblclmnFiles_text;
-	public static String LibraryImportComposite_tblclmnFiles_toolTipText;
 	public static String LibraryImportComposite_tblclmnPath_text;
 	public static String LibraryImportComposite_tblclmnStatus_text;
 	public static String LibraryImportComposite_tblclmnUrl_text;
@@ -53,7 +52,6 @@ public class UIMessages extends NLS {
 	public static String LibraryImportPageComposite_groupSelect_text;
 	public static String LibraryImportPageComposite_label_text;
 	public static String LibraryImportPageComposite_tree_root_text;
-	public static String LibraryImportPageComposite_tree_toolTipText;
 	public static String LibraryState_ADD;
 	public static String LibraryState_DOWNLOAD_ERROR;
 	public static String LibraryState_EXIST;
@@ -67,17 +65,14 @@ public class UIMessages extends NLS {
 	public static String ResultComposite_labelLog_text;
 	public static String ResultPage_this_message;
 	public static String ResultPage_this_title;
-	public static String StructureSelectComposite_btnJava_text;
-	public static String StructureSelectComposite_btnJavaScript_text;
-	public static String StructureSelectComposite_btnTomcat_text;
 	public static String StructureSelectComposite_buttonReload_text;
 	public static String StructureSelectComposite_group_text;
-	public static String StructureSelectComposite_label_text;
 	public static String StructureSelectComposite_lblInfo_text;
 	public static String StructureSelectComposite_lblNewLabel_text;
 	public static String StructureSelectComposite_structureGroup_text;
 	public static String StructureSelectPage_this_message;
 	public static String StructureSelectPage_this_title;
+	public static String LibraryImportComposite_lblDefaultInstallPath_text;
 
 	// //////////////////////////////////////////////////////////////////////////
 	//

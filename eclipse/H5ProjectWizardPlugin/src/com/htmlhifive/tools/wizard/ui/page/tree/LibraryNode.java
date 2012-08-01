@@ -202,4 +202,25 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 
 		this.fileList = fileList;
 	}
+
+	/**
+	 * ライセンスチェックが必要かどうかを確認する
+	 * 
+	 * @return ライセンスチェックが必要かどうか
+	 */
+	public boolean isNeedConfirmDialog() {
+		if (!isAddable()) {
+			return false;
+		}
+		for (TreeNode treeNode : getParent().getChildren()) {
+			LibraryNode libraryNode = (LibraryNode) treeNode;
+			if (libraryNode != this) {
+				if (libraryNode.isExists()) {
+					// 存在していればチェックしない.
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }

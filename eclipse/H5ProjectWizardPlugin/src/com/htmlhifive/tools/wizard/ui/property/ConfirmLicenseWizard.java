@@ -46,7 +46,6 @@ public class ConfirmLicenseWizard extends Wizard {
 	@Override
 	public void createPageControls(Composite pageContainer) {
 
-		// TODO 自動生成されたメソッド・スタブ
 		super.createPageControls(pageContainer);
 
 		confirmLicensePage.setLiceseContents();

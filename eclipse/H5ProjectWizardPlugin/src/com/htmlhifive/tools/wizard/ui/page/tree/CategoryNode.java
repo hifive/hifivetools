@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.TreeNode;
 import com.htmlhifive.tools.wizard.library.model.xml.Category;
 import com.htmlhifive.tools.wizard.library.model.xml.Info;
 import com.htmlhifive.tools.wizard.library.model.xml.Library;
+import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 
 /**
  * <H3>カテゴリノード.</H3>
@@ -133,25 +134,27 @@ public class CategoryNode extends TreeNode implements LibraryTreeNode {
 	 */
 	public IContainer getParentPath() {
 
-		return parentPath;
+		if (parentPath != null) {
+			return parentPath;
+		}
+		// パスチェックは、Workspace.newResourceより取得.
+		if (getValue().getPath().startsWith("${default.js.lib.path}")
+				&& H5IOUtils.isValidWorkspacePath(getParent().getDefaultProjectPath().getFullPath()
+						.append(getParent().getDefaultInstallPath()))) {
+			// 正しい場合
+			return getParent().getDefaultProjectPath()
+					.getFolder(Path.fromOSString(getParent().getDefaultInstallPath()));
+		}
+		return getParent().getDefaultProjectPath();
 	}
 
 	/**
 	 * parentPathを設定します.
 	 * 
 	 * @param parentPath parentPath
-	 * @param projectPath projectPath
 	 */
-	public void setParentPath(IContainer parentPath, IContainer projectPath) {
-
-		if (projectPath == null || getValue().getPath().startsWith("${default.js.lib.path}")) {
-			this.parentPath = parentPath;
-		} else {
-			this.parentPath = projectPath;
-		}
-		if (this.parentPath == null) {
-			System.out.println("");
-		}
+	public void setParentPath(IContainer parentPath) {
+		this.parentPath = parentPath;
 	}
 
 	/**
@@ -174,15 +177,15 @@ public class CategoryNode extends TreeNode implements LibraryTreeNode {
 	 */
 	public IContainer getInstallFullPath() {
 
-		if (parentPath == null || getValue().getPath() == null) {
+		if (getValue().getPath() == null) {
 			return null;
 		}
 
 		String realPath = getInstallSubPath();
 		if (StringUtils.isEmpty(realPath)) {
-			return parentPath;
+			return getParentPath();
 		}
-		return parentPath.getFolder(Path.fromOSString(realPath));
+		return getParentPath().getFolder(Path.fromOSString(realPath));
 	}
 
 	/**

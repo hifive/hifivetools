@@ -62,9 +62,6 @@ public abstract class Messages extends MessagesBase {
 	/** SE0025=ERROR,プロジェクト作成中にエラーが発生しました。. */
 	public static final Message SE0025 = createMessage("SE0025");
 
-	/** SE0026=ERROR,プロジェクト({0})削除処理中にエラーが発生しました。. */
-	public static final Message SE0026 = createMessage("SE0026");
-
 	/** SE0031=ERROR,プラグインがインストールされていない可能性があります。name={0}, natureId={1}. */
 	public static final Message SE0031 = createMessage("SE0031");
 
@@ -101,25 +98,31 @@ public abstract class Messages extends MessagesBase {
 	/** SE0052=ERROR,既にプロジェクトが存在します。. */
 	public static final Message SE0052 = createMessage("SE0052");
 
-	/** SE0061=INFO,プロジェクト構成を作成します。. */
+	/** SE0053=ERROR,定義ファイルが取得できません。Eclipseのネットワーク接続設定を確認して下さい。. */
+	public static final Message SE0053 = createMessage("SE0053");
+
+	/** SE0054=ERROR,{0}はファイル名として正しくありません。. */
+	public static final Message SE0054 = createMessage("SE0054");
+
+	/** SE0061=INFO,プロジェクト構成の作成開始. */
 	public static final Message SE0061 = createMessage("SE0061");
 
-	/** SE0062=INFO,プロジェクト構成の作成が完了しました。. */
+	/** SE0062=INFO,プロジェクト構成の作成完了. */
 	public static final Message SE0062 = createMessage("SE0062");
 
-	/** SE0063=INFO,プロジェクト用ZIPファイルをダウンロードします。. */
+	/** SE0063=INFO,プロジェクト用ZIPファイルのダウンロード開始. */
 	public static final Message SE0063 = createMessage("SE0063");
 
-	/** SE0064=INFO,プロジェクト用ZIPファイルをダウンロードしました。. */
+	/** SE0064=INFO,プロジェクト用ZIPファイルのダウンロード完了. */
 	public static final Message SE0064 = createMessage("SE0064");
 
-	/** SE0065=INFO,Nature({0})を追加します。. */
+	/** SE0065=INFO,Nature({0})の追加開始. */
 	public static final Message SE0065 = createMessage("SE0065");
 
-	/** SE0066=INFO,Nature({0})を追加しました。. */
+	/** SE0066=INFO,Nature({0})の追加完了. */
 	public static final Message SE0066 = createMessage("SE0066");
 
-	/** SE0067=ERROR,Nature({0})追加に失敗しました。. */
+	/** SE0067=ERROR,Nature({0})の追加に失敗しました。. */
 	public static final Message SE0067 = createMessage("SE0067");
 
 	/** SE0068=ERROR,プロジェクト用ZIPファイルのダウンロードに失敗しました。. */
@@ -131,44 +134,41 @@ public abstract class Messages extends MessagesBase {
 	/** SE0070=INFO,プロジェクト用ZIPファイルの展開が全て終了しました。. */
 	public static final Message SE0070 = createMessage("SE0070");
 
-	/** SE0071=INFO,ライブラリ更新処理を開始します。. */
-	public static final Message SE0071 = createMessage("SE0071");
-
-	/** SE0072=INFO,ライブラリ更新処理が完了しました。. */
-	public static final Message SE0072 = createMessage("SE0072");
-
-	/** SE0073=INFO,ライブラリ({0} {1})の更新処理を開始します。. */
+	/** SE0073=INFO,ライブラリ({0} {1})の更新開始. */
 	public static final Message SE0073 = createMessage("SE0073");
 
-	/** SE0074=INFO,ライブラリ({0} {1})の更新処理が完了しました。. */
+	/** SE0074=INFO,ライブラリ({0} {1})の更新完了. */
 	public static final Message SE0074 = createMessage("SE0074");
 
 	/** SE0081=ERROR,リソース({0})が見つかりません。. */
 	public static final Message SE0081 = createMessage("SE0081");
 
+	/** SE0082=ERROR,リソース({0})は正しいURLではありません。. */
+	public static final Message SE0082 = createMessage("SE0082");
+
 	// #ファイル操作(ResultStatus)
-	/** SE0091=INFO,リソース({0})を作成します。. */
+	/** SE0091=INFO,リソース({0})の作成開始. */
 	public static final Message SE0091 = createMessage("SE0091");
 
-	/** SE0092=INFO,リソース({0})を作成しました。. */
+	/** SE0092=INFO,リソース({0})の作成完了. */
 	public static final Message SE0092 = createMessage("SE0092");
 
-	/** SE0093=INFO,リソース({0})をダウンロードします。. */
+	/** SE0093=INFO,リソース({0})のダウンロード開始. */
 	public static final Message SE0093 = createMessage("SE0093");
 
-	/** SE0094=INFO,リソース({0})をダウンロードしました。. */
+	/** SE0094=INFO,リソース({0})のダウンロード完了. */
 	public static final Message SE0094 = createMessage("SE0094");
 
-	/** SE0095=INFO,リソース({0})を削除します。. */
+	/** SE0095=INFO,リソース({0})の削除開始. */
 	public static final Message SE0095 = createMessage("SE0095");
 
-	/** SE0096=INFO,リソース({0})を削除しました。. */
+	/** SE0096=INFO,リソース({0})の削除完了. */
 	public static final Message SE0096 = createMessage("SE0096");
 
-	/** SE0097=INFO,リソース({0})を更新します。. */
+	/** SE0097=INFO,リソース({0})の更新開始. */
 	public static final Message SE0097 = createMessage("SE0097");
 
-	/** SE0098=INFO,リソース({0})を更新しました。. */
+	/** SE0098=INFO,リソース({0})の更新完了. */
 	public static final Message SE0098 = createMessage("SE0098");
 
 	/** SE0099=ERROR,ファイルの作成に失敗しました。URL={1}, File={2}. */
@@ -177,18 +177,30 @@ public abstract class Messages extends MessagesBase {
 	/** SE0100=ERROR,プロジェクト({0})削除処理中にエラーが発生しました。. */
 	public static final Message SE0100 = createMessage("SE0100");
 
-	// #その他
-	/** SE0101=INFO,ライブラリの状態を最新化しました。. */
+	/** SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}. */
 	public static final Message SE0101 = createMessage("SE0101");
 
-	/** SE0102=INFO,ワークスペースを更新しました。. */
+	/** SE0102=WARN,リソース({0})は他で利用されているため削除を中止しました。. */
 	public static final Message SE0102 = createMessage("SE0102");
+
+	// #その他
+	/** SE0103=INFO,ライブラリ一覧を更新. */
+	public static final Message SE0103 = createMessage("SE0103");
+
+	/** SE0104=INFO,ワークスペースを更新. */
+	public static final Message SE0104 = createMessage("SE0104");
+
+	/** SE0105=INFO,エラー発生によるプロジェクト({0})の削除開始. */
+	public static final Message SE0105 = createMessage("SE0105");
+
+	/** SE0106=INFO,エラー発生によるプロジェクト({0})の削除完了. */
+	public static final Message SE0106 = createMessage("SE0106");
 
 	// #ダイアログ
 	/** SE0111=INFO,確認. */
 	public static final Message SE0111 = createMessage("SE0111");
 
-	/** SE0112=INFO,変更がありますが、終了してもよろしいですか？. */
+	/** SE0112=INFO,変更が破棄されますが、よろしいですか？. */
 	public static final Message SE0112 = createMessage("SE0112");
 
 	/** SE0113=INFO,上書き確認. */
@@ -197,11 +209,17 @@ public abstract class Messages extends MessagesBase {
 	/** SE0114=WARN,{0}は既に存在しています。. */
 	public static final Message SE0114 = createMessage("SE0114");
 
-	/** SE0115=ERROR, ダウンロードエラー. */
+	/** SE0115=ERROR,ダウンロードエラー. */
 	public static final Message SE0115 = createMessage("SE0115");
 
 	/** SE0116=ERROR,{0}のダウンロードに失敗しました。. */
 	public static final Message SE0116 = createMessage("SE0116");
+
+	/** SE0117=INFO,確認. */
+	public static final Message SE0117 = createMessage("SE0117");
+
+	/** SE0118=INFO,ここでは遷移できません。. */
+	public static final Message SE0118 = createMessage("SE0118");
 
 	// #taskName
 	/** PI0101=INFO,プロジェクトのディレクトリ構成を作成中.... */
@@ -230,10 +248,22 @@ public abstract class Messages extends MessagesBase {
 	/** PI0131=INFO,処理結果. */
 	public static final Message PI0131 = createMessage("PI0131");
 
-	/** PI0132=ERROR,ライブラリ更新処理が完了しました。. */
+	/** PI0132=INFO,{0}が終了しました。. */
 	public static final Message PI0132 = createMessage("PI0132");
 
-	/** PI0133=ERROR,ライブラリ更新処理に失敗しました。. */
+	/** PI0133=WARN,{0}が終了しましたが、\n一部でエラーが発生しています。. */
 	public static final Message PI0133 = createMessage("PI0133");
+
+	/** PI0135=INFO,{0}. */
+	public static final Message PI0135 = createMessage("PI0135");
+
+	/** PI0136=INFO,URL{0}の結果は{1}でした。. */
+	public static final Message PI0136 = createMessage("PI0136");
+
+	/** PI0137=INFO,プロジェクトの作成. */
+	public static final Message PI0137 = createMessage("PI0137");
+
+	/** PI0138=INFO,ライブラリの更新. */
+	public static final Message PI0138 = createMessage("PI0138");
 
 }

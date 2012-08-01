@@ -90,7 +90,7 @@ public class StructureSelectComposite extends Composite {
 
 		label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		label.setText(UIMessages.StructureSelectComposite_label_text);
+		label.setText("");
 
 		GridLayout gridLayout1 = new GridLayout(3, false);
 
@@ -131,7 +131,7 @@ public class StructureSelectComposite extends Composite {
 		linkInfo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		linkInfo.setVisible(false);
 
-		// 初期設定.
+		// 初期設定(初期表示なのでここでOK).
 		setInputComboZip();
 
 		textProject.setFocus();
@@ -145,6 +145,9 @@ public class StructureSelectComposite extends Composite {
 	public void setProjectName(String name) {
 
 		textProject.setText(name);
+		textProject.setSelection(textProject.getText().length());
+		textProject.setFocus();
+
 	}
 
 	/**
@@ -169,6 +172,7 @@ public class StructureSelectComposite extends Composite {
 		LibraryList libraryList = RemoteContentManager.getLibraryList();
 		// libraryListのnull対応.
 		if (libraryList == null) {
+			setErrorMessage(Messages.SE0053.format());
 			return;
 		}
 

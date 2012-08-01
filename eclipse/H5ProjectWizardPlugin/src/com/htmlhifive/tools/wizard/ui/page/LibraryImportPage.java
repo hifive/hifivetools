@@ -15,11 +15,12 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
 import com.htmlhifive.tools.wizard.PluginConstant;
 import com.htmlhifive.tools.wizard.RemoteContentManager;
@@ -59,8 +60,41 @@ public class LibraryImportPage extends WizardPage {
 		container = new LibraryImportComposite(parent, SWT.NONE);
 		setControl(container);
 
+		// 下からのメッセージを受ける.
+		container.addListener(SWT.ERROR_UNSPECIFIED, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				// メッセージを設定.
+				setErrorMessage(event.text); // WizardPage
+
+				setPageComplete(event.text == null);
+			}
+		});
+
 		// 初期化.
-		container.initialize(null);
+		//container.initialize(null);
+
+		// TODO:要リファクタ
+
+		//		((WizardDialog) getWizard().getContainer()).addPageChangingListener(new IPageChangingListener() {
+		//
+		//			@Override
+		//			public void handlePageChanging(PageChangingEvent event) {
+		//
+		//				// next:
+		//				if (event.getCurrentPage() == getPreviousPage() && event.getTargetPage() == LibraryImportPage.this) {
+		//					// → LibraryImportPage.
+		//
+		//				}
+		//				// next:
+		//				if (event.getCurrentPage() == getNextPage() && event.getTargetPage() == LibraryImportPage.this) {
+		//					// LibraryImportPage ←.
+		//
+		//				}
+		//			}
+		//		});
 
 	}
 
@@ -71,7 +105,6 @@ public class LibraryImportPage extends WizardPage {
 	 */
 	@Override
 	public boolean canFlipToNextPage() {
-
 		String errorMessage = getWizard().getPage(PluginConstant.JavaProjectWizardFirstPageName).getErrorMessage();
 		if (errorMessage != null) {
 			setErrorMessage(errorMessage);
@@ -83,22 +116,22 @@ public class LibraryImportPage extends WizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 
+		// TODO:要修正 戻り遷移で再度設定されてしまう
 		super.setVisible(visible);
-
 		if (visible) {
-
 			// libraryListのnull対応.
 			LibraryList libraryList = RemoteContentManager.getLibraryList();
 			if (libraryList != null) {
 				BaseProject baseProject = ((StructureSelectPage) getPreviousPage()).getBaseProject();
 				if (baseProject != null) {
-					if (!StringUtils.equals(libraryList.getDefaultJsLibPath(), baseProject.getDefaultJsLibPath())) {
-						libraryList.setDefaultJsLibPath(baseProject.getDefaultJsLibPath());
-						//container.refreshTreeLibrary(false, false);
-						container.initialize(null);
+					if (container.initialize(null, ((StructureSelectPage) getPreviousPage()).getProjectName(),
+							baseProject.getDefaultJsLibPath())) {
+						// 変更あり.
+						((ConfirmLicensePage) getNextPage()).clearCategory();
 					}
 				}
 			}
 		}
 	}
+
 }

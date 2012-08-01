@@ -73,7 +73,9 @@ public class ConfirmLicensePage extends WizardPage {
 	 */
 	public void setLiceseContents() {
 
-		container.setLiceseContents();
+		if (isControlCreated()) {
+			container.setLiceseContents();
+		}
 	}
 
 	/**
@@ -81,7 +83,9 @@ public class ConfirmLicensePage extends WizardPage {
 	 */
 	public void clearCategory() {
 
-		container.clearCategory();
+		if (isControlCreated()) {
+			container.clearCategory();
+		}
 	}
 
 	/**
@@ -94,4 +98,16 @@ public class ConfirmLicensePage extends WizardPage {
 
 		return false; // 次の画面(JS関連)は見せない.
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
+	 */
+	@Override
+	public boolean isPageComplete() {
+
+		return container.isAccepted();
+	}
+
 }
