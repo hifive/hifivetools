@@ -16,6 +16,7 @@
  */
 package com.htmlhifive.tools.jslint.engine.option.xml;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -71,18 +72,17 @@ public final class JaxbUtil {
 			StringWriter writer = new StringWriter();
 			marshall.marshal(checkOptions, writer);
 			if (output.exists()) {
-				output.setContents(IOUtils.toInputStream(writer.toString()), IResource.FORCE, null);
+				output.setContents(IOUtils.toInputStream(writer.toString(), "UTF-8"), IResource.FORCE, null);
 			} else {
-				output.create(IOUtils.toInputStream(writer.toString()), true, null);
+				output.create(IOUtils.toInputStream(writer.toString(), "UTF-8"), true, null);
 			}
 			output.refreshLocal(IResource.DEPTH_ONE, null);
 		} catch (JAXBException e) {
 			logger.put(Messages.EM0006, e, output.getName());
-			// throw new
-			// RuntimeException(Messages.EM0006.format(xmlOption.getName()), e);
 		} catch (CoreException e) {
 			logger.put(Messages.EM0100, e);
-			// throw new RuntimeException(Messages.EM0100.getText(), e);
+		} catch (IOException e) {
+			logger.put(Messages.EM0006, e, output.getName());
 		}
 	}
 
