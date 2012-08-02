@@ -15,7 +15,7 @@
 			<compilerarg value="-Xlint:deprecation" />
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
-				<pathelement path="lib/rhino-1.7R3.jar" />
+				<pathelement path="lib/rhino-1.7R4.jar" />
 				<pathelement path="lib/commons-io-2.1.jar" />
 				<pathelement path="lib/commons-lang-2.6.jar" />
 				<pathelement path="lib/slf4j-api-1.6.4.jar" />
