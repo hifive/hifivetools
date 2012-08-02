@@ -17,6 +17,8 @@ package com.htmlhifive.tools.wizard.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -172,5 +174,23 @@ public abstract class H5IOUtils {
 	 */
 	public static boolean isClassResources(String url) {
 		return url.startsWith("/");
+	}
+
+	/**
+	 * クエリを除いたパスを返す.
+	 * 
+	 * @param siteUrl URL
+	 * @return クエリを除いたパス
+	 */
+	public static String getURLPath(String siteUrl) {
+		try {
+			if (!H5IOUtils.isClassResources(siteUrl)) {
+				// クエリを除く.
+				return new URL(siteUrl).getPath();
+			}
+			return siteUrl;
+		} catch (MalformedURLException e) {
+		}
+		return null;
 	}
 }

@@ -17,12 +17,13 @@ package com.htmlhifive.tools.wizard;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
 
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -32,6 +33,7 @@ import com.htmlhifive.tools.wizard.library.LibraryFileParserFactory;
 import com.htmlhifive.tools.wizard.library.ParseException;
 import com.htmlhifive.tools.wizard.library.model.LibraryList;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
+import com.htmlhifive.tools.wizard.ui.DownloadModule;
 import com.htmlhifive.tools.wizard.ui.ResultStatus;
 
 /**
@@ -74,35 +76,49 @@ public abstract class RemoteContentManager {
 		ResultStatus resultStatus = new ResultStatus();
 
 		// サイトを読み込む.
-		for (String url : new String[] { PluginConstant.URL_LIBRARY_LIST, PluginConstant.URL_LIBRARY_LIST_MIRROR }) {
-			if (StringUtils.isNotEmpty(url)) {
+		for (String urlStr : new String[] { PluginConstant.URL_LIBRARY_LIST, PluginConstant.URL_LIBRARY_LIST_MIRROR }) {
+			if (StringUtils.isNotEmpty(urlStr)) {
 				InputStream is = null;
+				DownloadModule downloadModule = new DownloadModule();
 				try {
-					URLConnection connection = new URL(url).openConnection();
-					if (connection instanceof HttpURLConnection) {
-						HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
-						httpURLConnection.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+
+					HttpMethod method = downloadModule.connect(urlStr,
+							PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+					//					URLConnection connection = new URL(url).openConnection();
+					//					if (connection instanceof HttpURLConnection) {
+					//						HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+					//						httpURLConnection.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+					//					}
+					//					is = connection.getInputStream();
+					if (method != null) {
+						is = method.getResponseBodyAsStream();
 					}
-					is = connection.getInputStream();
 					if (is == null) {
-						resultStatus.log(Messages.SE0046, url);
+						resultStatus.log(Messages.SE0046, urlStr);
 					} else {
 						LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
 						LibraryList libraryList = parser.getLibraryList();
-						if (connection.getLastModified() > 0) {
-							libraryList.setLastModified(new Date(connection.getLastModified()));
+						if (method.getResponseHeader("last-modified") != null) {
+							try {
+								libraryList.setLastModified(DateUtil.parseDate(method
+										.getResponseHeader("last-modified").getValue()));
+							} catch (DateParseException e) {
+								// 無視.
+							}
+
 						}
-						libraryList.setSource(url);
+						libraryList.setSource(urlStr);
 						H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
 						return libraryList;
 					}
 				} catch (ParseException e) {
-					resultStatus.log(e, Messages.SE0046, url);
+					resultStatus.log(e, Messages.SE0046, urlStr);
 				} catch (MalformedURLException e) {
-					resultStatus.log(e, Messages.SE0046, url);
+					resultStatus.log(e, Messages.SE0046, urlStr);
 				} catch (IOException e) {
-					resultStatus.log(e, Messages.SE0046, url);
+					resultStatus.log(e, Messages.SE0046, urlStr);
 				} finally {
+					downloadModule.close();
 					IOUtils.closeQuietly(is);
 				}
 			}
@@ -140,7 +156,6 @@ public abstract class RemoteContentManager {
 
 		return null;
 	}
-
 	// 進捗表示の場合
 	//	ResultStatus resultStatus = new ResultStatus();
 	//	final IRunnableWithProgress runnable = getSiteDownLoad(resultStatus, PluginConstant.URL_LIBRARY_LIST);

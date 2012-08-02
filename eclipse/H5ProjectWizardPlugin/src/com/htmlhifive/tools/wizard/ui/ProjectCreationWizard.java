@@ -86,6 +86,12 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 		downloadModule = new DownloadModule();
 	}
 
+	@Override
+	public void dispose() {
+		downloadModule.close();
+		super.dispose();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

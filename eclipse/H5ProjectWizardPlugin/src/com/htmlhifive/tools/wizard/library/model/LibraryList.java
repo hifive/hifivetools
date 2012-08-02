@@ -15,8 +15,6 @@
  */
 package com.htmlhifive.tools.wizard.library.model;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -258,7 +256,8 @@ public class LibraryList {
 											set.add((IContainer) res);
 										}
 									}
-								}}
+								}
+							}
 						} catch (CoreException ignore) {
 							// TODO 自動生成された catch ブロック
 							ignore.printStackTrace();
@@ -381,17 +380,9 @@ public class LibraryList {
 	 */
 	private boolean checkSite(Site site, IContainer folder, List<String> existsFileList, List<String> noExistsFileList) {
 
-		String siteUrl = null;
-		try {
-			if (H5IOUtils.isClassResources(site.getUrl())) {
-				siteUrl = site.getUrl();
-			} else {
-				siteUrl = new URL(site.getUrl()).getPath();
-			}
-		} catch (MalformedURLException ignore) {
-			// 無視.
-		}
-		if (siteUrl == null) {
+		String siteUrl = site.getUrl();
+		String path = H5IOUtils.getURLPath(siteUrl);
+		if (path == null) {
 			return false;
 		}
 
@@ -403,7 +394,7 @@ public class LibraryList {
 		String[] fileList = null;
 
 		String wildCardStr = site.getFilePattern();
-		if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || wildCardStr != null) {
+		if (path.endsWith(".zip") || path.endsWith(".jar") || wildCardStr != null) {
 
 			// ZIPとか用
 			String wildCardPath = "";
@@ -420,8 +411,8 @@ public class LibraryList {
 			}
 
 			if (site.getReplaceFileName() != null) {
-				fileList =
-						savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(site.getReplaceFileName()));
+				fileList = savedFolder.getRawLocation().toFile()
+						.list(new WildcardFileFilter(site.getReplaceFileName()));
 			} else if (savedFolder != null) {
 				if (wildCardStr != null) {
 					fileList = savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(wildCardStr));
@@ -447,7 +438,7 @@ public class LibraryList {
 			if (site.getReplaceFileName() != null) {
 				file = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
 			} else {
-				file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(siteUrl, "/")));
+				file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(path, "/")));
 			}
 			if (file.exists()) {
 				fileList = new String[] { file.getName() };
@@ -462,7 +453,6 @@ public class LibraryList {
 		}
 		return false;
 	}
-
 
 	/**
 	 * ライブラリの情報を取得する.

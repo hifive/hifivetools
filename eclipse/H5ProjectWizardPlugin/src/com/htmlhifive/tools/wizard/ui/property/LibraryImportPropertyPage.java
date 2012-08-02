@@ -236,6 +236,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+				DownloadModule downloadModule = new DownloadModule();
 				try {
 					if (monitor == null) {
 						// モニタを生成.
@@ -250,7 +251,6 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					// 現在のデフォルトインストール先を取得する.
 
 					// ダウンロードの実行
-					DownloadModule downloadModule = new DownloadModule();
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
 							.getSelectedLibrarySet(), jsProject.getProject());
 
@@ -274,6 +274,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					logger.log(e, Messages.SE0023);
 					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
+					downloadModule.close();
 					monitor.done();
 				}
 			}

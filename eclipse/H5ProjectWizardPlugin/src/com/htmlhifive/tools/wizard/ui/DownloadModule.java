@@ -19,17 +19,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpConnectionParams;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -49,7 +54,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeNode;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
@@ -90,8 +94,8 @@ public class DownloadModule {
 	 */
 	public DownloadModule() {
 
-		this.proxyTracker = new ServiceTracker<IProxyService, Object>(FrameworkUtil.getBundle(
-				ProjectCreationWizard.class).getBundleContext(), IProxyService.class, null);
+		this.proxyTracker = new ServiceTracker<IProxyService, Object>(H5WizardPlugin.getInstance().getBundle()
+				.getBundleContext(), IProxyService.class, null);
 		proxyTracker.open();
 
 	}
@@ -104,6 +108,13 @@ public class DownloadModule {
 	static abstract class FileContentsHandler {
 
 		abstract InputStream getInputStream() throws IOException;
+	}
+
+	/**
+	 * closeする.
+	 */
+	public void close() {
+		proxyTracker.close();
 	}
 
 	/**
@@ -182,27 +193,13 @@ public class DownloadModule {
 	 * @param perSiteWork ここで進ませるworked
 	 * @throws CoreException コア例外
 	 */
-	private ZipFile download(IProgressMonitor monitor, ResultStatus logger, IFile file, final URI uri, int perSiteWork)
-			throws CoreException {
+	private ZipFile download(IProgressMonitor monitor, ResultStatus logger, IFile file, final String urlStr,
+			int perSiteWork) throws CoreException {
 
 		// PI0111=INFO,[{0}]をダウンロード中...
-		monitor.subTask(Messages.PI0111.format(uri.toString()));
+		monitor.subTask(Messages.PI0111.format(urlStr));
 
 		lastDownloadStatus = false;
-
-		final URL url;
-		if (H5IOUtils.isClassResources(uri.toString())) {
-			// 相対指定の場合はクラスパスから取得する.
-			url = null;
-		} else {
-			setProxy(uri);
-			try {
-
-				url = uri.toURL();
-			} catch (MalformedURLException e) {
-				throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0013.format(), e));
-			}
-		}
 
 		int ret = 0;
 		while (ret == 0) {
@@ -214,17 +211,13 @@ public class DownloadModule {
 						@Override
 						InputStream getInputStream() throws IOException {
 
-							if (url != null) {
-								URLConnection connection = url.openConnection();
-								if (connection instanceof HttpURLConnection) {
-									HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
-									httpURLConnection
-									.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
-								}
-								return connection.getInputStream();
+							if (H5IOUtils.isClassResources(urlStr)) {
+								// クラスパスから取得する.
+								return DownloadModule.class.getResourceAsStream(urlStr);
 							}
-							// urlがnullの時は、クラスパスから取得する.
-							return DownloadModule.class.getResourceAsStream(uri.toString());
+
+							return DownloadModule.this.connectAsStream(urlStr,
+									PluginConstant.URL_LIBRARY_CONNECTION_TIMEOUT);
 						}
 					});
 					if (updateResult) {
@@ -240,29 +233,33 @@ public class DownloadModule {
 					try {
 						int contentLength = 0;
 						int perWork = perSiteWork;
-						if (url == null) {
+						if (H5IOUtils.isClassResources(urlStr)) {
 							// urlがnullの時は、クラスパスから取得する.
-							is = DownloadModule.class.getResourceAsStream(uri.toString());
+							is = DownloadModule.class.getResourceAsStream(urlStr);
 						} else {
 							// 通常のURL
-							// サイズが取得で切れば取得する.
-							URLConnection connection = url.openConnection();
-							if (connection instanceof HttpURLConnection) {
-								HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
-								httpURLConnection.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+							HttpMethod method = DownloadModule.this.connect(urlStr,
+									PluginConstant.URL_LIBRARY_CONNECTION_TIMEOUT);
+							if (method == null) {
+								return null;
 							}
 
-							contentLength = connection.getContentLength();
+							// サイズが取得で切れば取得する.
+							Header header = method.getResponseHeader("Content-Length");
+							if (header != null) {
+								contentLength = Integer.valueOf(header.getValue());
+							}
 							if (contentLength > 0) {
 								perWork = Math.max(1, perSiteWork * DEFAULT_BUFFER_SIZE / contentLength);
 							}
-
-							// 接続.
-							is = connection.getInputStream();
+							is = method.getResponseBodyAsStream();
+						}
+						if (is == null) {
+							return null;
 						}
 
 						// SE0093=INFO,{0}をダウンロードします。
-						logger.log(Messages.SE0093, uri.toString());
+						logger.log(Messages.SE0093, urlStr);
 
 						// ZIP対応.
 						File tempFile = File.createTempFile(H5WizardPlugin.getId(), "tmp");
@@ -279,12 +276,12 @@ public class DownloadModule {
 								monitor.worked(perWork);
 							}
 						}
-						if (contentLength > 0) {
+						if (contentLength == 0) {
 							monitor.worked(perSiteWork);
 						}
 
 						// SE0094=INFO,{0}をダウンロードしました。
-						logger.log(Messages.SE0094, uri.toString());
+						logger.log(Messages.SE0094, urlStr);
 
 						lastDownloadStatus = true;
 						return new ZipFile(tempFile);
@@ -296,18 +293,18 @@ public class DownloadModule {
 				ret = 1;
 			} catch (IOException e) {
 				// SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}
-				logger.log(e, Messages.SE0101, uri.toString(), file != null ? file.toString() : "");
+				logger.log(e, Messages.SE0101, urlStr, file != null ? file.toString() : "");
 
 				// つながりません.
 				MessageDialog dialog = new MessageDialog(null, Messages.SE0115.format(),
-						Dialog.getImage(Dialog.DLG_IMG_MESSAGE_WARNING), Messages.SE0116.format(uri.toString()),
+						Dialog.getImage(Dialog.DLG_IMG_MESSAGE_WARNING), Messages.SE0116.format(urlStr),
 						MessageDialog.QUESTION, new String[] { UIMessages.Dialog_RETRY, UIMessages.Dialog_IGNORE,
 					UIMessages.Dialog_STOP }, 0);
 				ret = dialog.open();
 				if (ret == 2) {
 					// 中断
-					throw new OperationCanceledException(Messages.SE0101.format(uri.toString(),
-							file != null ? file.toString() : ""));
+					throw new OperationCanceledException(Messages.SE0101.format(urlStr, file != null ? file.toString()
+							: ""));
 				}
 			}
 		}
@@ -336,13 +333,22 @@ public class DownloadModule {
 		// 先に全上書きフラグは立てておく.
 		defaultOverwriteMode = 1;
 
-		final ZipFile zipFile;
-		try {
-			URI uri = new URI(baseProject.getUrl());
-			zipFile = download(monitor, logger, null, uri, 100);
-		} catch (URISyntaxException e) {
-			throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0013.format(), e));
+		String siteUrl = baseProject.getUrl();
+		String path = H5IOUtils.getURLPath(siteUrl);
+		if (path == null) {
+			logger.log(Messages.SE0082, baseProject.getUrl());
+			logger.setSuccess(false);
+			throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(),
+					Messages.SE0082.format(baseProject.getUrl())));
 		}
+
+		final ZipFile zipFile;
+		//try {
+		//URI uri = new URI(baseProject.getUrl());
+		zipFile = download(monitor, logger, null, siteUrl, 100);
+		//} catch (URISyntaxException e) {
+		//throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0013.format(), e));
+		//}
 
 		perLibWork = perLibWork - 100;
 		if (!lastDownloadStatus) {
@@ -526,25 +532,10 @@ public class DownloadModule {
 			int perSiteWork = Math.max(1, perLibWork / library.getSite().size());
 
 			for (Site site : library.getSite()) {
-				String siteUrl = null;
-				URI uri = null;
-				try {
-					uri = new URI(site.getUrl());
-					if (H5IOUtils.isClassResources(uri.toString())) {
-						// 相対指定の場合はクラスパスから取得する.
-						siteUrl = uri.toString();
-					} else {
-						siteUrl = new URL(site.getUrl()).getPath();
-					}
-				} catch (MalformedURLException e) {
-					logger.log(e, Messages.SE0082, site.getUrl());
-					continue;
-				} catch (URISyntaxException e) {
-					logger.log(e, Messages.SE0082, site.getUrl());
-					continue;
-				}
-
-				if (siteUrl == null) {
+				String siteUrl = site.getUrl();
+				String path = H5IOUtils.getURLPath(siteUrl);
+				if (path == null) {
+					logger.log(Messages.SE0082, siteUrl);
 					continue;
 				}
 
@@ -557,13 +548,13 @@ public class DownloadModule {
 
 				// ファイルのダウンロード.
 				IFile iFile = null;
-				if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || site.getFilePattern() != null) {
+				if (path.endsWith(".zip") || path.endsWith(".jar") || site.getFilePattern() != null) {
 
 					// Zipダウンロード
 
 					// 同じファイルはそのまま使う.
 					if (!siteUrl.equals(cachedSite)) {
-						cachedZipFile = download(monitor, logger, null, uri, perSiteWork);
+						cachedZipFile = download(monitor, logger, null, siteUrl, perSiteWork);
 						setWorked = true;
 						if (!lastDownloadStatus || cachedZipFile == null) {
 							libraryNode.setState(LibraryState.DOWNLOAD_ERROR);
@@ -647,11 +638,11 @@ public class DownloadModule {
 						iFile = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
 					} else {
 						// ファイル部分.
-						iFile = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(siteUrl, "/")));
+						iFile = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(path, "/")));
 					}
 
 					// 追加.
-					download(monitor, logger, iFile, uri, perSiteWork);
+					download(monitor, logger, iFile, siteUrl, perSiteWork);
 					setWorked = true;
 					if (!lastDownloadStatus) {
 
@@ -737,28 +728,70 @@ public class DownloadModule {
 	/**
 	 * URIに応じたプロキシを設定する.
 	 * 
-	 * @param uri URI
+	 * @param urlStr urlStr
+	 * @param client client
 	 */
-	public void setProxy(URI uri) {
+	public void setProxy(String urlStr, HttpClient client) {
 
 		// プロキシ設定.
 		IProxyService proxyService = getProxyService();
-		IProxyData[] proxyDataForHost = proxyService.select(uri);
-
+		IProxyData[] proxyDataForHost = proxyService.select(URI.create(urlStr));
 		for (IProxyData data : proxyDataForHost) {
 			if (data.getHost() != null) {
-				System.setProperty("http.proxySet", "true");
-				System.setProperty("http.proxyHost", data.getHost());
-				System.setProperty("http.proxyPort", String.valueOf(data.getPort()));
-			} else {
-				System.setProperty("http.proxySet", "false");
-			}
-			if (data.getUserId() != null) {
-				System.setProperty("http.proxyUser", data.getUserId());
-			}
-			if (data.getPassword() != null) {
-				System.setProperty("http.proxyPassword", data.getPassword());
+				client.getHostConfiguration().setProxy(data.getHost(), data.getPort());
+
+				if (StringUtils.isNotEmpty(data.getUserId())) {
+					client.getState().setProxyCredentials(new AuthScope(data.getHost(), data.getPort(), "relm"),
+							new UsernamePasswordCredentials(data.getUserId(), data.getPassword()));
+
+				}
 			}
 		}
+	}
+
+	/**
+	 * HttpMethod を取得する.
+	 * 
+	 * @param urlStr urlStr
+	 * @param connectionTimeout connectionTimeout
+	 * @return HttpMethod
+	 * @throws IOException IO例外
+	 */
+	public HttpMethod connect(String urlStr, int connectionTimeout) throws IOException {
+
+		HttpClient client = new HttpClient();
+		HttpMethod getMethod = new GetMethod(urlStr);
+
+		setProxy(urlStr, client);
+
+		client.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(0, true));
+		client.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT,
+				PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+
+		int result = client.executeMethod(getMethod);
+		if (result != HttpStatus.SC_OK) {
+			return null;
+		}
+		//Header header = getMethod.getResponseHeader("Content-Length");
+		//int content = Integer.valueOf(header.getValue());
+		return getMethod;
+	}
+
+	/**
+	 * InputStream を取得する.
+	 * 
+	 * @param urlStr urlStr
+	 * @param connectionTimeout connectionTimeout
+	 * @return InputStream
+	 * @throws IOException IO例外
+	 */
+	public InputStream connectAsStream(String urlStr, int connectionTimeout) throws IOException {
+
+		HttpMethod method = connect(urlStr, connectionTimeout);
+
+		if (method != null) {
+			return method.getResponseBodyAsStream();
+		}
+		return null;
 	}
 }

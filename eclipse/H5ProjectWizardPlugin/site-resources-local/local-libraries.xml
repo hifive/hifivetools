@@ -45,7 +45,7 @@ hifive の動作に必要なライブラリ
 
 
 	<base-projects>
-		<base-project default-js-lib-path="WebContent/res/lib" url="/projects/default.zip">
+		<base-project default-js-lib-path="WebContent/res/lib" url="/projects/wtp.zip">
 			<info lang="ja">
 				<title>hifive 基本構成 WTP プロジェクト</title>
 				<description>[hifive利用時の基本構成]
