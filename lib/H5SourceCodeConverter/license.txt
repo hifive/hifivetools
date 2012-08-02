@@ -3,7 +3,7 @@ the Apache License, Version 2.0(http://www.apache.org/licenses/LICENSE-2.0).
 
 -----
 Code in:
-lib/js1_7_R3.jar
+lib/js1_7_R4.jar
 
 Rhino
 URL:http://www.mozilla.org/rhino/

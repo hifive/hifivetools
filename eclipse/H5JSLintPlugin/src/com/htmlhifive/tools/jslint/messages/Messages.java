@@ -159,6 +159,12 @@ public final class Messages extends MessagesBase {
 	/** DL0030=INFO,ライセンスに同意しません. */
 	public static final Message DL0030 = createMessage("DL0030");
 
+	/** DL0031=INFO,JSLint取得先URL. */
+	public static final Message DL0031 = createMessage("DL0031");
+
+	/** DL0032=INFO,JSHint取得先URL. */
+	public static final Message DL0032 = createMessage("DL0032");
+
 	// #ダイアログツールチップ
 	/** DTT0000=INFO,チェック時にライブラリを考慮するかどうかを設定します。読み込むライブラリが多いとパフォーマンスに影響します。. */
 	public static final Message DTT0000 = createMessage("DTT0000");
@@ -289,7 +295,7 @@ public final class Messages extends MessagesBase {
 	/** T0006=INFO,コード検査中...ファイル名 : {0}. */
 	public static final Message T0006 = createMessage("T0006");
 
-	/** T0007=INFO,ビューに反映中.... */
+	/** T0007=INFO,ビューに反映中...(この処理には時間がかかる場合があります。). */
 	public static final Message T0007 = createMessage("T0007");
 
 	/** T0008=INFO,問題ビューに反映中... {0}件 / {1}件中. */
