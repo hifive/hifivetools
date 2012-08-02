@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<libraries xmlns="http://www.htmlhifive.com/schema/libraries" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.htmlhifive.com/schema/libraries libraries.xsd ">
+
+	<site-libraries>
+		<category org="hifive" name="hifive" path="${default.js.lib.path}/h5">
+<license><![CDATA[
+Copyright (C) 2012 NS Solutions Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    <a>http://www.apache.org/licenses/LICENSE-2.0</a>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+<a>http://www.htmlhifive.com</a>
+]]></license>
+			<info>
+				<title>hifive library</title>
+				<description>hifive base library</description>
+			</info>
+			<info lang="ja">
+				<title>hifive ライブラリ</title>
+				<description><![CDATA[
+hifive の動作に必要なライブラリ
+<a>http://www.htmlhifive.com</a>
+				]]></description>
+			</info>
+			<library version="1.0.4">
+				<site url="/libraries/hifive-all-1.0.4.zip" />
+			</library>
+		</category>
+	</site-libraries>
+
+
+	<default-libraries>
+		<library-ref org="hifive" name="hifive" version="1.0.4" />
+	</default-libraries>
+
+
+	<base-projects>
+		<base-project default-js-lib-path="WebContent/res/lib" url="/projects/default.zip">
+			<info lang="ja">
+				<title>hifive 基本構成 WTP プロジェクト</title>
+				<description>[hifive利用時の基本構成]
+				・JavaSriptプロジェクト
+				・WebContentsがドキュメントルートの動的Webプロジェクト(Java環境)
+				・Tomcatプラグインプロジェクト対応
+				・サンプルのHTMLとしてhifiveのStep3を含む
+				・hifive v1.0.4を同梱
+				</description>
+			</info>
+			<replace>
+				<file name="/.jslint"/>
+				<file name="/.codeassist"/>
+				<file name="/.tomcatplugin"/>
+				<file name="/.settings/org.eclipse.wst.common.component"/>
+			</replace>
+			<natures>
+				<nature id="org.eclipse.jdt.core.javanature" name="java" />
+				<nature id="com.sysdeo.eclipse.tomcat.tomcatnature"  name="tomcat"/>
+			</natures>
+		</base-project>
+	</base-projects>
+</libraries>
+

@@ -189,7 +189,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
 
 			ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-			dialog.run(true, true, downloadRunnable);
+			dialog.run(false, false, downloadRunnable);
 
 		} catch (InvocationTargetException e) {
 			final Throwable ex = e.getTargetException();

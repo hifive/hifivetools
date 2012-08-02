@@ -295,6 +295,9 @@ public class DownloadModule {
 				}
 				ret = 1;
 			} catch (IOException e) {
+				// SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}
+				logger.log(e, Messages.SE0101, uri.toString(), file != null ? file.toString() : "");
+
 				// つながりません.
 				MessageDialog dialog = new MessageDialog(null, Messages.SE0115.format(),
 						Dialog.getImage(Dialog.DLG_IMG_MESSAGE_WARNING), Messages.SE0116.format(uri.toString()),
@@ -303,8 +306,6 @@ public class DownloadModule {
 				ret = dialog.open();
 				if (ret == 2) {
 					// 中断
-					// SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}
-					logger.log(e, Messages.SE0101, uri.toString(), file != null ? file.toString() : "");
 					throw new OperationCanceledException(Messages.SE0101.format(uri.toString(),
 							file != null ? file.toString() : ""));
 				}
