@@ -29,4 +29,5 @@ Bundle-ClassPath: .,
  lib/jaxb/activation-1.1.jar,
  lib/jaxb/jaxb-api-2.2.5.jar,
  lib/jaxb/jaxb-impl-2.2.5.jar,
- lib/jaxb/jaxb-xjc-2.2.5.jar
+ lib/jaxb/jaxb-xjc-2.2.5.jar,
+ site-resources-local/

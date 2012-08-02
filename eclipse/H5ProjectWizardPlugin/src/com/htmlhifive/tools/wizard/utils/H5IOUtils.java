@@ -163,4 +163,14 @@ public abstract class H5IOUtils {
 		// パスチェックは、Workspace.newResourceより取得.
 		return path.isValidPath(path.toString()) && path.segmentCount() >= ICoreConstants.MINIMUM_FOLDER_SEGMENT_LENGTH;
 	}
+
+	/**
+	 * URLがクラスパスリソースを対象としているかどうかを取得する.
+	 * 
+	 * @param url URL
+	 * @return URLがクラスパスリソースを対象としているかどうか
+	 */
+	public static boolean isClassResources(String url) {
+		return url.startsWith("/");
+	}
 }

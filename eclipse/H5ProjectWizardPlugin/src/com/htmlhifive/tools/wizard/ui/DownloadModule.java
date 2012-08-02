@@ -19,10 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -41,6 +43,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -50,6 +53,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
+import com.htmlhifive.tools.wizard.PluginConstant;
 import com.htmlhifive.tools.wizard.library.model.LibraryState;
 import com.htmlhifive.tools.wizard.library.model.xml.BaseProject;
 import com.htmlhifive.tools.wizard.library.model.xml.Category;
@@ -58,8 +62,8 @@ import com.htmlhifive.tools.wizard.library.model.xml.Site;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
+import com.htmlhifive.tools.wizard.ui.page.tree.RootNode;
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
-import com.htmlhifive.tools.wizard.utils.H5LogUtils;
 
 /**
  * <H3>ライブラリダウンロード用モジュール.</H3>
@@ -178,19 +182,26 @@ public class DownloadModule {
 	 * @param perSiteWork ここで進ませるworked
 	 * @throws CoreException コア例外
 	 */
-	private ZipFile download(IProgressMonitor monitor, ResultStatus logger, IFile file, URI uri, int perSiteWork)
+	private ZipFile download(IProgressMonitor monitor, ResultStatus logger, IFile file, final URI uri, int perSiteWork)
 			throws CoreException {
 
 		// PI0111=INFO,[{0}]をダウンロード中...
 		monitor.subTask(Messages.PI0111.format(uri.toString()));
 
 		lastDownloadStatus = false;
-		setProxy(uri);
+
 		final URL url;
-		try {
-			url = uri.toURL();
-		} catch (MalformedURLException e) {
-			throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0013.format(), e));
+		if (H5IOUtils.isClassResources(uri.toString())) {
+			// 相対指定の場合はクラスパスから取得する.
+			url = null;
+		} else {
+			setProxy(uri);
+			try {
+
+				url = uri.toURL();
+			} catch (MalformedURLException e) {
+				throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0013.format(), e));
+			}
 		}
 
 		int ret = 0;
@@ -203,14 +214,23 @@ public class DownloadModule {
 						@Override
 						InputStream getInputStream() throws IOException {
 
-							return url.openStream();
+							if (url != null) {
+								URLConnection connection = url.openConnection();
+								if (connection instanceof HttpURLConnection) {
+									HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+									httpURLConnection
+									.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+								}
+								return connection.getInputStream();
+							}
+							// urlがnullの時は、クラスパスから取得する.
+							return DownloadModule.class.getResourceAsStream(uri.toString());
 						}
 					});
-					if (!updateResult) {
-
+					if (updateResult) {
+						lastDownloadStatus = true;
 					}
 					monitor.worked(perSiteWork);
-					lastDownloadStatus = true;
 				} else {
 					// fileがnullの時は一時ファイルを作成し、ZipFileを返す仕様とする.
 
@@ -218,14 +238,27 @@ public class DownloadModule {
 					OutputStream os = null;
 
 					try {
-						// 接続.
-						is = url.openStream();
-
-						// サイズが取得で切れば取得する.
-						int contentLength = url.openConnection().getContentLength();
+						int contentLength = 0;
 						int perWork = perSiteWork;
-						if (contentLength > 0) {
-							perWork = Math.max(1, perSiteWork * DEFAULT_BUFFER_SIZE / contentLength);
+						if (url == null) {
+							// urlがnullの時は、クラスパスから取得する.
+							is = DownloadModule.class.getResourceAsStream(uri.toString());
+						} else {
+							// 通常のURL
+							// サイズが取得で切れば取得する.
+							URLConnection connection = url.openConnection();
+							if (connection instanceof HttpURLConnection) {
+								HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
+								httpURLConnection.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+							}
+
+							contentLength = connection.getContentLength();
+							if (contentLength > 0) {
+								perWork = Math.max(1, perSiteWork * DEFAULT_BUFFER_SIZE / contentLength);
+							}
+
+							// 接続.
+							is = connection.getInputStream();
 						}
 
 						// SE0093=INFO,{0}をダウンロードします。
@@ -236,10 +269,8 @@ public class DownloadModule {
 						// VM終了時に削除されるようにセット.
 						tempFile.deleteOnExit();
 						// 保存する.
-						is = url.openStream();
 						os = FileUtils.openOutputStream(tempFile);
 						// IOUtils.copy(is, os);
-
 						byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 						int n = 0;
 						while (-1 != (n = is.read(buffer))) {
@@ -271,10 +302,11 @@ public class DownloadModule {
 					UIMessages.Dialog_STOP }, 0);
 				ret = dialog.open();
 				if (ret == 2) {
+					// 中断
 					// SE0101=ERROR,リソース({0})のダウンロードに失敗しました。URL={1}, File={2}
 					logger.log(e, Messages.SE0101, uri.toString(), file != null ? file.toString() : "");
-					throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0101.format(
-							uri.toString(), file != null ? file.toString() : ""), e));
+					throw new OperationCanceledException(Messages.SE0101.format(uri.toString(),
+							file != null ? file.toString() : ""));
 				}
 			}
 		}
@@ -456,11 +488,12 @@ public class DownloadModule {
 					// SE0074=INFO,ライブラリ{0}{1}の更新処理が完了しました。
 					logger.log(Messages.SE0074, category.getName(), libraryNode.getLabel());
 
-				} catch (Exception e) { // CoreException. IOException
+				} catch (IOException e) { // CoreException. IOException
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);
-
-					H5LogUtils.putLog(e, Messages.SE0044);
+				} catch (CoreException e) { // CoreException. IOException
+					// SE0023=ERROR,予期しない例外が発生しました。
+					logger.log(e, Messages.SE0023);
 				}
 			}
 		}
@@ -496,7 +529,12 @@ public class DownloadModule {
 				URI uri = null;
 				try {
 					uri = new URI(site.getUrl());
-					siteUrl = new URL(site.getUrl()).getPath();
+					if (H5IOUtils.isClassResources(uri.toString())) {
+						// 相対指定の場合はクラスパスから取得する.
+						siteUrl = uri.toString();
+					} else {
+						siteUrl = new URL(site.getUrl()).getPath();
+					}
 				} catch (MalformedURLException e) {
 					logger.log(e, Messages.SE0082, site.getUrl());
 					continue;
@@ -544,7 +582,7 @@ public class DownloadModule {
 							// 一致.
 
 							IContainer savedFolder2 = savedFolder;
-							String wildCardStr = site.getFilePattern();
+							String wildCardStr = StringUtils.defaultString(site.getFilePattern());
 							if (wildCardStr.contains("*") && wildCardStr.contains("/")) {
 								// 直前のフォルダまで取得する.
 								wildCardStr = StringUtils.substringBeforeLast(site.getFilePattern(), "/");
@@ -662,7 +700,11 @@ public class DownloadModule {
 	 */
 	private boolean isOtherLibraryResources(LibraryNode targetLibraryNode, IContainer folder, String targetFileName) {
 
-		for (TreeNode node : targetLibraryNode.getParent().getParent().getChildren()) {
+		RootNode rootNode = targetLibraryNode.getParent().getParent();
+		if (rootNode.getChildren() == null) {
+			return false;
+		}
+		for (TreeNode node : rootNode.getChildren()) {
 			CategoryNode categoryNode = (CategoryNode) node;
 			if (folder.equals(categoryNode.getInstallFullPath())) {
 				for (TreeNode node2 : categoryNode.getChildren()) {

@@ -61,7 +61,6 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	public LibraryImportPropertyPage() {
 
 		super();
-		setValid(true); // 常にOK
 		// setMessage(UIMessages.WizardPropertyPage_this_message);
 		// setTitle(UIMessages.WizardPropertyPage_this_title);
 	}
@@ -106,6 +105,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 		// 初期化.
 		container.initialize(getJavaScriptProject(), null, null);
+		setValid(true); // 常にOK
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
 
 			ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-			dialog.run(false, false, downloadRunnable);
+			dialog.run(true, true, downloadRunnable);
 
 		} catch (InvocationTargetException e) {
 			final Throwable ex = e.getTargetException();
@@ -197,8 +197,11 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			H5LogUtils.putLog(ex, Messages.SE0025);
 
 		} catch (InterruptedException e) {
+			logger.setInterrupted(true);
 			// We were cancelled...
+			//removeProject(logger);
 
+			return false;
 		} finally {
 			// 結果表示.
 			logger.showDialog(Messages.PI0138);
@@ -265,7 +268,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.
-					throw new InterruptedException();
+					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);

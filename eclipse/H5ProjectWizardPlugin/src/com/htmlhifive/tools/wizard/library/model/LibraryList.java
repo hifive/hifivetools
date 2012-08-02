@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -51,6 +52,7 @@ import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.RootNode;
+import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 import com.htmlhifive.tools.wizard.utils.H5LogUtils;
 import com.htmlhifive.tools.wizard.utils.H5StringUtils;
 
@@ -72,6 +74,12 @@ public class LibraryList {
 
 	/** infoBaseProjectMap. */
 	private final Map<String, BaseProject> infoBaseProjectMap = new LinkedHashMap<String, BaseProject>();
+
+	/** source. */
+	private String source = "";
+
+	/** lastModified. */
+	private Date lastModified = null;
 
 	/**
 	 * コンストラクタ.
@@ -275,6 +283,9 @@ public class LibraryList {
 		rootNode.setDefaultProjectPath(jsProject != null ? jsProject.getProject() : ResourcesPlugin.getWorkspace()
 				.getRoot().getProject(projectName));
 
+		if (rootNode.getChildren() == null) {
+			return checkContainers;
+		}
 		for (TreeNode node : rootNode.getChildren()) {
 			CategoryNode categoryNode = (CategoryNode) node;
 
@@ -372,7 +383,11 @@ public class LibraryList {
 
 		String siteUrl = null;
 		try {
-			siteUrl = new URL(site.getUrl()).getPath();
+			if (H5IOUtils.isClassResources(site.getUrl())) {
+				siteUrl = site.getUrl();
+			} else {
+				siteUrl = new URL(site.getUrl()).getPath();
+			}
 		} catch (MalformedURLException ignore) {
 			// 無視.
 		}
@@ -388,7 +403,7 @@ public class LibraryList {
 		String[] fileList = null;
 
 		String wildCardStr = site.getFilePattern();
-		if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || site.getFilePattern() != null) {
+		if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || wildCardStr != null) {
 
 			// ZIPとか用
 			String wildCardPath = "";
@@ -446,5 +461,54 @@ public class LibraryList {
 			return true;
 		}
 		return false;
+	}
+
+
+	/**
+	 * ライブラリの情報を取得する.
+	 * 
+	 * @return ライブラリの情報.
+	 */
+	public String getInfo() {
+		if (getSource() == null) {
+			return Messages.PI0152.format(getLastModified());
+		}
+		return Messages.PI0153.format(getLastModified());
+	}
+
+	/**
+	 * source.を取得します.
+	 * 
+	 * @return source.
+	 */
+	public String getSource() {
+		return source;
+	}
+
+	/**
+	 * source.を設定します.
+	 * 
+	 * @param source source.
+	 */
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	/**
+	 * lastModified.を取得します.
+	 * 
+	 * @return lastModified.
+	 */
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	/**
+	 * lastModified.を設定します.
+	 * 
+	 * @param lastModified lastModified.
+	 */
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
 	}
 }

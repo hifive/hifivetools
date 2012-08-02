@@ -73,6 +73,8 @@ public class UIMessages extends NLS {
 	public static String StructureSelectPage_this_message;
 	public static String StructureSelectPage_this_title;
 	public static String LibraryImportComposite_lblDefaultInstallPath_text;
+	public static String StructureSelectComposite_lblLbllistinfo_text;
+	public static String LibraryImportComposite_lblNewLabel_text_1;
 
 	// //////////////////////////////////////////////////////////////////////////
 	//

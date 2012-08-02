@@ -122,13 +122,13 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 		try {
 			// プロジェクトZIP展開.
 			final IRunnableWithProgress runnable = getExtractRunnnable(logger);
-			getContainer().run(false, false, runnable);
+			getContainer().run(true, false, runnable);
 
 			if (logger.isSuccess()) {
 				// 成功時のみ.
 				// ライブラリダウンロード.
 				final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
-				getContainer().run(false, false, downloadRunnable);
+				getContainer().run(true, false, downloadRunnable);
 			}
 
 		} catch (InvocationTargetException e) {
@@ -140,6 +140,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 			removeProject(logger);
 			return false;
 		} catch (InterruptedException e) {
+			logger.setInterrupted(true);
 
 			// We were cancelled...
 			removeProject(logger);
@@ -285,7 +286,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.
-					throw new InterruptedException();
+					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);

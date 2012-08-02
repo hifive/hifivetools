@@ -41,7 +41,7 @@ public class LibraryTreeLatestViewerFilter extends ViewerFilter {
 		}
 		if (parentElement instanceof CategoryNode && element instanceof LibraryNode) {
 			CategoryNode categoryNode = (CategoryNode) parentElement;
-			if (categoryNode.getChildren().length > 0) {
+			if (categoryNode.getChildren() != null && categoryNode.getChildren().length > 0) {
 				if (categoryNode.getChildren()[categoryNode.getChildren().length - 1] == element) {
 					// 最終子ノードが一致したら最新とみなす.
 					return true;
