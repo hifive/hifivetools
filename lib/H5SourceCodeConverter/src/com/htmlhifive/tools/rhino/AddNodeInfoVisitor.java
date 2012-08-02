@@ -44,6 +44,7 @@ import org.mozilla.javascript.ast.ContinueStatement;
 import org.mozilla.javascript.ast.DoLoop;
 import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.EmptyExpression;
+import org.mozilla.javascript.ast.EmptyStatement;
 import org.mozilla.javascript.ast.ErrorNode;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.ForInLoop;
@@ -129,6 +130,8 @@ public class AddNodeInfoVisitor implements NodeVisitor {
 			visit((ConditionalExpression) node);
 		} else if (node instanceof ElementGet) {
 			visit((ElementGet) node);
+		} else if (node instanceof EmptyStatement){
+			visit((EmptyStatement) node);
 		} else if (node instanceof EmptyExpression) {
 			visit((EmptyExpression) node);
 		} else if (node instanceof ErrorNode) {
@@ -383,6 +386,11 @@ public class AddNodeInfoVisitor implements NodeVisitor {
 	}
 
 	protected void visit(EmptyExpression an) {
+
+		int pos = addChild(an, 0, Util.makeIndent(indent));
+	}
+
+	protected void visit(EmptyStatement an) {
 
 		int pos = addChild(an, 0, Util.makeIndent(indent));
 	}

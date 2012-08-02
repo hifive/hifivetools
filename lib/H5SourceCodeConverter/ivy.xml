@@ -29,7 +29,7 @@
 		<dependency org="org.apache.ant" name="ant" rev="1.8.3" conf="lib->*" transitive="false"/>
 
 		<!-- h5Tools -->
-		<dependency org="org.mozilla" name="rhino" rev="1.7R3" conf="lib->*" transitive="false"/>
+		<dependency org="org.mozilla" name="rhino" rev="1.7R4" conf="lib->*" transitive="false"/>
 
 		<!-- log -->
 		<dependency org="log4j" name="log4j" rev="1.2.16" conf="lib->*" transitive="false" />

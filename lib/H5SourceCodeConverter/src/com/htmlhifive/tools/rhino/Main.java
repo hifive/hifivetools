@@ -60,9 +60,9 @@ public class Main {
 				//
 				// "js/h5.tmp.js",//
 				// "js/h5.tmp2.js",//
-						"js/h5.js",//
+//						"js/h5.js",//
 						"js/h5.dev.js",//
-						"js/jquery-codeAssist.js",
+//						"js/jquery-codeAssist.js",
 				// "js/jquery-1.7.js",//
 				// "js/jquery-1.6.2-vsdoc.js",//
 				// "js/jquery.mobile-1.0.js",//
@@ -280,7 +280,8 @@ public class Main {
 						sb.append(StringUtils.strip(token));
 						sb.append("\n");
 					}
-					comment.setJsDoc(sb.toString());
+//					comment.setJsDoc(sb.toString());
+					comment.setJsDocNode(new Comment(0, 0, CommentType.JSDOC, sb.toString()));
 				}
 			}
 		}
@@ -296,7 +297,8 @@ public class Main {
 				VSDocRoot vsDocRoot = converter.convert(jsdoc);
 				VSCommentBuilder builder = new VSCommentBuilder(vsDocRoot);
 				comment.putProp(Constants.VSDOC_FLAG, Boolean.valueOf(true));
-				comment.setJsDoc(builder.build());
+//				comment.setJsDoc(builder.build());
+				comment.setJsDocNode(new Comment(0, 0, CommentType.JSDOC, builder.build()));
 			}
 		}
 	}
