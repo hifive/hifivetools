@@ -17,10 +17,8 @@ package com.htmlhifive.tools.wizard.ui.property;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -63,6 +61,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	public LibraryImportPropertyPage() {
 
 		super();
+		setValid(true); // 常にOK
 		// setMessage(UIMessages.WizardPropertyPage_this_message);
 		// setTitle(UIMessages.WizardPropertyPage_this_title);
 	}
@@ -85,6 +84,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 				if (event.item instanceof Table) { // 一応.
 					boolean enabled = event.detail > 0;
+
 					getDefaultsButton().setEnabled(enabled);
 					getApplyButton().setEnabled(enabled);
 				}
@@ -103,50 +103,51 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	public void createControl(Composite parent) {
 
 		super.createControl(parent);
+
 		// 初期化.
-		container.initialize(getJavaScriptProject());
-	}
-
-	@Override
-	public void setValid(boolean b) {
-
-		// TODO 自動生成されたメソッド・スタブ
-		super.setValid(b);
+		container.initialize(getJavaScriptProject(), null, null);
 	}
 
 	@Override
 	protected void performDefaults() {
 
 		container.refreshTreeLibrary(false, true);
-		// getApplyButton().setSelection(false);
-		// super.performDefaults();
+	}
+
+	@Override
+	public boolean okToLeave() {
+		// 変更が必要かを判定する.
+		if (!getApplyButton().isEnabled()) { // 変更チェック.
+			return super.okToLeave();
+		}
+
+		// TODO:無駄なダイアログが表示される
+		if (!MessageDialog.openConfirm(null, Messages.SE0111.format(), Messages.SE0112.format())) {
+			return false;
+		}
+
+		// 変更を戻す
+		performDefaults();
+
+		return true;
 	}
 
 	@Override
 	public boolean performCancel() {
 
-		// ライセンス確認が必要かどうかを判定する.
-		boolean needRun = false;
-		for (LibraryNode libraryNode : H5WizardPlugin.getInstance().getSelectedLibrarySet()) {
-			if (libraryNode.isSelected()) {
-				needRun = true;
-				break;
-			}
+		if (!getApplyButton().isEnabled()) { // 変更チェック.
+			return super.performCancel();
 		}
-		if (needRun) {
-			if (!MessageDialog.openConfirm(null, Messages.SE0111.format(), Messages.SE0112.format())) {
-				return false;
-			}
-		}
-		container.refreshTreeLibrary(false, true);
 
-		return super.performCancel();
-	}
+		// 正しく動作しないのでコメントアウト
+		//		if (!MessageDialog.openConfirm(null, Messages.SE0111.format(), Messages.SE0112.format())) {
+		//			return false;
+		//		}
+		//
+		//		// 変更を戻す
+		//		performDefaults();
 
-	@Override
-	protected void performApply() {
-
-		super.performApply();
+		return true;
 	}
 
 	/**
@@ -157,20 +158,16 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	@Override
 	public boolean performOk() {
 
+		if (!getApplyButton().isEnabled()) { // 変更チェック.
+			return true;
+		}
+
 		// ライセンス確認が必要かどうかを判定する.
-		boolean needRun = false;
 		boolean needConfirmDialog = false;
 		for (LibraryNode libraryNode : H5WizardPlugin.getInstance().getSelectedLibrarySet()) {
-			if (libraryNode.isSelected()) {
-				needRun = true;
-			}
-			if (libraryNode.isAddable()) {
-				// TODO:とりあえず、追加するものがあれば表示ありとする(インストール済の場合は考慮しない)
+			if (libraryNode.isNeedConfirmDialog()) {
 				needConfirmDialog = true;
 			}
-		}
-		if (!needRun) {
-			return true;
 		}
 
 		// ライセンスダイアログの表示.
@@ -201,40 +198,13 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 		} catch (InterruptedException e) {
 			// We were cancelled...
-			final IProject proj = getProject();
-			if (proj != null && proj.exists()) {
-				try {
-					proj.delete(true, true, null);
-				} catch (CoreException ex) {
-					H5LogUtils.putLog(ex, Messages.SE0026);
-				}
-			}
+
 		} finally {
 			// 結果表示.
-			logger.showDialog();
+			logger.showDialog(Messages.PI0138);
 		}
 
 		return logger.isSuccess();
-	}
-
-	/**
-	 * プロジェクトを取得する.
-	 * 
-	 * @return プロジェクト.
-	 */
-	private IProject getProject() {
-
-		IAdaptable adapt = getElement();
-
-		// IAdaptable adaptable= getElement();
-		if (adapt instanceof IJavaScriptProject) {
-			return (IProject) adapt.getAdapter(IProject.class);
-		}
-		if (adapt instanceof IProject) {
-			return (IProject) adapt;
-		}
-		return null;
-
 	}
 
 	/**
@@ -279,25 +249,27 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					// ダウンロードの実行
 					DownloadModule downloadModule = new DownloadModule();
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySet(), jsProject.getProject(), null);
+							.getSelectedLibrarySet(), jsProject.getProject());
 
 					// ワークスペースとの同期.
 					jsProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					logger.log(Messages.SE0102);
+
+					// SE0104=INFO,ワークスペースを更新しました。
+					logger.log(Messages.SE0104);
 					monitor.worked(1);
 
-					// ファイルの存在チェック更新.
-					container.refreshTreeLibrary(false, false);
-					// SE0101=INFO,ライブラリの状態を最新化しました。
-					logger.log(Messages.SE0101);
+					// ファイルの存在チェック更新(チェックを戻す).
+					container.refreshTreeLibrary(false, true);
+					// SE0103=INFO,ライブラリの状態を最新化しました。
+					logger.log(Messages.SE0103);
 
 				} catch (OperationCanceledException e) {
+					// 処理手動停止.
 					throw new InterruptedException();
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);
-
-					H5LogUtils.putLog(e, Messages.SE0044);
+					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
 					monitor.done();
 				}

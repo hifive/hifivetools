@@ -59,14 +59,12 @@ public abstract class RemoteContentManager {
 	 */
 	public static LibraryList getLibraryList(boolean refresh) {
 
-		String defaultJsLibPath = null;
-		if (H5WizardPlugin.getInstance().getLibraryList() != null) {
-			defaultJsLibPath = H5WizardPlugin.getInstance().getLibraryList().getDefaultJsLibPath();
-		}
-
 		if (!refresh && H5WizardPlugin.getInstance().getLibraryList() != null) {
 			return H5WizardPlugin.getInstance().getLibraryList();
 		}
+
+		// 選択もクリアしておく
+		H5WizardPlugin.getInstance().getSelectedLibrarySet().clear();
 
 		IStatus status = null;
 
@@ -78,7 +76,6 @@ public abstract class RemoteContentManager {
 
 			LibraryList libraryList = parser.getLibraryList();
 			H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
-			libraryList.setDefaultJsLibPath(defaultJsLibPath);
 			return libraryList;
 		} catch (ParseException ex) {
 			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST);
@@ -98,14 +95,13 @@ public abstract class RemoteContentManager {
 
 			LibraryList libraryList = parser.getLibraryList();
 			H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
-			libraryList.setDefaultJsLibPath(defaultJsLibPath);
 			return libraryList;
 		} catch (ParseException ex) {
-			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
+			H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
 		} catch (MalformedURLException ex) {
-			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
+			H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
 		} catch (IOException ex) {
-			status = H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
+			H5LogUtils.putLog(ex, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
 		} finally {
 			IOUtils.closeQuietly(is);
 		}
@@ -113,7 +109,6 @@ public abstract class RemoteContentManager {
 		if (status != null) {
 			// メインのサイトのエラーをダイアログに表示する.
 			H5LogUtils.showLog(Messages.SE0041, status);
-			//throw new CoreException(status);
 		}
 
 		return null;

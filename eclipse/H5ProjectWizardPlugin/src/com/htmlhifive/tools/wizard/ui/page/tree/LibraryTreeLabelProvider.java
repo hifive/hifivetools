@@ -97,10 +97,10 @@ ITableColorProvider {
 
 		if (columnIndex == 1 && element instanceof CategoryNode) {
 			CategoryNode categoryNode = (CategoryNode) element;
-			boolean installed = true;
+			boolean installed = false;
 			for (TreeNode node : categoryNode.getChildren()) {
-				if (!((LibraryNode) node).isExists()) {
-					installed = false;
+				if (((LibraryNode) node).isExists()) {
+					installed = true;
 					break;
 				}
 			}

@@ -124,41 +124,53 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 			final IRunnableWithProgress runnable = getExtractRunnnable(logger);
 			getContainer().run(false, false, runnable);
 
-			if (!logger.isSuccess()) {
-				return false;
+			if (logger.isSuccess()) {
+				// 成功時のみ.
+				// ライブラリダウンロード.
+				final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
+				getContainer().run(false, false, downloadRunnable);
 			}
-
-			// ライブラリダウンロード.
-			final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
-			getContainer().run(false, false, downloadRunnable);
 
 		} catch (InvocationTargetException e) {
 			final Throwable ex = e.getTargetException();
 			// SE0023=ERROR,予期しない例外が発生しました。
 			logger.log(ex, Messages.SE0023);
 
-			H5LogUtils.putLog(e, Messages.SE0025);
-		} catch (InterruptedException e) {
 			// We were cancelled...
-			final IProject proj = structureSelectPage.getProjectHandle();
-			if (proj != null && proj.exists()) {
-				try {
-					proj.delete(true, true, null);
-				} catch (CoreException ex) {
-					// SE0100=INFO,プロジェクト({0})削除処理中にエラーが発生しました。
-					logger.log(ex, Messages.SE0100, proj.getName());
+			removeProject(logger);
+			return false;
+		} catch (InterruptedException e) {
 
-					H5LogUtils.putLog(ex, Messages.SE0026);
-				}
-			}
-			return logger.isSuccess();
+			// We were cancelled...
+			removeProject(logger);
+			return false;
 		} finally {
 			// 結果表示.
-			logger.showDialog();
-
+			logger.showDialog(Messages.PI0137);
 		}
 
-		return logger.isSuccess();
+		// Wizardの場合は結果に関わらず終了する.
+		//return logger.isSuccess();
+		return true;
+	}
+
+	/**
+	 * 失敗したプロジェクトを除去する.
+	 * 
+	 * @param logger ロガー
+	 */
+	private void removeProject(ResultStatus logger) {
+		final IProject proj = structureSelectPage.getProjectHandle();
+		if (proj != null && proj.exists()) {
+			try {
+				logger.log(Messages.SE0105, proj.getName());
+				proj.delete(true, true, null);
+				logger.log(Messages.SE0106, proj.getName());
+			} catch (CoreException ex) {
+				// SE0100=INFO,プロジェクト({0})削除処理中にエラーが発生しました。
+				logger.log(ex, Messages.SE0100, proj.getName());
+			}
+		}
 	}
 
 	/**
@@ -224,7 +236,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 					// 文字コード設定.
 					proj.setDefaultCharset("UTF-8", monitor);
 
-					// ダウンロード.
+					// プロジェクトダウンロード処理(Core例外発生の可能性あり).
 					downloadModule.downloadProject(monitor, logger, baseProject, proj); // 400
 
 					// SE0061=INFO,プロジェクト構成を作成します。
@@ -250,8 +262,10 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 								// SE0066=INFO,Nature{0}を追加しました。
 								logger.log(Messages.SE0066, nature.getId());
 							} catch (CoreException e) {
+
+								// 失敗にはしない.
 								// SE0067=INFO,Nature{0}追加に失敗しました。
-								logger.log(e, Messages.SE0067, nature.getId());
+								logger.logIgnoreSetSuccess(e, Messages.SE0067, nature.getId());
 
 								// SE0031=ERROR,プラグインがインストールされていない可能性があります。name={0}, natureId={1}
 								//H5LogUtils.putLog(e, Messages.SE0031, nature.getName(), nature.getId());
@@ -264,17 +278,18 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 					logger.log(Messages.SE0062);
 
 					proj.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					logger.log(Messages.SE0102);
+					// SE0104=INFO,ワークスペースを更新しました。
+					logger.log(Messages.SE0104);
 
 					monitor.worked(100);
 
 				} catch (OperationCanceledException e) {
+					// 処理手動停止.
 					throw new InterruptedException();
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);
-
-					H5LogUtils.putLog(e, Messages.SE0044);
+					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
 					monitor.done();
 				}
@@ -315,17 +330,21 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 					// ダウンロードの実行
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySet(), project, baseProject.getDefaultJsLibPath());
+							.getSelectedLibrarySet(), project);
 
 					// ワークスペースとの同期.
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					logger.log(Messages.SE0102);
+					// SE0104=INFO,ワークスペースを更新しました。
+					logger.log(Messages.SE0104);
 					monitor.worked(100);
 
 				} catch (OperationCanceledException e) {
+					// 処理手動停止.
 					throw new InterruptedException();
 				} catch (CoreException e) {
-					H5LogUtils.putLog(e, Messages.SE0044);
+					// SE0023=ERROR,予期しない例外が発生しました。
+					logger.log(e, Messages.SE0023);
+					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
 					monitor.done();
 				}
@@ -342,7 +361,6 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 	@Override
 	public void createPageControls(Composite pageContainer) {
 
-		// TODO 自動生成されたメソッド・スタブ
 		super.createPageControls(pageContainer);
 
 		((WizardDialog) getContainer()).addPageChangedListener(new IPageChangedListener() {
