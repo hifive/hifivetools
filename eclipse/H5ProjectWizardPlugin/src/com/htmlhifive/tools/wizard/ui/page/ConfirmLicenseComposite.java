@@ -115,7 +115,7 @@ public class ConfirmLicenseComposite extends Composite {
 		for (Category category : libraryList.getLibraries().getSiteLibraries().getCategory()) {
 			boolean isShow = false;
 			for (LibraryNode libraryNode : H5WizardPlugin.getInstance().getSelectedLibrarySet()) {
-				if (category == libraryNode.getParent().getValue()){
+				if (category == libraryNode.getParent().getValue()) {
 					// 今までに表示してなくて、追加するもののみが表示する対象.
 					isShow = true;
 					if (!categorySet.contains(category) && libraryNode.isNeedConfirmDialog()) {

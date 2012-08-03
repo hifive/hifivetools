@@ -104,4 +104,26 @@ public class H5WizardPlugin extends AbstractUIPlugin {
 
 		return selectedLibrarySet;
 	}
+
+	/**
+	 * ソートされた選択済ライブラリセットを取得する
+	 * 
+	 * @return ソートされた選択済ライブラリセット
+	 */
+	public Set<LibraryNode> getSelectedLibrarySortedSet() {
+
+		// 削除だけ先にする.
+		Set<LibraryNode> sortedSet = new LinkedHashSet<LibraryNode>();
+		for (LibraryNode libraryNode : selectedLibrarySet) {
+			if (libraryNode.isAddable()) {
+				sortedSet.add(libraryNode);
+			}
+		}
+		for (LibraryNode libraryNode : selectedLibrarySet) {
+			if (!libraryNode.isAddable()) {
+				sortedSet.add(libraryNode);
+			}
+		}
+		return sortedSet;
+	}
 }

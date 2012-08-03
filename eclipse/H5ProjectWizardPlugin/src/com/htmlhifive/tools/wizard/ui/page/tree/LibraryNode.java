@@ -33,6 +33,12 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	/** 推奨設定. */
 	private boolean recommended = false;
 
+	/** 全てが揃っているかどうか. */
+	private boolean incomplete = false;
+
+	/** エラーを含むかどうか. */
+	private boolean inError = false;
+
 	/** 処理状態. */
 	private LibraryState state = LibraryState.DEFAULT;
 
@@ -135,6 +141,42 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	}
 
 	/**
+	 * 全てが揃っているかどうか.を取得します.
+	 * 
+	 * @return 全てが揃っているかどうか.
+	 */
+	public boolean isIncomplete() {
+		return incomplete;
+	}
+
+	/**
+	 * 全てが揃っているかどうか.を設定します.
+	 * 
+	 * @param incomplete 全てが揃っているかどうか.
+	 */
+	public void setIncomplete(boolean incomplete) {
+		this.incomplete = incomplete;
+	}
+
+	/**
+	 * エラーを含むかどうか.を取得します.
+	 * 
+	 * @return エラーを含むかどうか.
+	 */
+	public boolean isInError() {
+		return inError;
+	}
+
+	/**
+	 * エラーを含むかどうか.を設定します.
+	 * 
+	 * @param inError エラーを含むかどうか.
+	 */
+	public void setInError(boolean inError) {
+		this.inError = inError;
+	}
+
+	/**
 	 * stateを取得します.
 	 * 
 	 * @return state.
@@ -151,10 +193,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 */
 	public void setState(LibraryState state) {
 
-		if (this.state == LibraryState.DEFAULT || this.state == LibraryState.ADD || this.state == LibraryState.REMOVE
-				|| this.state == LibraryState.EXISTS) {
-			this.state = state;
-		}
+		this.state = state;
 	}
 
 	/**
@@ -164,7 +203,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 */
 	public boolean isSelected() {
 
-		if (state != LibraryState.DEFAULT) {
+		if (state == LibraryState.ADD || state == LibraryState.REMOVE) {
 			return true;
 		}
 		return false;
@@ -177,7 +216,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 */
 	public boolean isAddable() {
 
-		if (state != LibraryState.DEFAULT && state != LibraryState.REMOVE) {
+		if (state == LibraryState.ADD) {
 			return true;
 		}
 		return false;

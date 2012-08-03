@@ -1,4 +1,3 @@
-
 package com.htmlhifive.tools.wizard.library.model.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -10,11 +9,11 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>anonymous complex typeのJavaクラス。
- * 
- * <p>次のスキーマ・フラグメントは、このクラス内に含まれる予期されるコンテンツを指定します。
+ * <p>
+ * anonymous complex typeのJavaクラス。
+ * <p>
+ * 次のスキーマ・フラグメントは、このクラス内に含まれる予期されるコンテンツを指定します。
  * 
  * <pre>
  * &lt;complexType>
@@ -27,94 +26,74 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "library-ref", namespace = "http://www.htmlhifive.com/schema/libraries")
 public class LibraryRef {
 
-    @XmlAttribute(name = "org", required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    protected String org;
-    @XmlAttribute(name = "name", required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    protected String name;
-    @XmlAttribute(name = "version", required = true)
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String version;
+	@XmlAttribute(name = "org", required = true)
+	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+	protected String org;
+	@XmlAttribute(name = "name", required = true)
+	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+	protected String name;
+	@XmlAttribute(name = "version", required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String version;
 
-    /**
-     * orgプロパティの値を取得します。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOrg() {
-        return org;
-    }
+	/**
+	 * orgプロパティの値を取得します。
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getOrg() {
+		return org;
+	}
 
-    /**
-     * orgプロパティの値を設定します。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOrg(String value) {
-        this.org = value;
-    }
+	/**
+	 * orgプロパティの値を設定します。
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setOrg(String value) {
+		this.org = value;
+	}
 
-    /**
-     * nameプロパティの値を取得します。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * nameプロパティの値を取得します。
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * nameプロパティの値を設定します。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+	/**
+	 * nameプロパティの値を設定します。
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setName(String value) {
+		this.name = value;
+	}
 
-    /**
-     * versionプロパティの値を取得します。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVersion() {
-        return version;
-    }
+	/**
+	 * versionプロパティの値を取得します。
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getVersion() {
+		return version;
+	}
 
-    /**
-     * versionプロパティの値を設定します。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVersion(String value) {
-        this.version = value;
-    }
+	/**
+	 * versionプロパティの値を設定します。
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setVersion(String value) {
+		this.version = value;
+	}
 
 }

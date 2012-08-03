@@ -1,4 +1,3 @@
-
 package com.htmlhifive.tools.wizard.library.model.xml;
 
 import java.util.ArrayList;
@@ -9,11 +8,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>anonymous complex typeのJavaクラス。
- * 
- * <p>次のスキーマ・フラグメントは、このクラス内に含まれる予期されるコンテンツを指定します。
+ * <p>
+ * anonymous complex typeのJavaクラス。
+ * <p>
+ * 次のスキーマ・フラグメントは、このクラス内に含まれる予期されるコンテンツを指定します。
  * 
  * <pre>
  * &lt;complexType>
@@ -26,46 +25,35 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "category"
-})
+@XmlType(name = "", propOrder = { "category" })
 @XmlRootElement(name = "site-libraries", namespace = "http://www.htmlhifive.com/schema/libraries")
 public class SiteLibraries {
 
-    @XmlElement(namespace = "http://www.htmlhifive.com/schema/libraries")
-    protected List<Category> category;
+	@XmlElement(namespace = "http://www.htmlhifive.com/schema/libraries")
+	protected List<Category> category;
 
-    /**
-     * Gets the value of the category property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the category property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCategory().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Category }
-     * 
-     * 
-     */
-    public List<Category> getCategory() {
-        if (category == null) {
-            category = new ArrayList<Category>();
-        }
-        return this.category;
-    }
+	/**
+	 * Gets the value of the category property.
+	 * <p>
+	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to
+	 * the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for
+	 * the category property.
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getCategory().add(newItem);
+	 * </pre>
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list {@link Category }
+	 */
+	public List<Category> getCategory() {
+		if (category == null) {
+			category = new ArrayList<Category>();
+		}
+		return this.category;
+	}
 
 }
