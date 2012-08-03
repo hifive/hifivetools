@@ -17,6 +17,7 @@ package com.htmlhifive.tools.wizard.log.messages;
 
 import java.util.ResourceBundle;
 
+
 /**
  * Messages.
  * 
@@ -271,7 +272,7 @@ public abstract class Messages extends MessagesBase {
 	/** PI0151=INFO,ライブラリ定義情報: 未取得. */
 	public static final Message PI0151 = createMessage("PI0151");
 
-	/** PI0152=INFO,ライブラリ定義情報: 外部アクセス不可のため内部データを利用. */
+	/** PI0152=INFO,ライブラリ定義情報: 外部アクセス不可のため内部データを利用中. */
 	public static final Message PI0152 = createMessage("PI0152");
 
 	/** PI0153=INFO,ライブラリ定義情報: {0,date,yyyy/MM/dd HH:mm:ss}版. */
