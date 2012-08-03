@@ -78,8 +78,6 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 		super();
 
-		// setWindowTitle("hifive プロジェクトウィザード");
-
 		downloadModule = new DownloadModule();
 	}
 
@@ -129,13 +127,6 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 			// プロジェクトZIP展開.
 			final IRunnableWithProgress runnable = getExtractRunnnable(logger);
 			getContainer().run(false, false, runnable);
-
-			if (logger.isSuccess()) {
-				// 成功時のみ.
-				// ライブラリダウンロード.
-				final IRunnableWithProgress downloadRunnable = getDownloadRunnnable(logger);
-				getContainer().run(false, false, downloadRunnable);
-			}
 
 		} catch (InvocationTargetException e) {
 			final Throwable ex = e.getTargetException();
@@ -232,7 +223,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 				}
 
 				// タスクを開始.
-				monitor.beginTask(Messages.PI0101.format(), 1000);
+				monitor.beginTask(Messages.PI0101.format(), 10000);
 
 				// nature追加, project-download, zip-extract, replace, reflesh
 
@@ -244,11 +235,11 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 					proj.setDefaultCharset("UTF-8", monitor);
 
 					// プロジェクトダウンロード処理(Core例外発生の可能性あり).
-					downloadModule.downloadProject(monitor, logger, baseProject, proj); // 400
+					downloadModule.downloadProject(monitor, 2000, logger, baseProject, proj); // 2000
 
 					// SE0061=INFO,プロジェクト構成を作成します。
 					logger.log(Messages.SE0061);
-					monitor.worked(100); // 状態変更 400
+					monitor.worked(1000); // 状態変更 1000
 
 					// 文字列置換.
 					for (com.htmlhifive.tools.wizard.library.model.xml.File file : baseProject.getReplace().getFile()) {
@@ -281,73 +272,27 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 							}
 						}
 					}
+					monitor.worked(1000);
+
 					// SE0062=INFO,プロジェクト構成の作成が完了しました。
 					logger.log(Messages.SE0062);
-
-					proj.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					// SE0104=INFO,ワークスペースを更新しました。
-					logger.log(Messages.SE0104);
-
-					monitor.worked(100);
-
-				} catch (OperationCanceledException e) {
-					// 処理手動停止.
-					throw new InterruptedException(e.getMessage());
-				} catch (CoreException e) {
-					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
-					throw new InvocationTargetException(e, Messages.SE0023.format());
-				} finally {
-					monitor.done();
-				}
-			}
-		};
-
-	}
-
-	/**
-	 * プロジェクト展開処理を行なうRunnable を取得.
-	 * 
-	 * @return プロジェクト展開処理を行なうRunnable.
-	 */
-	private IRunnableWithProgress getDownloadRunnnable(final ResultStatus logger) {
-
-		return new IRunnableWithProgress() {
-
-			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-				try {
-					if (monitor == null) {
-						// モニタを生成.
-						monitor = new NullProgressMonitor();
-					}
 
 					// プロジェクトを取得.
 					final IProject project = structureSelectPage.getProjectHandle();
 
-					// jsのルートを取得.
-					BaseProject baseProject = structureSelectPage.getBaseProject();
-					if (baseProject == null) {
-						// 続行不可.
-						H5LogUtils.putLog(null, Messages.SE0048);
-						logger.setSuccess(false);
-						return;
-					}
-
 					// ダウンロードの実行
-					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySortedSet(), project);
+					downloadModule.downloadLibrary(monitor, 5000, logger, H5WizardPlugin.getInstance()
+							.getSelectedLibrarySortedSet(), project); // 5000
 
 					// ワークスペースとの同期.
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					project.refreshLocal(IResource.DEPTH_ONE, monitor);
 					// SE0104=INFO,ワークスペースを更新しました。
 					logger.log(Messages.SE0104);
-					monitor.worked(100);
+					monitor.worked(1000);
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.
-					throw new InterruptedException();
+					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);

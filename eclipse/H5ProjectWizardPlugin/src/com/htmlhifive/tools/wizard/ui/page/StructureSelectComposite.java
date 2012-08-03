@@ -29,7 +29,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -39,6 +38,7 @@ import com.htmlhifive.tools.wizard.RemoteContentManager;
 import com.htmlhifive.tools.wizard.library.model.LibraryList;
 import com.htmlhifive.tools.wizard.library.model.xml.Info;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
 /**
@@ -87,6 +87,7 @@ public class StructureSelectComposite extends Composite {
 				do_textProject_modifyText(e);
 			}
 		});
+
 		textProject.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -165,6 +166,8 @@ public class StructureSelectComposite extends Composite {
 		RemoteContentManager.getLibraryList(true);
 
 		setInputComboZip();
+
+		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class StructureSelectComposite extends Composite {
 		LibraryList libraryList = RemoteContentManager.getLibraryList();
 		// libraryListのnull対応.
 		if (libraryList == null) {
-			setErrorMessage(Messages.SE0053.format());
+			UIEventHelper.setErrorMessage(this, Messages.SE0053.format());
 			lblListInfo.setText("");
 			return;
 		}
@@ -213,6 +216,7 @@ public class StructureSelectComposite extends Composite {
 			linkInfo.setText(info.getDescription());
 			linkInfo.setVisible(true);
 		}
+		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
 	}
 
 	/**
@@ -223,19 +227,7 @@ public class StructureSelectComposite extends Composite {
 	protected void do_textProject_modifyText(ModifyEvent e) {
 
 		validatePage();
-
-	}
-
-	/**
-	 * メッセージを上のページに設定する. nullだと正常の状態として認識する.
-	 * 
-	 * @param message
-	 */
-	void setErrorMessage(String message) {
-
-		Event event = new Event();
-		event.text = message;
-		notifyListeners(SWT.ERROR_UNSPECIFIED, event);
+		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
 	}
 
 	/**
@@ -264,7 +256,7 @@ public class StructureSelectComposite extends Composite {
 		if (name.length() == 0) {
 			// setMessage(NewWizardMessages.JavaProjectWizardFirstPage_Message_enterProjectName);
 			// setErrorMessage(NewWizardMessages.JavaProjectWizardFirstPage_Message_enterProjectName);
-			setErrorMessage(Messages.SE0051.format());
+			UIEventHelper.setErrorMessage(this, Messages.SE0051.format());
 			return;
 		}
 
@@ -277,7 +269,7 @@ public class StructureSelectComposite extends Composite {
 		// check whether the project name is valid
 		final IStatus nameStatus = ResourcesPlugin.getWorkspace().validateName(name, IResource.PROJECT);
 		if (!nameStatus.isOK()) {
-			setErrorMessage(nameStatus.getMessage());
+			UIEventHelper.setErrorMessage(this, nameStatus.getMessage());
 			return;
 		}
 
@@ -285,12 +277,11 @@ public class StructureSelectComposite extends Composite {
 		final IProject handle = getProjectHandle();
 		if (handle.exists()) {
 			// setErrorMessage(NewWizardMessages.JavaProjectWizardFirstPage_Message_projectAlreadyExists);
-			setErrorMessage(Messages.SE0052.format());
+			UIEventHelper.setErrorMessage(this, Messages.SE0052.format());
 			return;
 		}
 
 		// 正常.
-		setErrorMessage(null);
+		UIEventHelper.setErrorMessage(this, null);
 	}
-
 }

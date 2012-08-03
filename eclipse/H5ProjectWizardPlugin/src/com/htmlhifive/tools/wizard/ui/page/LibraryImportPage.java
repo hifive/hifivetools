@@ -21,11 +21,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 
 import com.htmlhifive.tools.wizard.PluginConstant;
-import com.htmlhifive.tools.wizard.RemoteContentManager;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.xml.BaseProject;
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
 /**
@@ -61,7 +60,7 @@ public class LibraryImportPage extends WizardPage {
 		setControl(container);
 
 		// 下からのメッセージを受ける.
-		container.addListener(SWT.ERROR_UNSPECIFIED, new Listener() {
+		container.addListener(UIEventHelper.SET_MESSAGE, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -113,25 +112,41 @@ public class LibraryImportPage extends WizardPage {
 		return super.canFlipToNextPage();
 	}
 
-	@Override
-	public void setVisible(boolean visible) {
-
-		// TODO:要修正 戻り遷移で再度設定されてしまう
-		super.setVisible(visible);
-		if (visible) {
-			// libraryListのnull対応.
-			LibraryList libraryList = RemoteContentManager.getLibraryList();
-			if (libraryList != null) {
-				BaseProject baseProject = ((StructureSelectPage) getPreviousPage()).getBaseProject();
-				if (baseProject != null) {
-					if (container.initialize(null, ((StructureSelectPage) getPreviousPage()).getProjectName(),
-							baseProject.getDefaultJsLibPath())) {
-						// 変更あり.
-						((ConfirmLicensePage) getNextPage()).clearCategory();
-					}
-				}
-			}
+	/**
+	 * 初期化.
+	 * 
+	 * @param jsProject プロジェクト
+	 * @param projectName プロジェクト名
+	 * @param defaultInstallPath 初期インストール場所
+	 * @return 変更あり
+	 */
+	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+		if (isControlCreated()) {
+			return container.initialize(jsProject, projectName, defaultInstallPath);
 		}
+		return false;
 	}
+
+	//
+	//	@Override
+	//	public void setVisible(boolean visible) {
+	//
+	//		// TODO:要修正 戻り遷移で再度設定されてしまう
+	//		super.setVisible(visible);
+	//		if (visible) {
+	//			// libraryListのnull対応.
+	//			LibraryList libraryList = RemoteContentManager.getLibraryList();
+	//			if (libraryList != null) {
+	//				BaseProject baseProject = ((StructureSelectPage) getPreviousPage()).getBaseProject();
+	//				if (baseProject != null) {
+	//					if (container.initialize(null, ((StructureSelectPage) getPreviousPage()).getProjectName(),
+	//							baseProject.getDefaultJsLibPath())) {
+	//						// 変更あり.
+	//						((ConfirmLicensePage) getNextPage()).clearCategory();
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
 
 }

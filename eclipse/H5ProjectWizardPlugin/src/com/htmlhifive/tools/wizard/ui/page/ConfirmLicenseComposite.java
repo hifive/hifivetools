@@ -32,7 +32,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.TabFolder;
@@ -43,6 +42,7 @@ import com.htmlhifive.tools.wizard.RemoteContentManager;
 import com.htmlhifive.tools.wizard.library.model.LibraryList;
 import com.htmlhifive.tools.wizard.library.model.xml.Category;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
@@ -238,20 +238,8 @@ public class ConfirmLicenseComposite extends Composite {
 	 * @param e イベント
 	 */
 	protected void do_btnRadioAccept_widgetSelected(SelectionEvent e) {
-		changePageStatus(btnRadioAccept.getSelection()
+		UIEventHelper.setPageComplete(this, btnRadioAccept.getSelection()
 				|| H5WizardPlugin.getInstance().getSelectedLibrarySet().isEmpty());
-	}
-
-	/**
-	 * pageへのメッセージ追加イベント発生用.
-	 * 
-	 * @param status 状態.
-	 */
-	public void changePageStatus(boolean status) {
-		Event event = new Event();
-		event.type = SWT.ERROR_UNSPECIFIED;
-		event.doit = status;
-		notifyListeners(event.type, event);
 	}
 
 	/**

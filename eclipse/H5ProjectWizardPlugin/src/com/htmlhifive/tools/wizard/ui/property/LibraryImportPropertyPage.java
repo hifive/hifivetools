@@ -41,6 +41,7 @@ import com.htmlhifive.tools.wizard.H5WizardPlugin;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.DownloadModule;
 import com.htmlhifive.tools.wizard.ui.ResultStatus;
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.page.LibraryImportComposite;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
 import com.htmlhifive.tools.wizard.utils.H5LogUtils;
@@ -76,13 +77,13 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		container = new LibraryImportComposite(parent, SWT.NONE);
 
 		// イベント通知受付.
-		container.addListener(SWT.CHANGED, new Listener() {
+		container.addListener(UIEventHelper.TABLE_SELECTION_CHANGE, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
 
 				if (event.item instanceof Table) { // 一応.
-					boolean enabled = event.detail > 0;
+					boolean enabled = ((Table) event.item).getItemCount() > 0;
 
 					getDefaultsButton().setEnabled(enabled);
 					getApplyButton().setEnabled(enabled);
@@ -105,13 +106,15 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 		// 初期化.
 		container.initialize(getJavaScriptProject(), null, null);
-		setValid(true); // 常にOK
+
+		//setValid(true); // 常にOK
 	}
 
 	@Override
 	protected void performDefaults() {
 
 		container.refreshTreeLibrary(false, true);
+
 	}
 
 	@Override
@@ -121,13 +124,14 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			return super.okToLeave();
 		}
 
-		// TODO:無駄なダイアログが表示される
+		// 確認
 		if (!MessageDialog.openConfirm(null, Messages.SE0111.format(), Messages.SE0112.format())) {
 			return false;
 		}
 
 		// 変更を戻す
-		performDefaults();
+		getDefaultsButton().setEnabled(false);
+		getApplyButton().setEnabled(false);
 
 		return true;
 	}
@@ -139,7 +143,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			return super.performCancel();
 		}
 
-		// 正しく動作しないのでコメントアウト
+		// TODO:正しく動作しないのでコメントアウト
 		//		if (!MessageDialog.openConfirm(null, Messages.SE0111.format(), Messages.SE0112.format())) {
 		//			return false;
 		//		}
@@ -249,23 +253,23 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					}
 
 					// タスクを開始.
-					monitor.beginTask(Messages.PI0103.format(), 1000);
+					monitor.beginTask(Messages.PI0103.format(), 10000);
 
 					IJavaScriptProject jsProject = getJavaScriptProject();
 
 					// 現在のデフォルトインストール先を取得する.
 
 					// ダウンロードの実行
-					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySortedSet(), jsProject.getProject()); // 900
+					downloadModule.downloadLibrary(monitor, 8000, logger, H5WizardPlugin.getInstance()
+							.getSelectedLibrarySortedSet(), jsProject.getProject()); // 8000
 
 					// ワークスペースとの同期.
-					jsProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					jsProject.getProject().refreshLocal(IResource.DEPTH_ONE, monitor);
 
 					// SE0104=INFO,ワークスペースを更新しました。
 					logger.log(Messages.SE0104);
 					monitor.subTask(Messages.SE0104.format());
-					monitor.worked(100);
+					monitor.worked(2000);
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.
