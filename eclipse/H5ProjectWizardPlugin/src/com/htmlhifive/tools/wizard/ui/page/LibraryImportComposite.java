@@ -341,11 +341,17 @@ public class LibraryImportComposite extends Composite {
 		// libraryListのnull対応.
 		if (libraryList == null) {
 			lblListInfo.setText(Messages.PI0151.format());
+			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
 			treeViewerLibrary.setInput(null);
 			treeLibrary.setEnabled(false);
 			return;
 		}
 		lblListInfo.setText(libraryList.getInfo());
+		if (libraryList.getSource() == null) {
+			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+		} else {
+			lblListInfo.setForeground(null);
+		}
 		lblListInfo.getParent().layout();
 
 		if (libraryList.getLibraries().getSiteLibraries().getCategory().isEmpty()) {
@@ -378,6 +384,9 @@ public class LibraryImportComposite extends Composite {
 						addTableItem(libraryNode);
 					} else if (forceDefault) {
 						item3.setChecked(false);
+						if (libraryNode.isIncomplete()) {
+							item3.setGrayed(true);
+						}
 					}
 					effectTreeViewParentItem(item3);
 				}
@@ -428,22 +437,14 @@ public class LibraryImportComposite extends Composite {
 		linkDetail.setText(detail.toString());
 		scrolledComposite.setMinSize(linkDetail.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
+		// チェック切り替えの処理
 		if (e.detail == SWT.CHECK) {
 			if (treeLibrary.getSelection().length == 1 && treeLibrary.getSelection()[0] != treeItem) {
 				treeLibrary.setSelection(treeItem); // 選択状態にしておく.
 			}
 			if (treeItem.getData() instanceof LibraryNode) {
 				LibraryNode libraryNode = (LibraryNode) treeItem.getData();
-				if (treeItem.getChecked()) {
-					// 追加処理.
-					// System.out.println("Check");
-					addTableItem(libraryNode);
-				} else {
-					// 削除処理.
-					// System.out.println("Remove");
-					// 削除.
-					removeTableItem(libraryNode);
-				}
+				itemCheck(libraryNode, treeItem);
 
 				// 親処理.
 				effectTreeViewParentItem(treeItem);
@@ -454,13 +455,7 @@ public class LibraryImportComposite extends Composite {
 					LibraryNode libraryNode = (LibraryNode) childItem.getData();
 
 					childItem.setChecked(treeItem.getChecked());
-					if (childItem.getChecked()) {
-						// 追加.
-						addTableItem(libraryNode);
-					} else {
-						// 削除.
-						removeTableItem(libraryNode);
-					}
+					itemCheck(libraryNode, treeItem);
 				}
 				treeItem.setGrayed(false);
 				tableSelection.layout();
@@ -480,6 +475,38 @@ public class LibraryImportComposite extends Composite {
 			// buttonAdd.setEnabled(true);
 			// }
 			// }
+		}
+	}
+
+	/**
+	 * アイテムのチェックを行う.
+	 * 
+	 * @param libraryNode ノード
+	 * @param treeItem アイテム
+	 */
+	private void itemCheck(LibraryNode libraryNode, TreeItem treeItem) {
+		if (libraryNode.isIncomplete()) {
+			if (treeItem.getChecked() && treeItem.getGrayed()) {
+				// 追加処理.
+				addTableItem(libraryNode);
+				treeItem.setGrayed(false);
+			} else if (!treeItem.getChecked() && !treeItem.getGrayed()) {
+				// 削除処理.
+				removeTableItem(libraryNode);
+				treeItem.setGrayed(false);
+			} else {
+				// 削除処理.
+				removeTableItem(libraryNode);
+				// デフォルト
+				treeItem.setChecked(false);
+				treeItem.setGrayed(true);
+			}
+		} else if (treeItem.getChecked()) {
+			// 追加処理.
+			addTableItem(libraryNode);
+		} else {
+			// 削除処理.
+			removeTableItem(libraryNode);
 		}
 	}
 
@@ -542,7 +569,6 @@ public class LibraryImportComposite extends Composite {
 
 		// RemoteContentManager.getLibraryList();
 
-		// for (TreeItem item : treeLibrary.getItems()) {
 		for (TreeItem item2 : treeLibrary.getItems()) {
 			for (TreeItem item3 : item2.getItems()) {
 				if (item3.getData() instanceof LibraryNode) {
@@ -625,11 +651,18 @@ public class LibraryImportComposite extends Composite {
 				if (treeItem2.getData() instanceof LibraryNode) {
 					LibraryNode libraryNode = (LibraryNode) treeItem2.getData();
 					if (getSelectedLibrarySet().contains(libraryNode)) {
-						// 追加.
+						// 処理あり.
 						if (libraryNode.isAddable()) {
 							treeItem2.setChecked(true);
+						} else if (!libraryNode.isIncomplete()) {
+							treeItem2.setChecked(false);
+						} else {
+							treeItem2.setChecked(false);
+							treeItem2.setGrayed(false);
 						}
-						libraryNode.setState(libraryNode.getState());
+						//libraryNode.setState(libraryNode.getState());
+					} else if (libraryNode.isIncomplete()) {
+						treeItem2.setGrayed(true);
 					}
 					effectTreeViewParentItem(treeItem2);
 				}
@@ -645,7 +678,9 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void removeTableItem(LibraryNode libraryNode) {
 
-		if (libraryNode.isExists() && !getSelectedLibrarySet().contains(libraryNode)) {
+		//if (libraryNode.isExists() && !getSelectedLibrarySet().contains(libraryNode)) {
+		if (!getSelectedLibrarySet().contains(libraryNode) || libraryNode.isIncomplete()
+				&& libraryNode.getState() == LibraryState.ADD) {
 			setTableItem(libraryNode, LibraryState.REMOVE);
 		} else {
 			if (libraryNode.isExists()) {
@@ -654,12 +689,14 @@ public class LibraryImportComposite extends Composite {
 				libraryNode.setState(LibraryState.DEFAULT);
 			}
 			// 本当に削除.
-			getSelectedLibrarySet().remove(libraryNode); // URL
-			if (tableSelection.getItemCount() > 0) {
-				for (int i = 0; i < tableSelection.getItemCount(); i++) {
-					if (tableSelection.getItem(i).getData() == libraryNode) {
-						tableSelection.remove(i);
-						break;
+			if (getSelectedLibrarySet().contains(libraryNode)) {
+				getSelectedLibrarySet().remove(libraryNode); // URL
+				if (tableSelection.getItemCount() > 0) {
+					for (int i = 0; i < tableSelection.getItemCount(); i++) {
+						if (tableSelection.getItem(i).getData() == libraryNode) {
+							tableSelection.remove(i);
+							break;
+						}
 					}
 				}
 			}
@@ -689,9 +726,8 @@ public class LibraryImportComposite extends Composite {
 	 * 
 	 * @param libraryData ライブラリデータ
 	 * @param libraryState 操作状態
-	 * @return 追加したテーブルItem
 	 */
-	private TableItem setTableItem(LibraryNode libraryNode, LibraryState state) {
+	private void setTableItem(LibraryNode libraryNode, LibraryState state) {
 
 		// 状態を変更.
 		libraryNode.setState(state);
@@ -707,7 +743,7 @@ public class LibraryImportComposite extends Composite {
 					}
 				}
 			}
-			return null;
+			return;
 		}
 
 		// 色替え.
@@ -719,7 +755,7 @@ public class LibraryImportComposite extends Composite {
 
 		if (state == LibraryState.EXISTS) {
 			// 存在していたら追加しない
-			return null;
+			return;
 		}
 
 		Library library = libraryNode.getValue();
@@ -755,7 +791,6 @@ public class LibraryImportComposite extends Composite {
 		tableItem.setData(libraryNode);
 
 		getSelectedLibrarySet().add(libraryNode);
-		return tableItem;
 	}
 
 	protected void changeTableSelection() {

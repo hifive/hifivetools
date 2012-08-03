@@ -34,13 +34,13 @@ public enum LibraryState {
 	/** REMOVE. */
 	REMOVE("-", UIMessages.LibraryState_REMOVE, PluginConstant.IMG_CORRECTION_REMOVE),
 	/** EXISTS. */
-	EXISTS(">", UIMessages.LibraryState_EXIST, PluginConstant.IMG_FIELD_PUBLIC),
-	/** EXISTS. */
-	INCOMPLETE(">", UIMessages.LibraryState_INCOMPLETE, PluginConstant.IMG_REFACTORING_WARNING),
-	/** DOWNLOAD_ERROR. */
-	DOWNLOAD_ERROR("x", UIMessages.LibraryState_DOWNLOAD_ERROR, PluginConstant.IMG_OBJS_FIXABLE_ERROR),
-	/** EXTRACT_ERROR. */
-	EXTRACT_ERROR("x", UIMessages.LibraryState_EXTRACT_ERROR, PluginConstant.IMG_OBJS_FIXABLE_PROBLEM);
+	EXISTS(">", UIMessages.LibraryState_EXIST, PluginConstant.IMG_FIELD_PUBLIC);
+	//	/** EXISTS. */
+	//	INCOMPLETE(">", UIMessages.LibraryState_INCOMPLETE, PluginConstant.IMG_REFACTORING_WARNING),
+	//	/** DOWNLOAD_ERROR. */
+	//	DOWNLOAD_ERROR("x", UIMessages.LibraryState_DOWNLOAD_ERROR, PluginConstant.IMG_OBJS_FIXABLE_ERROR),
+	//	/** EXTRACT_ERROR. */
+	//	EXTRACT_ERROR("x", UIMessages.LibraryState_EXTRACT_ERROR, PluginConstant.IMG_OBJS_FIXABLE_PROBLEM);
 
 	/** 文字記号. */
 	private String mark;

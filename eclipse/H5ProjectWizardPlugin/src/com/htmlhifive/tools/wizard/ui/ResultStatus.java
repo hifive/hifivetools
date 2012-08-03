@@ -51,6 +51,13 @@ public class ResultStatus {
 
 	// eはnull可能
 
+	/**
+	 * メッセージを追加する.
+	 * 
+	 * @param logLevel レベル
+	 * @param msg メッセージ
+	 * @param e 例外
+	 */
 	private void put(LogLevel logLevel, String msg, Throwable e) {
 
 		IStatus status = null;
@@ -207,18 +214,20 @@ public class ResultStatus {
 
 	/**
 	 * 割り込み.を取得します.
+	 * 
 	 * @return 割り込み.
 	 */
 	public boolean isInterrupted() {
-	    return interrupted;
+		return interrupted;
 	}
 
 	/**
 	 * 割り込み.を設定します.
+	 * 
 	 * @param interrupted 割り込み.
 	 */
 	public void setInterrupted(boolean interrupted) {
-	    this.interrupted = interrupted;
+		this.interrupted = interrupted;
 	}
 
 }

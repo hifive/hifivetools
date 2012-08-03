@@ -205,6 +205,11 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		} finally {
 			// 結果表示.
 			logger.showDialog(Messages.PI0138);
+
+			// ファイルの存在チェック更新(チェックを戻す).
+			container.refreshTreeLibrary(false, true);
+			// SE0103=INFO,ライブラリの状態を最新化しました。
+			logger.log(Messages.SE0103);
 		}
 
 		return logger.isSuccess();
@@ -252,19 +257,15 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 					// ダウンロードの実行
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
-							.getSelectedLibrarySet(), jsProject.getProject());
+							.getSelectedLibrarySortedSet(), jsProject.getProject()); // 900
 
 					// ワークスペースとの同期.
 					jsProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
 					// SE0104=INFO,ワークスペースを更新しました。
 					logger.log(Messages.SE0104);
-					monitor.worked(1);
-
-					// ファイルの存在チェック更新(チェックを戻す).
-					container.refreshTreeLibrary(false, true);
-					// SE0103=INFO,ライブラリの状態を最新化しました。
-					logger.log(Messages.SE0103);
+					monitor.subTask(Messages.SE0104.format());
+					monitor.worked(100);
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.

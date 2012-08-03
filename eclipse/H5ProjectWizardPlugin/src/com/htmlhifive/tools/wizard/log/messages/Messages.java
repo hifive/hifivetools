@@ -17,7 +17,6 @@ package com.htmlhifive.tools.wizard.log.messages;
 
 import java.util.ResourceBundle;
 
-
 /**
  * Messages.
  * 

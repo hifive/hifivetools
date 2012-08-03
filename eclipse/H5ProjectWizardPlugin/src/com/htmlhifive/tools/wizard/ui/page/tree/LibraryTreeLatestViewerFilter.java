@@ -47,7 +47,7 @@ public class LibraryTreeLatestViewerFilter extends ViewerFilter {
 					return true;
 				}
 				LibraryNode libraryNode = (LibraryNode) element;
-				if (libraryNode.isExists()) {
+				if (libraryNode.isExists() || libraryNode.isSelected()) {
 					// 存在するので消さない.
 					return true;
 				}

@@ -23,7 +23,6 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
 import com.htmlhifive.tools.wizard.log.messages.MessagesBase.Message;
 
-
 /**
  * <H3>ログユーティリティ.</H3>
  * 
@@ -40,10 +39,9 @@ public class H5LogUtils {
 	 * @return IStatus
 	 */
 	public static IStatus putLog(Throwable e, Message message, Object... params) {
-	
+
 		// eはnull可能
-		final IStatus status =
-				new Status(IStatus.INFO, H5WizardPlugin.getId(), IStatus.INFO, message.format(params), e);
+		final IStatus status = new Status(IStatus.INFO, H5WizardPlugin.getId(), IStatus.INFO, message.format(params), e);
 		final ILog log = H5WizardPlugin.getInstance().getLog();
 		// .metadata/.logにログを出力
 		log.log(status);
@@ -57,7 +55,7 @@ public class H5LogUtils {
 	 * @param status IStatus
 	 */
 	public static void showLog(Message title, IStatus status) {
-	
+
 		// ダイアログにエラーを表示
 		ErrorDialog.openError(null, title.format(), null, status);
 	}
@@ -71,10 +69,10 @@ public class H5LogUtils {
 	 * @param params メッセージ用パラメータ
 	 */
 	public static void showLog(Throwable e, Message title, Message message, Object... params) {
-	
+
 		// ログ出力.
 		IStatus status = putLog(e, message, params);
-	
+
 		showLog(title, status);
 	}
 

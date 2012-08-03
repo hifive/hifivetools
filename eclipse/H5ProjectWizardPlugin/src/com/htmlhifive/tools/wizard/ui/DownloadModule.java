@@ -457,33 +457,40 @@ public class DownloadModule {
 					if (libraryNode.getState() == LibraryState.REMOVE) {
 						// 削除処理.
 
-						for (String fileName : libraryNode.getFileList()) {
+						// 全てで900work.
+						int perLibFileWork = perLibWork;
+						if (libraryNode.getFileList().length > 0) {
+							perLibFileWork = Math.max(1, perLibWork / libraryNode.getFileList().length);
 
-							IFile iFile = folder.getFile(Path.fromOSString(fileName));
-
-							if (iFile.exists()) {
-								// 他で利用されているかどうかチェック.
-								if (isOtherLibraryResources(libraryNode, folder, fileName)) {
-									logger.log(Messages.SE0102, iFile.getFullPath());
-								} else {
-									// 削除.
-									logger.log(Messages.SE0095, iFile.getFullPath());
-									iFile.delete(true, true, monitor);
-									logger.log(Messages.SE0096, iFile.getFullPath());
-
-									// フォルダが空なら削除.
-									IContainer parentFolder = iFile.getParent();
-									while (parentFolder.exists() && parentFolder.members().length == 0) {
+							for (String fileName : libraryNode.getFileList()) {
+								IFile iFile = folder.getFile(Path.fromOSString(fileName));
+								if (iFile.exists()) {
+									// 他で利用されているかどうかチェック.
+									if (isOtherLibraryResources(libraryNode, folder, fileName)) {
+										logger.log(Messages.SE0102, iFile.getFullPath());
+									} else {
 										// 削除.
-										logger.log(Messages.SE0095, parentFolder.getFullPath());
-										((IFolder) parentFolder).delete(true, true, monitor);
-										logger.log(Messages.SE0096, parentFolder.getFullPath());
-										parentFolder = parentFolder.getParent();
+										logger.log(Messages.SE0095, iFile.getFullPath());
+										iFile.delete(true, true, monitor);
+										logger.log(Messages.SE0096, iFile.getFullPath());
+
+										// フォルダが空なら削除.
+										IContainer parentFolder = iFile.getParent();
+										while (parentFolder.exists() && parentFolder.members().length == 0) {
+											// 削除.
+											logger.log(Messages.SE0095, parentFolder.getFullPath());
+											((IFolder) parentFolder).delete(true, true, monitor);
+											logger.log(Messages.SE0096, parentFolder.getFullPath());
+											parentFolder = parentFolder.getParent();
+										}
 									}
 								}
+								monitor.worked(perLibFileWork);
 							}
+						} else {
+							monitor.worked(perLibWork);
 						}
-						monitor.worked(perLibWork);
+
 					} else if (libraryNode.isAddable()) {
 						// 追加処理.
 						if (!downloadZip(libraryNode, perLibWork, folder, monitor, logger)) {
@@ -557,7 +564,7 @@ public class DownloadModule {
 						cachedZipFile = download(monitor, logger, null, siteUrl, perSiteWork);
 						setWorked = true;
 						if (!lastDownloadStatus || cachedZipFile == null) {
-							libraryNode.setState(LibraryState.DOWNLOAD_ERROR);
+							libraryNode.setInError(true);
 							result = false;
 							break;
 						}
@@ -651,7 +658,7 @@ public class DownloadModule {
 								Messages.SE0101,
 								iFile != null ? iFile.getFullPath().toString() : StringUtils.defaultString(site
 										.getFilePattern()), site.getUrl(), site.getFilePattern());
-						libraryNode.setState(LibraryState.DOWNLOAD_ERROR);
+						libraryNode.setInError(true);
 					} else {
 						addStatus = true;
 					}
@@ -664,7 +671,7 @@ public class DownloadModule {
 					// SE0099=ERROR,ファイルの作成に失敗しました。URL={1}, File={2}
 					logger.log(Messages.SE0099, site.getUrl(), iFile != null ? iFile.getFullPath().toString()
 							: StringUtils.defaultString(site.getFilePattern()));
-					libraryNode.setState(LibraryState.EXTRACT_ERROR);
+					libraryNode.setInError(true);
 					result = false;
 				}
 
@@ -673,10 +680,12 @@ public class DownloadModule {
 				// logger.log(Messages.SE0102);
 				// logger.log(Messages.SE0068, iFile.getFullPath());
 
-				if (setWorked) {
-					monitor.worked(perLibWork);
+				if (!setWorked) {
+					monitor.worked(perSiteWork);
 				}
 			}
+		} else {
+			monitor.worked(perLibWork);
 		}
 
 		return result;
@@ -770,6 +779,7 @@ public class DownloadModule {
 
 		int result = client.executeMethod(getMethod);
 		if (result != HttpStatus.SC_OK) {
+
 			return null;
 		}
 		//Header header = getMethod.getResponseHeader("Content-Length");

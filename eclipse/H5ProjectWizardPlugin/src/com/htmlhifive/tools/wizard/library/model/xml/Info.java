@@ -1,4 +1,3 @@
-
 package com.htmlhifive.tools.wizard.library.model.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -12,11 +11,11 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
- * <p>anonymous complex typeのJavaクラス。
- * 
- * <p>次のスキーマ・フラグメントは、このクラス内に含まれる予期されるコンテンツを指定します。
+ * <p>
+ * anonymous complex typeのJavaクラス。
+ * <p>
+ * 次のスキーマ・フラグメントは、このクラス内に含まれる予期されるコンテンツを指定します。
  * 
  * <pre>
  * &lt;complexType>
@@ -31,97 +30,74 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "title",
-    "description"
-})
+@XmlType(name = "", propOrder = { "title", "description" })
 @XmlRootElement(name = "info", namespace = "http://www.htmlhifive.com/schema/libraries")
 public class Info {
 
-    @XmlElement(namespace = "http://www.htmlhifive.com/schema/libraries")
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String title;
-    @XmlElement(namespace = "http://www.htmlhifive.com/schema/libraries")
-    protected String description;
-    @XmlAttribute(name = "lang")
-    @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-    protected String lang;
+	@XmlElement(namespace = "http://www.htmlhifive.com/schema/libraries")
+	@XmlJavaTypeAdapter(NormalizedStringAdapter.class)
+	@XmlSchemaType(name = "normalizedString")
+	protected String title;
+	@XmlElement(namespace = "http://www.htmlhifive.com/schema/libraries")
+	protected String description;
+	@XmlAttribute(name = "lang")
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	protected String lang;
 
-    /**
-     * titleプロパティの値を取得します。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTitle() {
-        return title;
-    }
+	/**
+	 * titleプロパティの値を取得します。
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getTitle() {
+		return title;
+	}
 
-    /**
-     * titleプロパティの値を設定します。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTitle(String value) {
-        this.title = value;
-    }
+	/**
+	 * titleプロパティの値を設定します。
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setTitle(String value) {
+		this.title = value;
+	}
 
-    /**
-     * descriptionプロパティの値を取得します。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * descriptionプロパティの値を取得します。
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * descriptionプロパティの値を設定します。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
+	/**
+	 * descriptionプロパティの値を設定します。
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setDescription(String value) {
+		this.description = value;
+	}
 
-    /**
-     * langプロパティの値を取得します。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLang() {
-        return lang;
-    }
+	/**
+	 * langプロパティの値を取得します。
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getLang() {
+		return lang;
+	}
 
-    /**
-     * langプロパティの値を設定します。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLang(String value) {
-        this.lang = value;
-    }
+	/**
+	 * langプロパティの値を設定します。
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setLang(String value) {
+		this.lang = value;
+	}
 
 }

@@ -36,7 +36,7 @@ import com.htmlhifive.tools.wizard.library.model.LibraryState;
  * @author fkubo
  */
 public class LibraryTreeLabelProvider extends LabelProvider implements ITableLabelProvider, ITableFontProvider,
-ITableColorProvider {
+		ITableColorProvider {
 
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
@@ -75,7 +75,11 @@ ITableColorProvider {
 			if (element instanceof LibraryNode) {
 				LibraryNode libraryNode = (LibraryNode) element;
 
-				if (libraryNode.getState() == LibraryState.DEFAULT && libraryNode.isRecommended()) {
+				if (libraryNode.isInError()) {
+					return PluginConstant.IMG_REFACTORING_ERROR;
+				} else if (libraryNode.getState() == LibraryState.DEFAULT && libraryNode.isIncomplete()) {
+					return PluginConstant.IMG_REFACTORING_WARNING;
+				} else if (libraryNode.getState() == LibraryState.DEFAULT && libraryNode.isRecommended()) {
 					return PluginConstant.IMG_QUICK_ASSIST;
 				} else {
 					return libraryNode.getState().getImage();

@@ -306,7 +306,7 @@ public class LibraryList {
 					boolean libraryExists = false;
 					IContainer lastContainer = null;
 					List<String> lastExistsFileList = null;
-					List<String> lastNoExistsFileList = null;
+					//List<String> lastNoExistsFileList = null;
 
 					// Container単位ここから
 					for (IContainer container : checkContainers) {
@@ -327,7 +327,7 @@ public class LibraryList {
 									// 存在している.
 									libraryExists = true;
 									lastExistsFileList = existsFileList;
-									lastNoExistsFileList = noExistsFileList;
+									//lastNoExistsFileList = noExistsFileList;
 									lastContainer = container;
 								} else {
 									// 存在していない.
@@ -350,13 +350,14 @@ public class LibraryList {
 						categoryNode.setParentPath(lastContainer);
 						libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
 						libraryNode.setExists(true);
+						libraryNode.setIncomplete(false);
 						libraryNode.setState(LibraryState.EXISTS);
 					} else if (libraryExists) {
 						// 一部存在している場合.
 						categoryNode.setParentPath(lastContainer);
 						libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
-						libraryNode.setExists(false);
-						libraryNode.setState(LibraryState.INCOMPLETE);
+						libraryNode.setExists(false); // 一応falseにしておく
+						libraryNode.setIncomplete(true);
 						// 存在していないファイルログ
 						//for (String name : lastNoExistsFileList) {
 						//	H5LogUtils.putLog(null, Messages.SE0081, name);
