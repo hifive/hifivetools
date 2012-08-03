@@ -33,7 +33,10 @@ hifive の動作に必要なライブラリ
 				]]></description>
 			</info>
 			<library version="1.0.4">
-				<site url="/libraries/hifive-all-1.0.4.zip" />
+				<site url="/archives/v1.0.4/ejs-1.0.h5mod.js" />
+				<site url="/archives/v1.0.4/h5-1.0.4.css" />
+				<site url="/archives/v1.0.4/h5-1.0.4.dev.js" />
+				<site url="/archives/v1.0.4/h5-1.0.4.js" />
 			</library>
 		</category>
 	</site-libraries>

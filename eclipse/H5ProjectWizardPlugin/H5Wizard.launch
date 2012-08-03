@@ -12,6 +12,7 @@
 <booleanAttribute key="clearwslog" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/H5Wizard"/>
 <booleanAttribute key="default" value="false"/>
+<stringAttribute key="deselected_workspace_plugins" value="com.htmlhifive.tools.codeassist.H5CodeAssistLibraryPlugin,com.htmlhifive.tools.codeassist.core.H5CodeAssistCorePlugin,com.htmlhifive.tools.codeassist.ui.H5CodeAssistUIPlugin,com.htmlhifive.tools.jslint.H5JSLintPlugin,com.htmlhifive.tools.jslint.H5JSLintPluginLibrary,jp.co.nssol.tool.common.generator-framework-plugin,jp.co.nssol.tool.common.generator-framework-plugin-library,jp.co.nssol.tool.common.generator-framework-plugin-test,jp.co.nssol.tool.common.license-check-plugin,jp.co.nssol.tool.common.license-check-plugin-test,jp.co.nssol.tool.mybatis.mybatis-mapper-generator-plugin,jp.co.nssol.tool.mybatis.mybatis-mapper-generator-plugin-test,org.eclipse.wst.jsdt.core,org.junithelper.plugin"/>
 <stringAttribute key="featureDefaultLocation" value="workspace"/>
 <stringAttribute key="featurePluginResolution" value="workspace"/>
 <booleanAttribute key="includeOptional" value="true"/>
