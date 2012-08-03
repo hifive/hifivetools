@@ -61,7 +61,6 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	public LibraryImportPropertyPage() {
 
 		super();
-		setValid(true); // 常にOK
 		// setMessage(UIMessages.WizardPropertyPage_this_message);
 		// setTitle(UIMessages.WizardPropertyPage_this_title);
 	}
@@ -106,6 +105,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 		// 初期化.
 		container.initialize(getJavaScriptProject(), null, null);
+		setValid(true); // 常にOK
 	}
 
 	@Override
@@ -197,8 +197,11 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			H5LogUtils.putLog(ex, Messages.SE0025);
 
 		} catch (InterruptedException e) {
+			logger.setInterrupted(true);
 			// We were cancelled...
+			//removeProject(logger);
 
+			return false;
 		} finally {
 			// 結果表示.
 			logger.showDialog(Messages.PI0138);
@@ -233,6 +236,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+				DownloadModule downloadModule = new DownloadModule();
 				try {
 					if (monitor == null) {
 						// モニタを生成.
@@ -247,7 +251,6 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					// 現在のデフォルトインストール先を取得する.
 
 					// ダウンロードの実行
-					DownloadModule downloadModule = new DownloadModule();
 					downloadModule.downloadLibrary(monitor, logger, H5WizardPlugin.getInstance()
 							.getSelectedLibrarySet(), jsProject.getProject());
 
@@ -265,12 +268,13 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.
-					throw new InterruptedException();
+					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);
 					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
+					downloadModule.close();
 					monitor.done();
 				}
 			}

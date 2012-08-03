@@ -39,7 +39,7 @@ public class ConfigFileParserFactoryTest {
 
 		InputStream is = null;
 		is = ConfigFileParserFactoryTest.class.getResourceAsStream("default-libraries.xml");
-		LibraryFileParser parser = LibraryFileParserFactory.createParser(is, "xml");
+		LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
 		try {
 			LibraryList list = parser.getLibraryList();
 			for (Category category : list.getLibraries().getSiteLibraries().getCategory()) {

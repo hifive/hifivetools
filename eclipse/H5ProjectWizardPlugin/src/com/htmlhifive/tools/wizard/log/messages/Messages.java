@@ -68,22 +68,22 @@ public abstract class Messages extends MessagesBase {
 	/** SE0032=ERROR,Nature追加エラー. */
 	public static final Message SE0032 = createMessage("SE0032");
 
-	/** SE0041=ERROR,定義ファイルダウンロードエラー. */
+	/** SE0041=ERROR,ライブラリ定義情報ダウンロードエラー. */
 	public static final Message SE0041 = createMessage("SE0041");
 
-	/** SE0042=ERROR,定義ファイルのダウンロード中にエラーが発生しました。Eclipseのネットワーク接続設定を確認して下さい。. */
+	/** SE0042=ERROR,ライブラリ定義情報のダウンロード中にエラーが発生しました。Eclipseのネットワーク接続設定を確認して下さい。. */
 	public static final Message SE0042 = createMessage("SE0042");
 
 	/** SE0043=ERROR,ダウンロードエラー. */
 	public static final Message SE0043 = createMessage("SE0043");
 
-	/** SE0044=ERROR,ライブラリのダウンロード中にエラーが発生しました。. */
+	/** SE0044=ERROR,ライブラリ定義情報のダウンロード中にエラーが発生しました。. */
 	public static final Message SE0044 = createMessage("SE0044");
 
-	/** SE0045=ERROR,ライブラリ内の({0} {1})を展開中にエラーが発生しました。. */
+	/** SE0045=ERROR,ライブラリ({0} {1})の展開中にエラーが発生しました。. */
 	public static final Message SE0045 = createMessage("SE0045");
 
-	/** SE0046=ERROR,({0})にある定義ファイルのダウンロード中に失敗しました。. */
+	/** SE0046=ERROR,ライブラリ定義情報({0})のダウンロードに失敗しました。. */
 	public static final Message SE0046 = createMessage("SE0046");
 
 	/** SE0047=ERROR,取得エラー. */
@@ -98,7 +98,7 @@ public abstract class Messages extends MessagesBase {
 	/** SE0052=ERROR,既にプロジェクトが存在します。. */
 	public static final Message SE0052 = createMessage("SE0052");
 
-	/** SE0053=ERROR,定義ファイルが取得できません。Eclipseのネットワーク接続設定を確認して下さい。. */
+	/** SE0053=ERROR,ライブラリ定義情報が取得できません。Eclipseのネットワーク接続設定を確認して下さい。. */
 	public static final Message SE0053 = createMessage("SE0053");
 
 	/** SE0054=ERROR,{0}はファイル名として正しくありません。. */
@@ -251,8 +251,11 @@ public abstract class Messages extends MessagesBase {
 	/** PI0132=INFO,{0}が終了しました。. */
 	public static final Message PI0132 = createMessage("PI0132");
 
-	/** PI0133=WARN,{0}が終了しましたが、\n一部でエラーが発生しています。. */
+	/** PI0133=WARN,{0}が終了しましたが、\nエラーが発生しています。. */
 	public static final Message PI0133 = createMessage("PI0133");
+
+	/** PI0134=WARN,{0}処理が中断されました。. */
+	public static final Message PI0134 = createMessage("PI0134");
 
 	/** PI0135=INFO,{0}. */
 	public static final Message PI0135 = createMessage("PI0135");
@@ -265,5 +268,17 @@ public abstract class Messages extends MessagesBase {
 
 	/** PI0138=INFO,ライブラリの更新. */
 	public static final Message PI0138 = createMessage("PI0138");
+
+	/** PI0151=INFO,ライブラリ定義情報: 未取得. */
+	public static final Message PI0151 = createMessage("PI0151");
+
+	/** PI0152=INFO,ライブラリ定義情報: 外部アクセス不可のため内部データを利用. */
+	public static final Message PI0152 = createMessage("PI0152");
+
+	/** PI0153=INFO,ライブラリ定義情報: {0,date,yyyy/MM/dd HH:mm:ss}版. */
+	public static final Message PI0153 = createMessage("PI0153");
+
+	/** PI0154=INFO,ライブラリ定義情報の取得. */
+	public static final Message PI0154 = createMessage("PI0154");
 
 }

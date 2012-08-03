@@ -80,6 +80,8 @@ public class LibraryImportComposite extends Composite {
 	private final CheckboxTreeViewer treeViewerLibrary;
 	private final Table tableSelection;
 	private final Link linkDetail;
+	private final Label lblListInfo;
+	private final Button checkFilterLatest;
 
 	private IJavaScriptProject jsProject = null;
 	private String projectName = null;
@@ -102,26 +104,26 @@ public class LibraryImportComposite extends Composite {
 		lblInfo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblInfo.setText(UIMessages.LibraryImportComposite_lblNewLabel_text);
 
+		lblListInfo = new Label(this, SWT.NONE);
+		lblListInfo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+
 		Group groupAll = new Group(this, SWT.NONE);
 		groupAll.setLayout(new GridLayout(4, false));
-		groupAll.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2));
+		groupAll.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		groupAll.setText(UIMessages.LibraryImportPageComposite_groupAll_text);
 
-		Label lblDefaultInstallPath = new Label(groupAll, SWT.NONE);
-		lblDefaultInstallPath.setText(UIMessages.LibraryImportComposite_lblDefaultInstallPath_text);
-
-		cmbDefaultInstallPath = new Combo(groupAll, SWT.NONE);
-		cmbDefaultInstallPath.addModifyListener(new ModifyListener() {
+		checkFilterLatest = new Button(groupAll, SWT.CHECK);
+		checkFilterLatest.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		checkFilterLatest.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 
-				do_cmbDefaultInstallPath_modifyText(e);
+				do_checkFilterLatest_widgetSelected(e);
 			}
 		});
-		GridData gd_cmbDefaultInstallPath = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_cmbDefaultInstallPath.horizontalIndent = 20;
-		cmbDefaultInstallPath.setLayoutData(gd_cmbDefaultInstallPath);
+		checkFilterLatest.setText(UIMessages.LibraryImportComposite_checkFilterLatest_text);
+		checkFilterLatest.setSelection(true);
 
 		Button btnRecommended = new Button(groupAll, SWT.NONE);
 		btnRecommended.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -147,18 +149,21 @@ public class LibraryImportComposite extends Composite {
 		});
 		btnReload.setText(UIMessages.LibraryImportComposite_btnReload_text);
 
-		Button checkFilterLatest = new Button(groupAll, SWT.CHECK);
-		checkFilterLatest.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		checkFilterLatest.addSelectionListener(new SelectionAdapter() {
+		Label lblDefaultInstallPath = new Label(groupAll, SWT.NONE);
+		lblDefaultInstallPath.setText(UIMessages.LibraryImportComposite_lblDefaultInstallPath_text);
+
+		cmbDefaultInstallPath = new Combo(groupAll, SWT.NONE);
+		cmbDefaultInstallPath.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void modifyText(ModifyEvent e) {
 
-				do_checkFilterLatest_widgetSelected(e);
+				do_cmbDefaultInstallPath_modifyText(e);
 			}
 		});
-		checkFilterLatest.setText(UIMessages.LibraryImportComposite_checkFilterLatest_text);
-		checkFilterLatest.setSelection(true);
+		GridData gd_cmbDefaultInstallPath = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_cmbDefaultInstallPath.horizontalIndent = 20;
+		cmbDefaultInstallPath.setLayoutData(gd_cmbDefaultInstallPath);
 		new Label(groupAll, SWT.NONE);
 		new Label(groupAll, SWT.NONE);
 
@@ -175,7 +180,7 @@ public class LibraryImportComposite extends Composite {
 
 		treeViewerLibrary.setAutoExpandLevel(3);
 		Tree treeLibrary = treeViewerLibrary.getTree();
-		GridData gd_treeLibrary = new GridData(SWT.FILL, SWT.FILL, false, true, 4, 2);
+		GridData gd_treeLibrary = new GridData(SWT.FILL, SWT.FILL, false, true, 4, 1);
 		gd_treeLibrary.heightHint = 160;
 		treeLibrary.setLayoutData(gd_treeLibrary);
 		treeLibrary.addSelectionListener(new SelectionAdapter() {
@@ -226,7 +231,7 @@ public class LibraryImportComposite extends Composite {
 
 		Group groupSelect = new Group(this, SWT.NONE);
 		groupSelect.setLayout(new GridLayout(2, false));
-		groupSelect.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
+		groupSelect.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		groupSelect.setText(UIMessages.LibraryImportPageComposite_groupSelect_text);
 
 		TableViewer tableSelectionViewer = new TableViewer(groupSelect, SWT.BORDER | SWT.FULL_SELECTION
@@ -296,14 +301,18 @@ public class LibraryImportComposite extends Composite {
 		if (defaultInstallPath != null) {
 			cmbDefaultInstallPath.setText(defaultInstallPath);
 		} else if (cmbDefaultInstallPath.getItemCount() > 0) {
-			cmbDefaultInstallPath.setText(cmbDefaultInstallPath.getItem(0));
+			String setText = cmbDefaultInstallPath.getItem(0);
 			// /libで終わるものを優先的に設定する.
 			for (String item : cmbDefaultInstallPath.getItems()) {
 				if (item.endsWith("/lib")) {
-					cmbDefaultInstallPath.setText(item);
+					setText = item;
 					break;
 				}
 			}
+			if (setText.startsWith(".")) { // .始まりの場合は空文字としておく
+				setText = "";
+			}
+			cmbDefaultInstallPath.setText(setText);
 		} else {
 			cmbDefaultInstallPath.setText("");
 		}
@@ -331,11 +340,23 @@ public class LibraryImportComposite extends Composite {
 
 		// libraryListのnull対応.
 		if (libraryList == null) {
+			lblListInfo.setText(Messages.PI0151.format());
 			treeViewerLibrary.setInput(null);
 			treeLibrary.setEnabled(false);
 			return;
 		}
-		treeLibrary.setEnabled(true);
+		lblListInfo.setText(libraryList.getInfo());
+		lblListInfo.getParent().layout();
+
+		if (libraryList.getLibraries().getSiteLibraries().getCategory().isEmpty()) {
+			treeLibrary.setEnabled(false);
+			cmbDefaultInstallPath.setEnabled(false);
+			checkFilterLatest.setEnabled(false);
+		} else {
+			treeLibrary.setEnabled(true);
+			cmbDefaultInstallPath.setEnabled(true);
+			checkFilterLatest.setEnabled(true);
+		}
 
 		// チェック.
 		RootNode rootNode = new RootNode(libraryList);

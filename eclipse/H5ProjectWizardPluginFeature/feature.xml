@@ -27,6 +27,7 @@
       <import plugin="org.eclipse.wst.jsdt.core"/>
       <import plugin="org.eclipse.wst.jsdt.ui"/>
       <import plugin="org.eclipse.equinox.p2.ui"/>
+      <import plugin="org.apache.commons.httpclient"/>
    </requires>
 
    <plugin

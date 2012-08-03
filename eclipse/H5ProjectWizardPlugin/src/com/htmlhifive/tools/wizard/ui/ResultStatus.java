@@ -46,6 +46,9 @@ public class ResultStatus {
 	/** 結果. */
 	private boolean success = true;
 
+	/** 割り込み. */
+	private boolean interrupted = false;
+
 	// eはnull可能
 
 	private void put(LogLevel logLevel, String msg, Throwable e) {
@@ -64,7 +67,7 @@ public class ResultStatus {
 				break;
 			default:
 		}
-		if (status != null ) {
+		if (status != null) {
 			statusList.add(status);
 			if (status.getSeverity() != IStatus.INFO) { // Info以外を出力
 				// .metadata/.logにログを出力
@@ -133,13 +136,17 @@ public class ResultStatus {
 	 */
 	public void showDialog(Message method) {
 
-		if (isSuccess()) {
+		if (interrupted) {
+			ErrorDialog.openError(null, Messages.PI0131.format(), null,
+					getMultiStatus(IStatus.INFO, Messages.PI0134.format(method.format())));
+		} else if (isSuccess()) {
 			ErrorDialog.openError(null, Messages.PI0131.format(), null,
 					getMultiStatus(IStatus.INFO, Messages.PI0132.format(method.format())));
 		} else {
 			ErrorDialog.openError(null, Messages.PI0131.format(), null,
 					getMultiStatus(IStatus.WARNING, Messages.PI0133.format(method.format())));
 		}
+
 	}
 
 	/**
@@ -196,6 +203,22 @@ public class ResultStatus {
 				return level;
 			}
 		};
+	}
+
+	/**
+	 * 割り込み.を取得します.
+	 * @return 割り込み.
+	 */
+	public boolean isInterrupted() {
+	    return interrupted;
+	}
+
+	/**
+	 * 割り込み.を設定します.
+	 * @param interrupted 割り込み.
+	 */
+	public void setInterrupted(boolean interrupted) {
+	    this.interrupted = interrupted;
 	}
 
 }

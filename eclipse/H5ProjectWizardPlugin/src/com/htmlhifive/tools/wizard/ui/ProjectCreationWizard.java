@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -29,6 +30,8 @@ import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.wst.jsdt.internal.ui.packageview.PackageExplorerPart;
 import org.eclipse.wst.jsdt.internal.ui.wizards.JavaProjectWizard;
 import org.eclipse.wst.jsdt.internal.ui.wizards.JavaProjectWizardFirstPage;
 import org.eclipse.wst.jsdt.internal.ui.wizards.NewWizardMessages;
@@ -83,6 +86,12 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 		downloadModule = new DownloadModule();
 	}
 
+	@Override
+	public void dispose() {
+		downloadModule.close();
+		super.dispose();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -101,6 +110,35 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 		// first, second ページを追加.
 		super.addPages();
 
+	}
+
+	private PackageExplorerPart getActivePackageExplorer() {
+		PackageExplorerPart explorerPart = PackageExplorerPart.getFromActivePerspective();
+		if (explorerPart == null) {
+			return null;
+		}
+
+		IWorkbenchPage activePage = explorerPart.getViewSite().getWorkbenchWindow().getActivePage();
+		if (activePage == null) {
+			return null;
+		}
+
+		if (activePage.getActivePart() != explorerPart) {
+			return null;
+		}
+
+		return explorerPart;
+	}
+
+	private IConfigurationElement fConfigElement;
+
+	/*
+	 * Stores the configuration element for the wizard. The config element will be used in <code>performFinish</code> to
+	 * set the result perspective.
+	 */
+	@Override
+	public void setInitializationData(IConfigurationElement cfig, String propertyName, Object data) {
+		fConfigElement = cfig;
 	}
 
 	/**
@@ -140,6 +178,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 			removeProject(logger);
 			return false;
 		} catch (InterruptedException e) {
+			logger.setInterrupted(true);
 
 			// We were cancelled...
 			removeProject(logger);
@@ -285,7 +324,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 				} catch (OperationCanceledException e) {
 					// 処理手動停止.
-					throw new InterruptedException();
+					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
 					logger.log(e, Messages.SE0023);

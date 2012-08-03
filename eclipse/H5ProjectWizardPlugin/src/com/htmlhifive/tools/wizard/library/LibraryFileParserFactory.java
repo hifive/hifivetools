@@ -29,17 +29,11 @@ public abstract class LibraryFileParserFactory {
 	 * 生成できない場合はnullを返却.
 	 * 
 	 * @param is オプションインプットストリーム.
-	 * @param fileExtension オプションファイルの拡張子.
 	 * @return パーサ.
 	 * @throws ParseException 解析例外.
 	 */
-	public static LibraryFileParser createParser(InputStream is, String fileExtension) throws ParseException {
-
-		if (!".xml".equals(fileExtension)) {
-			return new LibraryFileParserImpl(is);
-		}
-
-		return null;
+	public static LibraryFileParser createParser(InputStream is) throws ParseException {
+		return new LibraryFileParserImpl(is);
 	}
 
 }

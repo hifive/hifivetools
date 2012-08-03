@@ -15,10 +15,9 @@
  */
 package com.htmlhifive.tools.wizard.library.model;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -51,6 +50,7 @@ import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.RootNode;
+import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 import com.htmlhifive.tools.wizard.utils.H5LogUtils;
 import com.htmlhifive.tools.wizard.utils.H5StringUtils;
 
@@ -72,6 +72,12 @@ public class LibraryList {
 
 	/** infoBaseProjectMap. */
 	private final Map<String, BaseProject> infoBaseProjectMap = new LinkedHashMap<String, BaseProject>();
+
+	/** source. */
+	private String source = "";
+
+	/** lastModified. */
+	private Date lastModified = null;
 
 	/**
 	 * コンストラクタ.
@@ -250,7 +256,8 @@ public class LibraryList {
 											set.add((IContainer) res);
 										}
 									}
-								}}
+								}
+							}
 						} catch (CoreException ignore) {
 							// TODO 自動生成された catch ブロック
 							ignore.printStackTrace();
@@ -275,6 +282,9 @@ public class LibraryList {
 		rootNode.setDefaultProjectPath(jsProject != null ? jsProject.getProject() : ResourcesPlugin.getWorkspace()
 				.getRoot().getProject(projectName));
 
+		if (rootNode.getChildren() == null) {
+			return checkContainers;
+		}
 		for (TreeNode node : rootNode.getChildren()) {
 			CategoryNode categoryNode = (CategoryNode) node;
 
@@ -370,13 +380,9 @@ public class LibraryList {
 	 */
 	private boolean checkSite(Site site, IContainer folder, List<String> existsFileList, List<String> noExistsFileList) {
 
-		String siteUrl = null;
-		try {
-			siteUrl = new URL(site.getUrl()).getPath();
-		} catch (MalformedURLException ignore) {
-			// 無視.
-		}
-		if (siteUrl == null) {
+		String siteUrl = site.getUrl();
+		String path = H5IOUtils.getURLPath(siteUrl);
+		if (path == null) {
 			return false;
 		}
 
@@ -388,7 +394,7 @@ public class LibraryList {
 		String[] fileList = null;
 
 		String wildCardStr = site.getFilePattern();
-		if (siteUrl.endsWith(".zip") || siteUrl.endsWith(".jar") || site.getFilePattern() != null) {
+		if (path.endsWith(".zip") || path.endsWith(".jar") || wildCardStr != null) {
 
 			// ZIPとか用
 			String wildCardPath = "";
@@ -405,8 +411,8 @@ public class LibraryList {
 			}
 
 			if (site.getReplaceFileName() != null) {
-				fileList =
-						savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(site.getReplaceFileName()));
+				fileList = savedFolder.getRawLocation().toFile()
+						.list(new WildcardFileFilter(site.getReplaceFileName()));
 			} else if (savedFolder != null) {
 				if (wildCardStr != null) {
 					fileList = savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(wildCardStr));
@@ -432,7 +438,7 @@ public class LibraryList {
 			if (site.getReplaceFileName() != null) {
 				file = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
 			} else {
-				file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(siteUrl, "/")));
+				file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(path, "/")));
 			}
 			if (file.exists()) {
 				fileList = new String[] { file.getName() };
@@ -446,5 +452,53 @@ public class LibraryList {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * ライブラリの情報を取得する.
+	 * 
+	 * @return ライブラリの情報.
+	 */
+	public String getInfo() {
+		if (getSource() == null) {
+			return Messages.PI0152.format(getLastModified());
+		}
+		return Messages.PI0153.format(getLastModified());
+	}
+
+	/**
+	 * source.を取得します.
+	 * 
+	 * @return source.
+	 */
+	public String getSource() {
+		return source;
+	}
+
+	/**
+	 * source.を設定します.
+	 * 
+	 * @param source source.
+	 */
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	/**
+	 * lastModified.を取得します.
+	 * 
+	 * @return lastModified.
+	 */
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	/**
+	 * lastModified.を設定します.
+	 * 
+	 * @param lastModified lastModified.
+	 */
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
 	}
 }

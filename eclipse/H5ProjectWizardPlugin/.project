@@ -25,11 +25,4 @@
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>site-resources</name>
-			<type>2</type>
-			<location>//nas/confidential/research/2012/(H24SXX)HTML5開発PF「hifive」による次世代Webアプリ開発/開発環境整備/site-resources</location>
-		</link>
-	</linkedResources>
 </projectDescription>

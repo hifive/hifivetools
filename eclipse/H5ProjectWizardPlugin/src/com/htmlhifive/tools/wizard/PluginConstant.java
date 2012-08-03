@@ -18,6 +18,7 @@ package com.htmlhifive.tools.wizard;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.eclipse.equinox.internal.p2.ui.ProvUIImages;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.jsdt.internal.ui.JavaPluginImages;
@@ -56,9 +57,16 @@ public abstract class PluginConstant {
 	/** ライブラリ用のURL_MIRROR. */
 	public static final String URL_LIBRARY_LIST_MIRROR = properties.getProperty("url.library.list.mirror");
 
+	/** ライブラリリスト取得時のタイムアウト設定. */
+	public static final int URL_LIBRARY_LIST_CONNECTION_TIMEOUT = NumberUtils.toInt(
+			properties.getProperty("url.library.list.connection.timeout"), 3000);
+
+	/** ライブラリ取得時のタイムアウト設定. */
+	public static final int URL_LIBRARY_CONNECTION_TIMEOUT = NumberUtils.toInt(
+			properties.getProperty("url.library.connection.timeout"), 5000);
+
 	/** JavaProjectWizardFirstPageName. */
-	public static final String JavaProjectWizardFirstPageName =
-			NewWizardMessages.JavaProjectWizardFirstPage_page_pageName;
+	public static final String JavaProjectWizardFirstPageName = NewWizardMessages.JavaProjectWizardFirstPage_page_pageName;
 
 	// 画像
 

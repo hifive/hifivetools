@@ -56,6 +56,7 @@ public class StructureSelectComposite extends Composite {
 	private final Label lblNewLabel;
 	private final Label label;
 	private final Label lblInfo;
+	private final Label lblListInfo;
 
 	/**
 	 * コンストラクタ.
@@ -102,6 +103,10 @@ public class StructureSelectComposite extends Composite {
 		lblInfo = new Label(structureGroup, SWT.NONE);
 		lblInfo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 		lblInfo.setText(UIMessages.StructureSelectComposite_lblInfo_text);
+		new Label(structureGroup, SWT.NONE);
+
+		lblListInfo = new Label(structureGroup, SWT.NONE);
+		lblListInfo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1));
 
 		comboZip = new Combo(structureGroup, SWT.READ_ONLY);
 		comboZip.addSelectionListener(new SelectionAdapter() {
@@ -173,8 +178,10 @@ public class StructureSelectComposite extends Composite {
 		// libraryListのnull対応.
 		if (libraryList == null) {
 			setErrorMessage(Messages.SE0053.format());
+			lblListInfo.setText("");
 			return;
 		}
+		lblListInfo.setText(libraryList.getInfo());
 
 		for (Info info : libraryList.getInfoMap().values()) {
 			comboZip.add(info.getTitle());
