@@ -121,12 +121,13 @@ public class DownloadModule {
 	 * 1つのファイルを保存する.
 	 * 
 	 * @param monitor モニター
+	 * @param totalWork タスク数
 	 * @param iFile ファイル
 	 * @param fileContentsHandler ファイルコンテンツハンドラ
 	 * @throws IOException IO例外
 	 * @return 結果
 	 */
-	private boolean updateFile(IProgressMonitor monitor, ResultStatus logger, IFile iFile,
+	private boolean updateFile(IProgressMonitor monitor, int totalWork, ResultStatus logger, IFile iFile,
 			FileContentsHandler fileContentsHandler) throws IOException {
 
 		// PI0112=INFO,[{0}]を更新中...
@@ -154,7 +155,7 @@ public class DownloadModule {
 						// 上書きする.
 						logger.log(Messages.SE0097, iFile.getFullPath());
 						is = fileContentsHandler.getInputStream();
-						iFile.setContents(is, true, true, monitor);
+						iFile.setContents(is, true, true, null);
 						logger.log(Messages.SE0098, iFile.getFullPath());
 						break;
 					case 3:
@@ -166,12 +167,12 @@ public class DownloadModule {
 			} else {
 				if (!iFile.getParent().exists()) {
 					// フォルダの作成.
-					H5IOUtils.createParentFolder(iFile.getParent(), monitor);
+					H5IOUtils.createParentFolder(iFile.getParent(), null);
 				}
 
 				is = fileContentsHandler.getInputStream();
 				logger.log(Messages.SE0091, iFile.getFullPath());
-				iFile.create(is, true, monitor);
+				iFile.create(is, true, null);
 				logger.log(Messages.SE0092, iFile.getFullPath());
 			}
 			return true;
@@ -188,13 +189,13 @@ public class DownloadModule {
 	 * 1つのファイルをダウンロードする.
 	 * 
 	 * @param monitor モニター
+	 * @param totalWork タスク数
 	 * @param file ファイル
 	 * @param uri URI
-	 * @param perSiteWork ここで進ませるworked
 	 * @throws CoreException コア例外
 	 */
-	private ZipFile download(IProgressMonitor monitor, ResultStatus logger, IFile file, final String urlStr,
-			int perSiteWork) throws CoreException {
+	private ZipFile download(IProgressMonitor monitor, int totalWork, ResultStatus logger, IFile file,
+			final String urlStr) throws CoreException {
 
 		// PI0111=INFO,[{0}]をダウンロード中...
 		monitor.subTask(Messages.PI0111.format(urlStr));
@@ -206,7 +207,7 @@ public class DownloadModule {
 			try {
 				if (file != null) {
 					// 通常のファイル生成.
-					boolean updateResult = updateFile(monitor, logger, file, new FileContentsHandler() {
+					boolean updateResult = updateFile(monitor, 0, logger, file, new FileContentsHandler() {
 
 						@Override
 						InputStream getInputStream() throws IOException {
@@ -223,7 +224,7 @@ public class DownloadModule {
 					if (updateResult) {
 						lastDownloadStatus = true;
 					}
-					monitor.worked(perSiteWork);
+					monitor.worked(totalWork);
 				} else {
 					// fileがnullの時は一時ファイルを作成し、ZipFileを返す仕様とする.
 
@@ -232,7 +233,7 @@ public class DownloadModule {
 
 					try {
 						int contentLength = 0;
-						int perWork = perSiteWork;
+						int perWork = totalWork;
 						if (H5IOUtils.isClassResources(urlStr)) {
 							// urlがnullの時は、クラスパスから取得する.
 							is = DownloadModule.class.getResourceAsStream(urlStr);
@@ -250,7 +251,7 @@ public class DownloadModule {
 								contentLength = Integer.valueOf(header.getValue());
 							}
 							if (contentLength > 0) {
-								perWork = Math.max(1, perSiteWork * DEFAULT_BUFFER_SIZE / contentLength);
+								perWork = Math.max(1, perWork * DEFAULT_BUFFER_SIZE / contentLength);
 							}
 							is = method.getResponseBodyAsStream();
 						}
@@ -277,7 +278,7 @@ public class DownloadModule {
 							}
 						}
 						if (contentLength == 0) {
-							monitor.worked(perSiteWork);
+							monitor.worked(perWork);
 						}
 
 						// SE0094=INFO,{0}をダウンロードしました。
@@ -315,16 +316,17 @@ public class DownloadModule {
 	 * プロジェクト構造をダウンロードする.
 	 * 
 	 * @param monitor モニター
+	 * @param totalTask タスク数
 	 * @param logger ロガー
 	 * @param baseProject ベースプロジェクト
 	 * @param proj 対象プロジェクト
 	 * @throws CoreException コア例外
 	 */
-	public void downloadProject(IProgressMonitor monitor, ResultStatus logger, BaseProject baseProject, IProject proj)
-			throws CoreException {
+	public void downloadProject(IProgressMonitor monitor, int totalTask, ResultStatus logger, BaseProject baseProject,
+			IProject proj) throws CoreException {
 
 		// 全てで400work.
-		int perLibWork = 400;
+		int perLibWork = totalTask;
 
 		// SE0063=INFO,プロジェクト用ZIPファイルをダウンロードします。
 		logger.log(Messages.SE0063);
@@ -345,7 +347,7 @@ public class DownloadModule {
 		final ZipFile zipFile;
 		//try {
 		//URI uri = new URI(baseProject.getUrl());
-		zipFile = download(monitor, logger, null, siteUrl, 100);
+		zipFile = download(monitor, totalTask, logger, null, siteUrl);
 		//} catch (URISyntaxException e) {
 		//throw new CoreException(new Status(IStatus.ERROR, H5WizardPlugin.getId(), Messages.SE0013.format(), e));
 		//}
@@ -362,7 +364,7 @@ public class DownloadModule {
 		logger.log(Messages.SE0064);
 
 		// 更新.
-		//proj.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		//proj.refreshLocal(IResource.DEPTH_ONE, monitor);
 		//logger.log(Messages.SE0101);
 
 		// プロジェクト構造の追加
@@ -378,7 +380,7 @@ public class DownloadModule {
 				IFolder iFolder = proj.getFolder(zipEntry.getName());
 				if (!iFolder.exists()) {
 					logger.log(Messages.SE0091, iFolder.getFullPath());
-					H5IOUtils.createParentFolder(iFolder, monitor);
+					H5IOUtils.createParentFolder(iFolder, null);
 					logger.log(Messages.SE0092, iFolder.getFullPath());
 				}
 			} else {
@@ -387,7 +389,7 @@ public class DownloadModule {
 
 				// ファイル保存.
 				try {
-					updateFile(monitor, logger, iFile, new FileContentsHandler() {
+					updateFile(monitor, 0, logger, iFile, new FileContentsHandler() {
 
 						@Override
 						InputStream getInputStream() throws IOException {
@@ -417,20 +419,21 @@ public class DownloadModule {
 	 * ライブラリをダウンロードする.
 	 * 
 	 * @param monitor モニター
+	 * @param totalWork タスク数
 	 * @param logger ロガー
 	 * @param selectedLibrarySet 選択済ライブラリ
 	 * @param projectRoot プロジェクトルートフォルダ
 	 * @return 処理が成功したかどうか
 	 */
-	public boolean downloadLibrary(IProgressMonitor monitor, ResultStatus logger, Set<LibraryNode> selectedLibrarySet,
-			IContainer projectRoot) {
+	public boolean downloadLibrary(IProgressMonitor monitor, int totalWork, ResultStatus logger,
+			Set<LibraryNode> selectedLibrarySet, IContainer projectRoot) {
 
 		if (H5WizardPlugin.getInstance().getSelectedLibrarySet().size() == 0) {
 			return true;
 		}
 
 		// 全てで900work.
-		int perLibWork = Math.max(1, 900 / H5WizardPlugin.getInstance().getSelectedLibrarySet().size());
+		int perLibWork = Math.max(1, totalWork / H5WizardPlugin.getInstance().getSelectedLibrarySet().size());
 
 		// タスクを開始.
 		// PI0102=INFO,ライブラリをダウンロード中...
@@ -561,7 +564,7 @@ public class DownloadModule {
 
 					// 同じファイルはそのまま使う.
 					if (!siteUrl.equals(cachedSite)) {
-						cachedZipFile = download(monitor, logger, null, siteUrl, perSiteWork);
+						cachedZipFile = download(monitor, perSiteWork, logger, null, siteUrl);
 						setWorked = true;
 						if (!lastDownloadStatus || cachedZipFile == null) {
 							libraryNode.setInError(true);
@@ -573,66 +576,66 @@ public class DownloadModule {
 
 					final ZipFile zipFile = cachedZipFile;
 
+					int perZipWork = Math.max(1, perSiteWork / zipFile.size());
+
 					// Zip展開.
 					for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements();) {
 						final ZipEntry zipEntry = e.nextElement();
-						if (site.getFilePattern() == null
-								|| FilenameUtils.wildcardMatch(zipEntry.getName(), site.getFilePattern())) {
-							// 一致.
 
-							IContainer savedFolder2 = savedFolder;
-							String wildCardStr = StringUtils.defaultString(site.getFilePattern());
-							if (wildCardStr.contains("*") && wildCardStr.contains("/")) {
-								// 直前のフォルダまで取得する.
-								wildCardStr = StringUtils.substringBeforeLast(site.getFilePattern(), "/");
-							}
+						if (site.getFilePattern() != null
+								&& !FilenameUtils.wildcardMatch(zipEntry.getName(), site.getFilePattern())) {
+							// 一致しない.
+							continue;
+						}
 
-							String entryName = zipEntry.getName();
-							if (entryName.startsWith(wildCardStr + "/")) {
-								entryName = entryName.substring(wildCardStr.length() + 1);
-							}
+						IContainer savedFolder2 = savedFolder;
+						String wildCardStr = StringUtils.defaultString(site.getFilePattern());
+						if (wildCardStr.contains("*") && wildCardStr.contains("/")) {
+							// 直前のフォルダまで取得する.
+							wildCardStr = StringUtils.substringBeforeLast(site.getFilePattern(), "/");
+						}
 
-							if (zipEntry.isDirectory()) {
-								// zipディレクトリは作成するだけ.
-								if (StringUtils.isNotEmpty(entryName)) {
-									// フォルダ作成.
-									savedFolder2 = savedFolder2.getFolder(Path.fromOSString(entryName));
-									if (libraryNode.isAddable() && !savedFolder2.exists()) {
-										logger.log(Messages.SE0091, savedFolder2.getFullPath());
-										H5IOUtils.createParentFolder(savedFolder2, monitor);
-										logger.log(Messages.SE0092, savedFolder2.getFullPath());
-									} else if (libraryNode.getState() == LibraryState.REMOVE && savedFolder2.exists()) {
-										// 削除.
-										logger.log(Messages.SE0095, savedFolder2.getFullPath());
-										H5IOUtils.createParentFolder(savedFolder2, monitor);
-										logger.log(Messages.SE0096, savedFolder2.getFullPath());
-									}
+						String entryName = zipEntry.getName();
+						if (entryName.startsWith(wildCardStr + "/")) {
+							entryName = entryName.substring(wildCardStr.length() + 1);
+						}
+
+						if (zipEntry.isDirectory()) {
+							// zipディレクトリは作成するだけ.
+							if (StringUtils.isNotEmpty(entryName)) {
+								// フォルダ作成.
+								savedFolder2 = savedFolder2.getFolder(Path.fromOSString(entryName));
+								if (libraryNode.isAddable() && !savedFolder2.exists()) {
+									logger.log(Messages.SE0091, savedFolder2.getFullPath());
+									H5IOUtils.createParentFolder(savedFolder2, null);
+									logger.log(Messages.SE0092, savedFolder2.getFullPath());
+								} else if (libraryNode.getState() == LibraryState.REMOVE && savedFolder2.exists()) {
+									// 削除.
+									logger.log(Messages.SE0095, savedFolder2.getFullPath());
+									H5IOUtils.createParentFolder(savedFolder2, null);
+									logger.log(Messages.SE0096, savedFolder2.getFullPath());
 								}
-							} else {
-								// zip以外ファイル追加.
-
-								// ファイル名の変更.
-								if (site.getReplaceFileName() != null) {
-									iFile = savedFolder2.getFile(Path.fromOSString(site.getReplaceFileName()));
-								} else {
-									iFile = savedFolder2.getFile(Path.fromOSString(entryName));
-								}
-
-								// ファイル保存.
-								updateFile(monitor, logger, iFile, new FileContentsHandler() {
-
-									@Override
-									InputStream getInputStream() throws IOException {
-
-										return zipFile.getInputStream(zipEntry);
-									}
-								});
-								addStatus = true;
 							}
-
 						} else {
-							// 不一致.
-							// System.out.println(zipEntry.getName() + "はマッチしないファイル");
+							// zip以外ファイル追加.
+
+							// ファイル名の変更.
+							if (site.getReplaceFileName() != null) {
+								iFile = savedFolder2.getFile(Path.fromOSString(site.getReplaceFileName()));
+							} else {
+								iFile = savedFolder2.getFile(Path.fromOSString(entryName));
+							}
+
+							// ファイル保存.
+							updateFile(monitor, 0, logger, iFile, new FileContentsHandler() {
+
+								@Override
+								InputStream getInputStream() throws IOException {
+
+									return zipFile.getInputStream(zipEntry);
+								}
+							});
+							addStatus = true;
 						}
 					}
 					if (savedFolder.exists() && savedFolder.members().length == 0) {
@@ -649,7 +652,7 @@ public class DownloadModule {
 					}
 
 					// 追加.
-					download(monitor, logger, iFile, siteUrl, perSiteWork);
+					download(monitor, perSiteWork, logger, iFile, siteUrl);
 					setWorked = true;
 					if (!lastDownloadStatus) {
 
@@ -804,4 +807,8 @@ public class DownloadModule {
 		}
 		return null;
 	}
+
+	//	public static IProgressMonitor getSubMonitor(IProgressMonitor monitor, int ticks) {
+	//		return new SubProgressMonitor(monitor, ticks, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
+	//	}
 }

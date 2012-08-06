@@ -17,6 +17,9 @@ package com.htmlhifive.tools.wizard.ui.page;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.dialogs.IPageChangeProvider;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -26,6 +29,7 @@ import org.eclipse.swt.widgets.Listener;
 import com.htmlhifive.tools.wizard.RemoteContentManager;
 import com.htmlhifive.tools.wizard.library.model.LibraryList;
 import com.htmlhifive.tools.wizard.library.model.xml.BaseProject;
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
 /**
@@ -37,6 +41,9 @@ public class StructureSelectPage extends WizardPage {
 
 	/** container. */
 	private StructureSelectComposite container;
+
+	/** changeProject. */
+	private boolean changeProject = true;
 
 	/**
 	 * コンストラクタ.
@@ -62,7 +69,7 @@ public class StructureSelectPage extends WizardPage {
 		setControl(container);
 
 		// 下からのメッセージを受ける.
-		container.addListener(SWT.ERROR_UNSPECIFIED, new Listener() {
+		container.addListener(UIEventHelper.SET_MESSAGE, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -70,7 +77,33 @@ public class StructureSelectPage extends WizardPage {
 				// メッセージを設定.
 				setErrorMessage(event.text); // WizardPage
 
+				// 次に遷移できるかどうかを設定
 				setPageComplete(event.text == null);
+			}
+		});
+
+		// ページ切替時の処理.
+		((IPageChangeProvider) getContainer()).addPageChangedListener(new IPageChangedListener() {
+			@Override
+			public void pageChanged(PageChangedEvent event) {
+				if (event.getSelectedPage() == getNextPage()) {
+
+					if (StructureSelectPage.this.changeProject) {
+						ConfirmLicensePage confirmLicensePage = (ConfirmLicensePage) getWizard().getPage(
+								"confirmLicensePage");
+						LibraryImportPage libraryImportPage = (LibraryImportPage) getWizard().getPage("libraryImportPage");
+
+						BaseProject baseProject = getBaseProject();
+						if (baseProject != null) {
+							if (libraryImportPage.initialize(null, getProjectName(), baseProject.getDefaultJsLibPath())) {
+								// 変更あり.
+								confirmLicensePage.clearCategory();
+
+								StructureSelectPage.this.changeProject = false;
+							}
+						}
+					}
+				}
 			}
 		});
 
@@ -120,4 +153,5 @@ public class StructureSelectPage extends WizardPage {
 		}
 		return libraryList.getInfoBaseProjectMap().get(container.comboZip.getText());
 	}
+
 }

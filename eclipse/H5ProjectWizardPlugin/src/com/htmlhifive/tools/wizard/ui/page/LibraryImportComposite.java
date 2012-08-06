@@ -41,7 +41,6 @@ import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -61,6 +60,7 @@ import com.htmlhifive.tools.wizard.library.model.xml.Category;
 import com.htmlhifive.tools.wizard.library.model.xml.Library;
 import com.htmlhifive.tools.wizard.library.model.xml.Site;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
@@ -82,12 +82,11 @@ public class LibraryImportComposite extends Composite {
 	private final Link linkDetail;
 	private final Label lblListInfo;
 	private final Button checkFilterLatest;
+	private final Combo cmbDefaultInstallPath;
+	private final ScrolledComposite scrolledComposite;
 
 	private IJavaScriptProject jsProject = null;
 	private String projectName = null;
-
-	private ScrolledComposite scrolledComposite = null;
-	private Combo cmbDefaultInstallPath = null;
 
 	/**
 	 * Create the composite.
@@ -347,6 +346,7 @@ public class LibraryImportComposite extends Composite {
 			return;
 		}
 		lblListInfo.setText(libraryList.getInfo());
+		treeLibrary.setEnabled(false);
 		if (libraryList.getSource() == null) {
 			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
 		} else {
@@ -791,16 +791,15 @@ public class LibraryImportComposite extends Composite {
 		tableItem.setData(libraryNode);
 
 		getSelectedLibrarySet().add(libraryNode);
+
 	}
 
-	protected void changeTableSelection() {
 
-		// 変更を親に通知する
-		Event event = new Event();
-		event.item = tableSelection;
-		event.detail = tableSelection.getItemCount();
-		event.type = SWT.CHANGED;
-		notifyListeners(event.type, event);
+	/**
+	 * テーブル変更時.
+	 */
+	protected void changeTableSelection() {
+		UIEventHelper.notifyListeners(this, UIEventHelper.TABLE_SELECTION_CHANGE, tableSelection);
 	}
 
 	/**
@@ -837,7 +836,7 @@ public class LibraryImportComposite extends Composite {
 	/**
 	 * テキスト編集イベント.
 	 * 
-	 * @param e
+	 * @param e イベント
 	 */
 	protected void do_cmbDefaultInstallPath_modifyText(ModifyEvent e) {
 
@@ -846,18 +845,6 @@ public class LibraryImportComposite extends Composite {
 			treeViewerLibrary.refresh(true);
 		}
 		validatePage();
-	}
-
-	/**
-	 * メッセージを上のページに設定する. nullだと正常の状態として認識する.
-	 * 
-	 * @param message
-	 */
-	void setErrorMessage(String message) {
-
-		Event event = new Event();
-		event.text = message;
-		notifyListeners(SWT.ERROR_UNSPECIFIED, event);
 	}
 
 	/**
@@ -874,11 +861,12 @@ public class LibraryImportComposite extends Composite {
 						.getFullPath().append(path))) {
 			// setMessage(NewWizardMessages.JavaProjectWizardFirstPage_Message_enterProjectName);
 			// setErrorMessage(NewWizardMessages.JavaProjectWizardFirstPage_Message_enterProjectName);
-			setErrorMessage(Messages.SE0054.format(UIMessages.LibraryImportComposite_lblDefaultInstallPath_text));
+			UIEventHelper.setErrorMessage(this,
+					Messages.SE0054.format(UIMessages.LibraryImportComposite_lblDefaultInstallPath_text));
 			return;
 		}
 
 		// 正常.
-		setErrorMessage(null);
+		UIEventHelper.setErrorMessage(this, null);
 	}
 }

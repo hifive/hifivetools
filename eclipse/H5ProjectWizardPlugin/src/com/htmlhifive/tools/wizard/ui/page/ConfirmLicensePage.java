@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
+import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
 /**
@@ -43,7 +44,7 @@ public class ConfirmLicensePage extends WizardPage {
 		super(pageName);
 		setMessage(UIMessages.ConfirmLicensePage_this_message);
 		setTitle(UIMessages.LicenseListPage_this_title);
-		setPageComplete(false); // 別に設定不要なので
+		setPageComplete(false);
 	}
 
 	/**
@@ -56,8 +57,9 @@ public class ConfirmLicensePage extends WizardPage {
 
 		container = new ConfirmLicenseComposite(parent, SWT.NONE);
 		setControl(container);
-		// イベント通知受付.
-		container.addListener(SWT.ERROR_UNSPECIFIED, new Listener() {
+
+		// 下からのメッセージを受ける.
+		container.addListener(UIEventHelper.SET_PAGE_COMPLETE, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
@@ -65,7 +67,6 @@ public class ConfirmLicensePage extends WizardPage {
 				setPageComplete(event.doit);
 			}
 		});
-
 	}
 
 	/**
@@ -73,9 +74,7 @@ public class ConfirmLicensePage extends WizardPage {
 	 */
 	public void setLiceseContents() {
 
-		if (isControlCreated()) {
-			container.setLiceseContents();
-		}
+		container.setLiceseContents();
 	}
 
 	/**
@@ -83,9 +82,7 @@ public class ConfirmLicensePage extends WizardPage {
 	 */
 	public void clearCategory() {
 
-		if (isControlCreated()) {
-			container.clearCategory();
-		}
+		container.clearCategory();
 	}
 
 	/**
@@ -97,17 +94,6 @@ public class ConfirmLicensePage extends WizardPage {
 	public boolean canFlipToNextPage() {
 
 		return false; // 次の画面(JS関連)は見せない.
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
-	 */
-	@Override
-	public boolean isPageComplete() {
-
-		return container.isAccepted();
 	}
 
 }
