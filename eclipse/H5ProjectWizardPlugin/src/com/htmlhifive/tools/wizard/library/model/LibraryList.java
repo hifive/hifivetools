@@ -226,57 +226,7 @@ public class LibraryList {
 		//					.getFolder(Path.fromOSString(defaultJsLibPath));
 		//		}
 
-		IContainer[] checkContainers = new IContainer[0];
-		if (jsProject != null) {
-			//			defaultInstallContainer = getDefaultInstallPath(jsProject);
-			checkContainers = new IContainer[] { jsProject.getProject() }; // プロジェクト直下.
-
-			try {
-				// JavaScriptのライブラリを検索する.
-				Set<IContainer> set = new LinkedHashSet<IContainer>();
-				for (IIncludePathEntry entry : jsProject.getResolvedIncludepath(true)) {
-					if (entry.getContentKind() == IPackageFragmentRoot.K_SOURCE) {
-						// Includeの指定がないものを優先的にインストール先として利用する
-						//						if (defaultInstallContainer == null && entry.getInclusionPatterns().length == 0) {
-						//							defaultInstallContainer =
-						//									ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
-						//						}
-						//x: ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
-						//o: ResourcesPlugin.getWorkspace().getRoot().getProject(entry.getPath().toString());
-						//n: ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(entry.getPath());
-
-						try {
-							if (ResourcesPlugin.getWorkspace().getRoot().exists(entry.getPath())) { // 存在チェック.
-								IContainer parentContainer = (IContainer) ResourcesPlugin.getWorkspace().getRoot()
-										.findMember(entry.getPath());
-								set.add(parentContainer);
-								if (parentContainer.exists()) {
-									for (IResource res : parentContainer.members()) {
-										if (res.getType() == IResource.FOLDER) {
-											set.add((IContainer) res);
-										}
-									}
-								}
-							}
-						} catch (CoreException ignore) {
-							// TODO 自動生成された catch ブロック
-							ignore.printStackTrace();
-						}
-
-					}
-				}
-				set.add(jsProject.getProject()); // 一応追加しておく.
-
-				if (!set.isEmpty()) {
-					checkContainers = set.toArray(new IContainer[0]);
-					//					if (defaultInstallContainer == null) {
-					//						defaultInstallContainer = set.iterator().next();
-					//					}
-				}
-			} catch (JavaScriptModelException e) {
-				H5LogUtils.putLog(e, Messages.SE0022);
-			}
-		}
+		IContainer[] checkContainers = getCheckContainers(jsProject);
 
 		rootNode.setDefaultInstallPath(defaultJsLibPath);
 		rootNode.setDefaultProjectPath(jsProject != null ? jsProject.getProject() : ResourcesPlugin.getWorkspace()
@@ -366,6 +316,67 @@ public class LibraryList {
 				}
 			}
 			// LibraryNode単位ここまで
+		}
+		return checkContainers;
+	}
+
+	/**
+	 * ライブラリの存在チェックを行うルートフォルダを検索する.
+	 * 
+	 * @param jsProject JavaScriptプロジェクト
+	 * @return ライブラリの存在チェックを行うルートフォルダ
+	 */
+	private IContainer[] getCheckContainers(IJavaScriptProject jsProject) {
+		IContainer[] checkContainers = new IContainer[0];
+		if (jsProject != null) {
+			//			defaultInstallContainer = getDefaultInstallPath(jsProject);
+			checkContainers = new IContainer[] { jsProject.getProject() }; // プロジェクト直下.
+
+			try {
+				// JavaScriptのライブラリを検索する.
+				Set<IContainer> set = new LinkedHashSet<IContainer>();
+				for (IIncludePathEntry entry : jsProject.getResolvedIncludepath(true)) {
+					if (entry.getContentKind() == IPackageFragmentRoot.K_SOURCE) {
+						// Includeの指定がないものを優先的にインストール先として利用する
+						//						if (defaultInstallContainer == null && entry.getInclusionPatterns().length == 0) {
+						//							defaultInstallContainer =
+						//									ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
+						//						}
+						//x: ResourcesPlugin.getWorkspace().getRoot().getFolder(entry.getPath());
+						//o: ResourcesPlugin.getWorkspace().getRoot().getProject(entry.getPath().toString());
+						//n: ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(entry.getPath());
+
+						try {
+							if (ResourcesPlugin.getWorkspace().getRoot().exists(entry.getPath())) { // 存在チェック.
+								IContainer parentContainer = (IContainer) ResourcesPlugin.getWorkspace().getRoot()
+										.findMember(entry.getPath());
+								set.add(parentContainer);
+								if (parentContainer.exists()) {
+									for (IResource res : parentContainer.members()) {
+										if (res.getType() == IResource.FOLDER) {
+											set.add((IContainer) res);
+										}
+									}
+								}
+							}
+						} catch (CoreException ignore) {
+							// フォルダの検出だけなので、例外は無視.
+							ignore.printStackTrace();
+						}
+
+					}
+				}
+				set.add(jsProject.getProject()); // 一応追加しておく.
+
+				if (!set.isEmpty()) {
+					checkContainers = set.toArray(new IContainer[0]);
+					//					if (defaultInstallContainer == null) {
+					//						defaultInstallContainer = set.iterator().next();
+					//					}
+				}
+			} catch (JavaScriptModelException e) {
+				H5LogUtils.putLog(e, Messages.SE0022);
+			}
 		}
 		return checkContainers;
 	}
