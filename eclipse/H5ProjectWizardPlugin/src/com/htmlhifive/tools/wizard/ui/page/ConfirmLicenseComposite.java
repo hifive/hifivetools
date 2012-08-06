@@ -181,7 +181,6 @@ public class ConfirmLicenseComposite extends Composite {
 							//H5LogUtils.putLog(null, Messages.PI0136,category.getLicenseUrl(), result);
 						} else {
 							Link link = new Link(tabFolder, SWT.NONE);
-							// link.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 							tabItem.setControl(link);
 							if (category.getLicense() != null) {
 								link.setText(category.getLicense());

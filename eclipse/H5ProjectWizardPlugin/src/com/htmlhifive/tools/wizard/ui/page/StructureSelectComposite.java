@@ -181,10 +181,16 @@ public class StructureSelectComposite extends Composite {
 		// libraryListのnull対応.
 		if (libraryList == null) {
 			UIEventHelper.setErrorMessage(this, Messages.SE0053.format());
-			lblListInfo.setText("");
+			lblListInfo.setText(Messages.PI0151.format());
+			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
 			return;
 		}
 		lblListInfo.setText(libraryList.getInfo());
+		if (libraryList.getSource() == null) {
+			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+		} else {
+			lblListInfo.setForeground(null);
+		}
 
 		for (Info info : libraryList.getInfoMap().values()) {
 			comboZip.add(info.getTitle());
