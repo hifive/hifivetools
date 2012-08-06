@@ -14,8 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui;
-
+package com.htmlhifive.tools.codeassist.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -26,9 +25,9 @@ import com.htmlhifive.tools.codeassist.ui.logger.H5CodeAssistPluginLoggerImpl;
 
 /**
  * UIプラグインクラス.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class H5CodeAssistUIPlugin extends AbstractUIPlugin {
 
@@ -66,7 +65,7 @@ public class H5CodeAssistUIPlugin extends AbstractUIPlugin {
 
 	/**
 	 * プラグインインスタンスを取得する.
-	 *
+	 * 
 	 * @return プラグインインスタンス.
 	 */
 	public static H5CodeAssistUIPlugin getDefault() {
@@ -76,7 +75,7 @@ public class H5CodeAssistUIPlugin extends AbstractUIPlugin {
 
 	/**
 	 * プラグインからの相対パスからイメージデスクリプターを取得する.
-	 *
+	 * 
 	 * @param path 画像パス.
 	 * @return イメージデスクリプター
 	 */

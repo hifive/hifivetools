@@ -14,8 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.context;
-
+package com.htmlhifive.tools.codeassist.ui.context;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
@@ -26,9 +25,9 @@ import com.htmlhifive.tools.codeassist.core.proposal.ProposalContext;
 
 /**
  * Hi5のコード補完コンテキストデフォルト実装クラス.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class H5ProposalContext implements ProposalContext {
 
@@ -54,7 +53,7 @@ public class H5ProposalContext implements ProposalContext {
 
 	/**
 	 * コンストラクタ.
-	 *
+	 * 
 	 * @param context コンテキスト.
 	 */
 	public H5ProposalContext(JavaContentAssistInvocationContext context) {

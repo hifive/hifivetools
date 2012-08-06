@@ -1,0 +1,66 @@
+Unless otherwise stated, all source files are licensed under
+the Apache License, Version 2.0(http://www.apache.org/licenses/LICENSE-2.0).
+
+-----
+Code in:
+lib/js1_7_R4.jar
+
+Rhino
+URL:http://www.mozilla.org/rhino/
+License:MPL 1.1 and GPL 2.0
+	http://www.mozilla.org/MPL/1.1/
+	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+Local Modifications: None.
+
+-----
+Code in:
+lib/commons-io-2.0.1.jar
+
+Commons IO
+URL:http://commons.apache.org/io/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----
+Code in:
+lib/commons-lang-2.6.jar
+
+Commons Lang
+URL:http://commons.apache.org/lang/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----
+Code in:
+lib/ant.jar
+
+Apache Ant
+URL:http://ant.apache.org/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----
+Code in:
+lib/slf4j-api-1.6.4.jar
+lib/slf4j-log4j12-1.6.4.jar
+
+Simple Logging Facade for Java (SLF4J)
+URL:http://www.slf4j.org/
+License:MIT
+	http://www.opensource.org/licenses/mit-license.php
+Local Modifications: None.
+
+-----
+Code in:
+lib/log4j-1.2.16.jar
+
+Apache log4j
+URL:http://logging.apache.org/log4j/
+License:the Apache License, Version 2.0
+	http://www.apache.org/licenses/LICENSE-2.0
+Local Modifications: None.
+
+-----

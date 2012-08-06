@@ -62,6 +62,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.htmlhifive.tools.jslint.JSLintPlugin;
+import com.htmlhifive.tools.jslint.JSLintPluginConstant;
 import com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport;
 import com.htmlhifive.tools.jslint.engine.download.DownloadJSHintSupport;
 import com.htmlhifive.tools.jslint.engine.download.DownloadJSLintSupport;
@@ -206,6 +207,22 @@ public class CreateEngineDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		setTitle(Messages.DL0023.getText());
 		Composite area = (Composite) super.createDialogArea(parent);
+
+		Composite compLblDownload = new Composite(area, SWT.NONE);
+		compLblDownload.setLayout(new GridLayout(2, false));
+		compLblDownload.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+
+		Label lblJslintDownloadUrl = new Label(compLblDownload, SWT.NONE);
+		lblJslintDownloadUrl.setText(Messages.DL0031.getText());
+
+		Label lblJSLintURL = new Label(compLblDownload, SWT.NONE);
+		lblJSLintURL.setText(JSLintPluginConstant.SOURCE_URL_JSLINT);
+
+		Label lblJSHintDownloadUrl = new Label(compLblDownload, SWT.NONE);
+		lblJSHintDownloadUrl.setText(Messages.DL0032.getText());
+
+		Label lblJSHintURL = new Label(compLblDownload, SWT.NONE);
+		lblJSHintURL.setText(JSLintPluginConstant.SOURCE_URL_JSHINT);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -344,7 +361,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(482, 271);
+		return new Point(534, 325);
 	}
 
 	@Override

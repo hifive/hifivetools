@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.htmlhifive.tools.codeassist.H5CodeAssistLibraryPlugin
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.vqualifier
 Bundle-ClassPath: lib/commons-cli-1.2.jar,
  lib/commons-io-2.0.1.jar,
  lib/commons-lang-2.6.jar,

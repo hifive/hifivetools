@@ -16,6 +16,7 @@
  */
 package com.htmlhifive.tools.jslint.engine.download;
 
+import com.htmlhifive.tools.jslint.JSLintPluginConstant;
 import com.htmlhifive.tools.jslint.engine.option.Engine;
 
 /**
@@ -25,11 +26,6 @@ import com.htmlhifive.tools.jslint.engine.option.Engine;
  * 
  */
 public class DownloadJSLintSupport extends AbstractDownloadEngineSupport implements DownloadEngineSupport {
-
-	/**
-	 * ダウンロード先URL.TODO 外部化.
-	 */
-	private static final String SOURCE_URL = "https://raw.github.com/douglascrockford/JSLint/master/jslint.js";
 
 	/*
 	 * (非 Javadoc)
@@ -51,7 +47,8 @@ public class DownloadJSLintSupport extends AbstractDownloadEngineSupport impleme
 	 */
 	@Override
 	public String getEngineSourceUrl() {
-		return SOURCE_URL;
+
+		return JSLintPluginConstant.SOURCE_URL_JSLINT;
 	}
 
 	/*

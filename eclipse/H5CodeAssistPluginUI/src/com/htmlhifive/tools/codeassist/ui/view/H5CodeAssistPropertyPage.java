@@ -40,9 +40,9 @@ import com.htmlhifive.tools.codeassist.ui.view.bean.BeanChangeEvent.CompositeBea
 
 /**
  * Hi5コードアシストの設定ページ.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class H5CodeAssistPropertyPage extends PropertyPage {
 
@@ -67,7 +67,7 @@ public class H5CodeAssistPropertyPage extends PropertyPage {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse
 	 * .swt.widgets.Composite)
@@ -87,19 +87,16 @@ public class H5CodeAssistPropertyPage extends PropertyPage {
 		} catch (CoreException e) {
 			logger.log(UIMessages.UIEM0001, e, composite.getClass());
 			ErrorDialog.openError(getShell(), UIMessages.UIDT0002.getText(),
-					UIMessages.UIEM0001.format(composite.getClass()),
-					e.getStatus());
+					UIMessages.UIEM0001.format(composite.getClass()), e.getStatus());
 		}
 		return composite;
 	}
 
 	/**
 	 * コンポジットを生成します.
-	 *
-	 * @param parent
-	 *            親コンポジット.
-	 * @throws CoreException
-	 *             生成例外.
+	 * 
+	 * @param parent 親コンポジット.
+	 * @throws CoreException 生成例外.
 	 */
 	private void createComposite(Composite parent) throws CoreException {
 
@@ -123,10 +120,9 @@ public class H5CodeAssistPropertyPage extends PropertyPage {
 
 	/**
 	 * 入力項目を検証する.<br>
-	 *
-	 *
-	 * @param bean
-	 *            オプションファイルビーン.
+	 * 
+	 * 
+	 * @param bean オプションファイルビーン.
 	 */
 	private void optionFileValidate(OptionConfigureBean bean) {
 
@@ -136,15 +132,13 @@ public class H5CodeAssistPropertyPage extends PropertyPage {
 			setErrorMessage(null);
 			return;
 		}
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot()
-				.findMember(optionFilePath);
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(optionFilePath);
 		if (resource == null || !(resource instanceof IFile)) {
 			setValid(false);
 			setErrorMessage(UIMessages.UIEM0004.getText());
 			return;
 		}
-		if (!StringUtils.equals(resource.getFileExtension(),
-				H5CodeAssistCorePluginConst.EXTENTION_XML)) {
+		if (!StringUtils.equals(resource.getFileExtension(), H5CodeAssistCorePluginConst.EXTENTION_XML)) {
 			setValid(false);
 			setErrorMessage(UIMessages.UIEM0005.getText());
 			return;
@@ -168,7 +162,7 @@ public class H5CodeAssistPropertyPage extends PropertyPage {
 
 	/**
 	 * プロジェクトを取得する.
-	 *
+	 * 
 	 * @return プロジェクト.
 	 */
 	private IProject getProject() {

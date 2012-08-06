@@ -38,9 +38,9 @@ import com.htmlhifive.tools.codeassist.ui.messages.UIMessages;
 
 /**
  * Hi5用コード補完生成コンピュータ.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class H5ProposalComputer implements IJavaCompletionProposalComputer {
 
@@ -71,16 +71,15 @@ public class H5ProposalComputer implements IJavaCompletionProposalComputer {
 		JavaContentAssistInvocationContext jsContext = (JavaContentAssistInvocationContext) context;
 		try {
 			// オプションファイルの取得
-			String path =
-					CodeAssistConfigManager.getConfig(jsContext.getProject().getProject(), true).getConfigBean()
-							.getOptionFilePath();
+			String path = CodeAssistConfigManager.getConfig(jsContext.getProject().getProject(), true).getConfigBean()
+					.getOptionFilePath();
 			IFile option = null;
 			if (StringUtils.isNotEmpty(path)) {
 				option = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
 			}
 			ProposalContext hi5Context = new H5ProposalContext(jsContext);
-			List<ICompletionProposal> resultList =
-					H5CodeAssistCorePlugin.getDefault().getCompletionProposals(hi5Context, monitor, option);
+			List<ICompletionProposal> resultList = H5CodeAssistCorePlugin.getDefault().getCompletionProposals(
+					hi5Context, monitor, option);
 			return resultList;
 		} catch (CoreException e) {
 			logger.log(UIMessages.UIEM0003);

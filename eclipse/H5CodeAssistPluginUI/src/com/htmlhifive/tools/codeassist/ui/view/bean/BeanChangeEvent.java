@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.view.bean;
+package com.htmlhifive.tools.codeassist.ui.view.bean;
 
 /**
  * Beanが変更された時のイベント.

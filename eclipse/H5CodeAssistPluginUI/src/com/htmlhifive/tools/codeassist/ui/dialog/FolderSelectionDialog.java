@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.dialog;
+package com.htmlhifive.tools.codeassist.ui.dialog;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.viewers.Viewer;

@@ -90,7 +90,7 @@ public final class Messages extends MessagesBase {
 	/** DL0007=INFO,エラーメッセｰジを正規表現で比較し、マッチしたものを分類します。. */
 	public static final Message DL0007 = createMessage("DL0007");
 
-	/** DL0008=INFO,チェック対象のjsファイルパターンと指定されているライブラリ一覧.設定は<a>ここ</a>から. */
+	/** DL0008=INFO,チェック対象のjsファイルパターンと指定されているライブラリ一覧.設定は<a>ここ</a>から(JavaScriptProjectのみ). */
 	public static final Message DL0008 = createMessage("DL0008");
 
 	/** DL0009=INFO,JSLintプラグインの設定を行います.. */
@@ -99,7 +99,7 @@ public final class Messages extends MessagesBase {
 	/** DL0010=INFO,JSLintプラグインヘルプページは<a>こちら</a>. */
 	public static final Message DL0010 = createMessage("DL0010");
 
-	/** DL0011=INFO,http://www.htmlhifive.com/conts/web/view/reference/eclipseplugins#HJSLint30D730E930B030A430F3. */
+	/** DL0011=INFO,http://www.htmlhifive.com/conts/web/view/tools/eclipse-jslint-plugin. */
 	public static final Message DL0011 = createMessage("DL0011");
 
 	/** DL0012=INFO,JSLint(又はJSHint)のエンジンファイルを設定します.. */
@@ -132,7 +132,7 @@ public final class Messages extends MessagesBase {
 	/** DL0021=INFO,設定ファイル名. */
 	public static final Message DL0021 = createMessage("DL0021");
 
-	/** DL0022=INFO,設定ファイルを生成するディレクトリを選択してください.. */
+	/** DL0022=INFO,出力先ディレクトリを選択してください.. */
 	public static final Message DL0022 = createMessage("DL0022");
 
 	/** DL0023=INFO,JSLint.js又はJSHint.jsの取得. */
@@ -158,6 +158,12 @@ public final class Messages extends MessagesBase {
 
 	/** DL0030=INFO,ライセンスに同意しません. */
 	public static final Message DL0030 = createMessage("DL0030");
+
+	/** DL0031=INFO,JSLint取得先URL. */
+	public static final Message DL0031 = createMessage("DL0031");
+
+	/** DL0032=INFO,JSHint取得先URL. */
+	public static final Message DL0032 = createMessage("DL0032");
 
 	// #ダイアログツールチップ
 	/** DTT0000=INFO,チェック時にライブラリを考慮するかどうかを設定します。読み込むライブラリが多いとパフォーマンスに影響します。. */
@@ -289,7 +295,7 @@ public final class Messages extends MessagesBase {
 	/** T0006=INFO,コード検査中...ファイル名 : {0}. */
 	public static final Message T0006 = createMessage("T0006");
 
-	/** T0007=INFO,ビューに反映中.... */
+	/** T0007=INFO,ビューに反映中...(この処理には時間がかかる場合があります。). */
 	public static final Message T0007 = createMessage("T0007");
 
 	/** T0008=INFO,問題ビューに反映中... {0}件 / {1}件中. */
