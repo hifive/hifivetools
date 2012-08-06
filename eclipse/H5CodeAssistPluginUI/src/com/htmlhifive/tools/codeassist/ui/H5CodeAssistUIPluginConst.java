@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui;
+package com.htmlhifive.tools.codeassist.ui;
 
 import org.eclipse.core.runtime.QualifiedName;
 

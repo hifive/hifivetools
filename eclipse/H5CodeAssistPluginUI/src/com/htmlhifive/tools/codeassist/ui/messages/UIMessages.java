@@ -49,7 +49,7 @@ public final class UIMessages extends MessagesBase {
 	/** UIEM0004=WARN,指定されたパスにファイルが存在しません.. */
 	public static final Message UIEM0004 = createMessage("UIEM0004");
 
-	/** UIEM0005=WARN,"xmlファイルを指定してください.". */
+	/** UIEM0005=WARN,xmlファイルを指定してください.. */
 	public static final Message UIEM0005 = createMessage("UIEM0005");
 
 	// #ダイアログタイトル
@@ -59,13 +59,25 @@ public final class UIMessages extends MessagesBase {
 	/** UIDT0002=INFO,エラーダイアログ.. */
 	public static final Message UIDT0002 = createMessage("UIDT0002");
 
+	/** UIDT0003=INFO,出力先の指定. */
+	public static final Message UIDT0003 = createMessage("UIDT0003");
+
+	/** UIDT0004=INFO,確認ダイアログ. */
+	public static final Message UIDT0004 = createMessage("UIDT0004");
+
 	// #ダイアログメッセージラベル
 	/** UIDM0001=INFO,オプションファイルを選択してください.. */
 	public static final Message UIDM0001 = createMessage("UIDM0001");
 
+	/** UIDM0002=INFO,{0}を出力しました.. */
+	public static final Message UIDM0002 = createMessage("UIDM0002");
+
 	// #ボタン名
 	/** UIBT0001=INFO,選択. */
 	public static final Message UIBT0001 = createMessage("UIBT0001");
+
+	/** UIBT0002=INFO,デフォルトの補完xmlファイルをエクスポート. */
+	public static final Message UIBT0002 = createMessage("UIBT0002");
 
 	// #コンポジットラベル.
 	/** UICL0001=INFO,オプションファイルの設定(特に指定がなければ空を指定してください). */

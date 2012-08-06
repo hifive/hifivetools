@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.config;
+package com.htmlhifive.tools.codeassist.ui.config;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,9 +40,9 @@ import com.htmlhifive.tools.codeassist.ui.view.bean.OptionConfigureBean;
 
 /**
  * コードアシストの設定情報を管理するクラス.
- *
+ * 
  * @author NS Solutions Corporation
- *
+ * 
  */
 public class CodeAssistConfig {
 
@@ -59,8 +59,7 @@ public class CodeAssistConfig {
 	/**
 	 * ロガー.
 	 */
-	private static H5CodeAssistPluginLogger logger = H5CodeAssistPluginLoggerFactory
-			.getLogger(CodeAssistConfig.class);
+	private static H5CodeAssistPluginLogger logger = H5CodeAssistPluginLoggerFactory.getLogger(CodeAssistConfig.class);
 
 	/**
 	 * 設定ファイル.
@@ -74,7 +73,7 @@ public class CodeAssistConfig {
 
 	/**
 	 * コンストラクタ.
-	 *
+	 * 
 	 * @param file 設定ファイル.
 	 */
 	CodeAssistConfig(IFile file) {
@@ -106,7 +105,7 @@ public class CodeAssistConfig {
 
 	/**
 	 * 設定ビーンを取得する.
-	 *
+	 * 
 	 * @return 設定ビーン.
 	 */
 	public OptionConfigureBean getConfigBean() {
@@ -116,7 +115,7 @@ public class CodeAssistConfig {
 
 	/**
 	 * ビーンを設定ファイルに保存する.
-	 *
+	 * 
 	 * @return セーブが成功したかどうか
 	 */
 	public boolean saveConfig() {

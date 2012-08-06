@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.htmlhifive.tools.jslint.feature"
+      id="com.htmlhifive.tools.jslint"
       label="%feature.name"
-      version="1.1.0.vqualifier"
+      version="1.2.0.vqualifier"
       provider-name="%feature.vendor"
       plugin="com.htmlhifive.tools.jslint.H5JSLintPlugin">
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.htmlhifive.tools.wizard"
+      label="%feature.name"
+      version="1.0.0.vqualifier"
+      provider-name="%feature.vendor"
+      plugin="com.htmlhifive.tools.codeassist.ui.H5ProjectWizardPlugin">
+
+   <description>
+      %feature.description
+   </description>
+
+   <copyright>
+      %feature.copyright.notice
+   </copyright>
+
+   <license url="">
+      %feature.license.agreement
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.core.net"/>
+      <import plugin="org.eclipse.wst.jsdt.core"/>
+      <import plugin="org.eclipse.wst.jsdt.ui"/>
+      <import plugin="org.eclipse.equinox.p2.ui"/>
+      <import plugin="org.apache.commons.httpclient"/>
+   </requires>
+
+   <plugin
+         id="com.htmlhifive.tools.wizard"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

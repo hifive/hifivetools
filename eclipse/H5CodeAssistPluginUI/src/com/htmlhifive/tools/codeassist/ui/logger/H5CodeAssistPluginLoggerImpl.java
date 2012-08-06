@@ -14,8 +14,7 @@
  * limitations under the License.
  *
  */
- package com.htmlhifive.tools.codeassist.ui.logger;
-
+package com.htmlhifive.tools.codeassist.ui.logger;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
@@ -69,18 +68,18 @@ public class H5CodeAssistPluginLoggerImpl implements H5CodeAssistPluginLogger {
 	private int convertToInternalLevel(LogLevel level) {
 
 		switch (level) {
-			case FATAL:
-				return IStatus.ERROR;
-			case ERROR:
-				return IStatus.ERROR;
-			case WARN:
-				return IStatus.WARNING;
-			case INFO:
-				return IStatus.INFO;
-			case DEBUG:
-				return IStatus.INFO;
-			default:
-				break;
+		case FATAL:
+			return IStatus.ERROR;
+		case ERROR:
+			return IStatus.ERROR;
+		case WARN:
+			return IStatus.WARNING;
+		case INFO:
+			return IStatus.INFO;
+		case DEBUG:
+			return IStatus.INFO;
+		default:
+			break;
 		}
 		return 0;
 	}
