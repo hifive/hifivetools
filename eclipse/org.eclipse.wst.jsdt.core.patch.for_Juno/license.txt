@@ -1,0 +1,2 @@
+This product licensed under
+EPL(http://www.eclipse.org/legal/epl-v10.html).
