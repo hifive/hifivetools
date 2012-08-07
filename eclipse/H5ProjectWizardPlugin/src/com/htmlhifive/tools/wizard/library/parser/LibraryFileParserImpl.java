@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.htmlhifive.tools.wizard.library;
+package com.htmlhifive.tools.wizard.library.parser;
 
 import java.io.InputStream;
 
@@ -21,8 +21,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.xml.Libraries;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.xml.Libraries;
 import com.htmlhifive.tools.wizard.log.PluginLogger;
 import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
 import com.htmlhifive.tools.wizard.log.messages.Messages;

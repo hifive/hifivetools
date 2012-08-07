@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.htmlhifive.tools.wizard.library.model;
+package com.htmlhifive.tools.wizard.library;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.htmlhifive.tools.wizard.PluginConstant;
+import com.htmlhifive.tools.wizard.PluginResource;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
 /**
@@ -28,19 +28,19 @@ import com.htmlhifive.tools.wizard.ui.UIMessages;
 public enum LibraryState {
 
 	/** DEFAULT. */
-	DEFAULT("", "", PluginConstant.IMG_FIELD_COMPARE),
+	DEFAULT("", "", PluginResource.IMG_FIELD_COMPARE),
 	/** ADDITION. */
-	ADD("+", UIMessages.LibraryState_ADD, PluginConstant.IMG_CORRECTION_ADD),
+	ADD("+", UIMessages.LibraryState_ADD, PluginResource.IMG_CORRECTION_ADD),
 	/** REMOVE. */
-	REMOVE("-", UIMessages.LibraryState_REMOVE, PluginConstant.IMG_CORRECTION_REMOVE),
+	REMOVE("-", UIMessages.LibraryState_REMOVE, PluginResource.IMG_CORRECTION_REMOVE),
 	/** EXISTS. */
-	EXISTS(">", UIMessages.LibraryState_EXIST, PluginConstant.IMG_FIELD_PUBLIC);
+	EXISTS(">", UIMessages.LibraryState_EXIST, PluginResource.IMG_FIELD_PUBLIC);
 	//	/** EXISTS. */
-	//	INCOMPLETE(">", UIMessages.LibraryState_INCOMPLETE, PluginConstant.IMG_REFACTORING_WARNING),
+	//	INCOMPLETE(">", UIMessages.LibraryState_INCOMPLETE, PluginResource.IMG_REFACTORING_WARNING),
 	//	/** DOWNLOAD_ERROR. */
-	//	DOWNLOAD_ERROR("x", UIMessages.LibraryState_DOWNLOAD_ERROR, PluginConstant.IMG_OBJS_FIXABLE_ERROR),
+	//	DOWNLOAD_ERROR("x", UIMessages.LibraryState_DOWNLOAD_ERROR, PluginResource.IMG_OBJS_FIXABLE_ERROR),
 	//	/** EXTRACT_ERROR. */
-	//	EXTRACT_ERROR("x", UIMessages.LibraryState_EXTRACT_ERROR, PluginConstant.IMG_OBJS_FIXABLE_PROBLEM);
+	//	EXTRACT_ERROR("x", UIMessages.LibraryState_EXTRACT_ERROR, PluginResource.IMG_OBJS_FIXABLE_PROBLEM);
 
 	/** 文字記号. */
 	private String mark;

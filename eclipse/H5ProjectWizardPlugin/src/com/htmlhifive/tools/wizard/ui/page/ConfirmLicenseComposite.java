@@ -39,8 +39,10 @@ import org.eclipse.swt.widgets.TabItem;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
 import com.htmlhifive.tools.wizard.RemoteContentManager;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.xml.Category;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
@@ -53,9 +55,12 @@ import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
  * @author fkubo
  */
 public class ConfirmLicenseComposite extends Composite {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(ConfirmLicenseComposite.class);
 
 	private final TabFolder tabFolder;
-	private Button btnRadioAccept = null;
+	private final Button btnRadioAccept;
+	private final Button btnRadioReject;
 	final Set<Category> categorySet = new LinkedHashSet<Category>();
 
 	/**
@@ -93,7 +98,7 @@ public class ConfirmLicenseComposite extends Composite {
 		});
 		btnRadioAccept.setText(UIMessages.ConfirmLicenseComposite_btnAcceptButton_text);
 
-		Button btnRadioReject = new Button(composite, SWT.RADIO);
+		btnRadioReject = new Button(composite, SWT.RADIO);
 		btnRadioReject.setSelection(true);
 		btnRadioReject.setText(UIMessages.ConfirmLicenseComposite_btnRejectButton_text);
 
@@ -101,10 +106,14 @@ public class ConfirmLicenseComposite extends Composite {
 		//setLiceseContents();
 	}
 
+	// イベント処理系.
+
 	/**
 	 * ライセンス表示更新処理.
 	 */
 	void setLiceseContents() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "setLiceseContents");
 
 		LibraryList libraryList = RemoteContentManager.getLibraryList();
 
@@ -160,6 +169,7 @@ public class ConfirmLicenseComposite extends Composite {
 
 								@Override
 								public void changing(LocationEvent event) {
+
 									// System.out.println("changing: " + event.location);
 									if (!"about:blank".equals(((Browser) event.widget).getUrl())) {
 										// 遷移させない.
@@ -171,6 +181,7 @@ public class ConfirmLicenseComposite extends Composite {
 
 								@Override
 								public void changed(LocationEvent event) {
+
 									// System.out.println("changed: " + event.location);
 								}
 							});
@@ -219,9 +230,14 @@ public class ConfirmLicenseComposite extends Composite {
 			}
 		}
 		tabFolder.layout();
+
+		// 実行可否.
+		UIEventHelper.setPageComplete(this, isAccepted());
 	}
 
 	void clearCategory() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "clearCategory");
 
 		categorySet.clear();
 		// 不要なものを削除.
@@ -229,6 +245,9 @@ public class ConfirmLicenseComposite extends Composite {
 			// 不要.
 			item.dispose();
 		}
+
+		// 実行可否.
+		UIEventHelper.setPageComplete(this, isAccepted());
 	}
 
 	/**
@@ -237,8 +256,12 @@ public class ConfirmLicenseComposite extends Composite {
 	 * @param e イベント
 	 */
 	protected void do_btnRadioAccept_widgetSelected(SelectionEvent e) {
-		UIEventHelper.setPageComplete(this, btnRadioAccept.getSelection()
-				|| H5WizardPlugin.getInstance().getSelectedLibrarySet().isEmpty());
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_btnRadioAccept_widgetSelected");
+
+		// 実行可否.
+		UIEventHelper.setPageComplete(this, isAccepted());
+
 	}
 
 	/**
@@ -248,7 +271,18 @@ public class ConfirmLicenseComposite extends Composite {
 	 */
 	public boolean isAccepted() {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "isAccepted");
+
 		// TODO:要修正 追加でチェックされたときに対応できない
-		return btnRadioAccept.getSelection();
+		return H5WizardPlugin.getInstance().getSelectedLibrarySet().isEmpty() ? true : btnRadioAccept.getSelection();
+	}
+
+	/**
+	 * 同意しないに設定する.
+	 */
+	public void rejected() {
+
+		btnRadioAccept.setSelection(false);
+		btnRadioReject.setSelection(true);
 	}
 }

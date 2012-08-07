@@ -15,26 +15,29 @@
  */
 package com.htmlhifive.tools.wizard;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.net.URLConnection;
-import java.util.Date;
 
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.util.DateParseException;
-import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
-import com.htmlhifive.tools.wizard.library.LibraryFileParser;
-import com.htmlhifive.tools.wizard.library.LibraryFileParserFactory;
-import com.htmlhifive.tools.wizard.library.ParseException;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
+import com.htmlhifive.tools.wizard.download.ConnectMethodFactory;
+import com.htmlhifive.tools.wizard.download.DownloadModule;
+import com.htmlhifive.tools.wizard.download.IConnectMethod;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.parser.LibraryFileParser;
+import com.htmlhifive.tools.wizard.library.parser.LibraryFileParserFactory;
+import com.htmlhifive.tools.wizard.library.parser.ParseException;
+import com.htmlhifive.tools.wizard.log.ResultStatus;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
-import com.htmlhifive.tools.wizard.ui.DownloadModule;
-import com.htmlhifive.tools.wizard.ui.ResultStatus;
+import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 
 /**
  * <H3>リモートコンテンツマネージャー.</H3>
@@ -70,46 +73,145 @@ public abstract class RemoteContentManager {
 			return H5WizardPlugin.getInstance().getLibraryList();
 		}
 
-		// 選択もクリアしておく
+		// クリアしておく
+		H5WizardPlugin.getInstance().setLibraryList(null);
 		H5WizardPlugin.getInstance().getSelectedLibrarySet().clear();
 
 		ResultStatus resultStatus = new ResultStatus();
 
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(null);
+
 		// サイトを読み込む.
-		for (String urlStr : new String[] { PluginConstant.URL_LIBRARY_LIST, PluginConstant.URL_LIBRARY_LIST_MIRROR }) {
+		for (String urlStr : new String[] { PluginConstant.URL_LIBRARY_LIST, PluginConstant.URL_LIBRARY_LIST_MIRROR,
+				LOCAL_LIBRARIES_XML }) {
 			if (StringUtils.isNotEmpty(urlStr)) {
 				InputStream is = null;
 				DownloadModule downloadModule = new DownloadModule();
 				try {
 
-					HttpMethod method = downloadModule.connect(urlStr,
-							PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
-					//					URLConnection connection = new URL(url).openConnection();
-					//					if (connection instanceof HttpURLConnection) {
-					//						HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
-					//						httpURLConnection.setConnectTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+					//					IConnectMethod method = ConnectMethodFactory.getMethod(urlStr, true);
+					//					method.setConnectionTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+					//					method.setProxy(downloadModule.getProxyService());
+					//					is = method.getInputStream();
+					//					if (is == null) {
+					//						resultStatus.log(Messages.SE0046, urlStr);
+					//					} else {
+					//						LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
+					//						LibraryList libraryList = parser.getLibraryList();
+					//						libraryList.setLastModified(method.getLastModified());
+					//						libraryList.setSource(urlStr);
+					//						H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
+					//						return libraryList;
 					//					}
-					//					is = connection.getInputStream();
-					if (method != null) {
-						is = method.getResponseBodyAsStream();
+					//				} catch (ParseException e) {
+					//					resultStatus.log(e, Messages.SE0046, urlStr);
+					//				} catch (MalformedURLException e) {
+					//					resultStatus.log(e, Messages.SE0046, urlStr);
+					//				} catch (IOException e) {
+					//					resultStatus.log(e, Messages.SE0046, urlStr);
+
+					//進捗表示の場合
+					final IRunnableWithProgress runnable = getSiteDownLoad(resultStatus, urlStr, downloadModule);
+
+					try {
+						dialog.run(true, false, runnable);
+						if (resultStatus.isSuccess()) {
+							return H5WizardPlugin.getInstance().getLibraryList();
+						}
+					} catch (InvocationTargetException e) {
+						resultStatus.log(e, Messages.SE0046, urlStr);
+					} catch (InterruptedException e) {
+						resultStatus.log(e, Messages.SE0046, urlStr);
 					}
+				} finally {
+					downloadModule.close();
+					IOUtils.closeQuietly(is);
+				}
+			}
+		}
+
+		//		// ローカルのリソースを利用する.
+		//		InputStream is = null;
+		//		try {
+		//			URLConnection connection = RemoteContentManager.class.getResource(LOCAL_LIBRARIES_XML).openConnection();
+		//			is = connection.getInputStream();
+		//			if (is == null) {
+		//				resultStatus.log(Messages.SE0046, LOCAL_LIBRARIES_XML);
+		//			} else {
+		//				LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
+		//				LibraryList libraryList = parser.getLibraryList();
+		//				if (connection.getLastModified() > 0) {
+		//					libraryList.setLastModified(new Date(connection.getLastModified()));
+		//				}
+		//				libraryList.setSource(null);
+		//				H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
+		//				return libraryList;
+		//			}
+		//		} catch (ParseException e) {
+		//			resultStatus.log(e, Messages.SE0046, LOCAL_LIBRARIES_XML);
+		//		} catch (IOException e) {
+		//			resultStatus.log(e, Messages.SE0046, LOCAL_LIBRARIES_XML);
+		//		} finally {
+		//			IOUtils.closeQuietly(is);
+		//		}
+
+		if (!resultStatus.isSuccess()) {
+			// エラーを表示する.
+			resultStatus.falureDialog(Messages.PI0139, Messages.PI0140);
+		}
+
+		return null;
+	}
+
+	private static IRunnableWithProgress getSiteDownLoad(final ResultStatus resultStatus, final String urlStr,
+			final DownloadModule downloadModule) {
+
+		return new IRunnableWithProgress() {
+
+			@Override
+			public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+				monitor.setTaskName(Messages.PI0141.format(urlStr));
+
+				BufferedInputStream bufferIs = null;
+				try {
+					IConnectMethod method = ConnectMethodFactory.getMethod(urlStr, true);
+					method.setConnectionTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+					method.setProxy(downloadModule.getProxyService());
+					InputStream is = method.getInputStream();
 					if (is == null) {
 						resultStatus.log(Messages.SE0046, urlStr);
 					} else {
-						LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
-						LibraryList libraryList = parser.getLibraryList();
-						if (method.getResponseHeader("last-modified") != null) {
-							try {
-								libraryList.setLastModified(DateUtil.parseDate(method
-										.getResponseHeader("last-modified").getValue()));
-							} catch (DateParseException e) {
-								// 無視.
-							}
 
+						final int content = method.getContentLength();
+						monitor.beginTask(Messages.PI0142.format(urlStr), content);
+
+						bufferIs = new BufferedInputStream(is) {
+							private int current = 0;
+
+							@Override
+							public synchronized int read() throws IOException {
+
+								int result = super.read();
+								current += result * 16;
+								monitor.subTask(Messages.PI0143.format(current, content, urlStr));
+								monitor.worked(result * 16);
+
+								return result;
+							}
+						};
+
+						LibraryFileParser parser = LibraryFileParserFactory.createParser(bufferIs);
+						LibraryList libraryList = parser.getLibraryList();
+						libraryList.setLastModified(method.getLastModified());
+						if (H5IOUtils.isClassResources(urlStr)) {
+							libraryList.setSource(null); // クラスパスリソース出ない時設定.
+						} else {
+							libraryList.setSource(urlStr);
 						}
-						libraryList.setSource(urlStr);
 						H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
-						return libraryList;
+						resultStatus.setSuccess(true); // 途中で失敗してても成功.
+						monitor.done();
 					}
 				} catch (ParseException e) {
 					resultStatus.log(e, Messages.SE0046, urlStr);
@@ -118,95 +220,10 @@ public abstract class RemoteContentManager {
 				} catch (IOException e) {
 					resultStatus.log(e, Messages.SE0046, urlStr);
 				} finally {
-					downloadModule.close();
-					IOUtils.closeQuietly(is);
+					IOUtils.closeQuietly(bufferIs);
+					//Thread.currentThread().wait(5000);
 				}
 			}
-		}
-
-		// ローカルのリソースを利用する.
-		InputStream is = null;
-		try {
-			URLConnection connection = RemoteContentManager.class.getResource(LOCAL_LIBRARIES_XML).openConnection();
-			is = connection.getInputStream();
-			if (is == null) {
-				resultStatus.log(Messages.SE0046, LOCAL_LIBRARIES_XML);
-			} else {
-				LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
-				LibraryList libraryList = parser.getLibraryList();
-				if (connection.getLastModified() > 0) {
-					libraryList.setLastModified(new Date(connection.getLastModified()));
-				}
-				libraryList.setSource(null);
-				H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
-				return libraryList;
-			}
-		} catch (ParseException e) {
-			resultStatus.log(e, Messages.SE0046, LOCAL_LIBRARIES_XML);
-		} catch (IOException e) {
-			resultStatus.log(e, Messages.SE0046, LOCAL_LIBRARIES_XML);
-		} finally {
-			IOUtils.closeQuietly(is);
-		}
-
-		if (!resultStatus.isSuccess()) {
-			// エラーを表示する.
-			resultStatus.showDialog(Messages.PI0154);
-		}
-
-		return null;
+		};
 	}
-	// 進捗表示の場合
-	//	ResultStatus resultStatus = new ResultStatus();
-	//	final IRunnableWithProgress runnable = getSiteDownLoad(resultStatus, PluginConstant.URL_LIBRARY_LIST);
-	//	ProgressMonitorDialog dialog = new ProgressMonitorDialog(null);
-	//	try {
-	//		dialog.run(false, false, runnable);
-	//	} catch (InvocationTargetException e) {
-	//		e.printStackTrace();
-	//	} catch (InterruptedException e) {
-	//		e.printStackTrace();
-	//	}
-	//	if (resultStatus.isSuccess()) {
-	//		return H5WizardPlugin.getInstance().getLibraryList();
-	//	}
-	//
-	//	private static IRunnableWithProgress getSiteDownLoad(final ResultStatus resultStatus, final String url) {
-	//		return new IRunnableWithProgress() {
-	//
-	//			@Override
-	//			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-	//
-	//				if (monitor == null) {
-	//					// モニタを生成.
-	//					monitor = new NullProgressMonitor();
-	//				}
-	//				InputStream is = null;
-	//				try {
-	//					HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-	//					connection.setConnectTimeout(PluginConstant.URL_LIBRARY_CONNECTION_TIMEOUT);
-	//					is = connection.getInputStream();
-	//					LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
-	//					LibraryList libraryList = parser.getLibraryList();
-	//					if (connection.getLastModified() > 0) {
-	//						libraryList.setLastModified(new Date(connection.getLastModified()));
-	//					}
-	//					libraryList.setSource("");
-	//					H5WizardPlugin.getInstance().setLibraryList(libraryList); // キャッシュさせておく.
-	//				} catch (ParseException e) {
-	//					H5LogUtils.putLog(e, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
-	//					resultStatus.log(e, Messages.SE0046);
-	//				} catch (MalformedURLException e) {
-	//					H5LogUtils.putLog(e, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
-	//					resultStatus.log(e, Messages.SE0046);
-	//				} catch (IOException e) {
-	//					H5LogUtils.putLog(e, Messages.SE0046, PluginConstant.URL_LIBRARY_LIST_MIRROR);
-	//					resultStatus.log(e, Messages.SE0046);
-	//				} finally {
-	//					IOUtils.closeQuietly(is);
-	//				}
-	//			}
-	//		};
-	//	}
-
 }

@@ -31,6 +31,7 @@ public abstract class UIEventHelper {
 	 * @param eventCode イベントコード
 	 */
 	public static void notifyListeners(Widget widget, int eventCode) {
+
 		widget.notifyListeners(eventCode, new Event());
 	}
 
@@ -42,6 +43,7 @@ public abstract class UIEventHelper {
 	 * @param eventItem イベントウィジェット
 	 */
 	public static void notifyListeners(Widget widget, int eventCode, Widget eventItem) {
+
 		Event event = new Event();
 		event.item = eventItem;
 		widget.notifyListeners(eventCode, event);

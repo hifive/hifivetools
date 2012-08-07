@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="lib" path="site-resources-local/"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="lib/test/jmockit-0.999.14.jar" sourcepath="lib/test/sources/jmockit-0.999.14-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb/activation-1.1.jar" sourcepath="lib/jaxb/sources/activation-1.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb/jaxb-api-2.2.5.jar" sourcepath="lib/jaxb/sources/jaxb-api-2.2.5-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb/jaxb-impl-2.2.5.jar" sourcepath="lib/jaxb/sources/jaxb-impl-2.2.5-sources.jar"/>

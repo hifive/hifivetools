@@ -23,7 +23,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 
-import com.htmlhifive.tools.wizard.PluginConstant;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
+import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
@@ -33,9 +35,14 @@ import com.htmlhifive.tools.wizard.ui.UIMessages;
  */
 
 public class LibraryImportPage extends WizardPage {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(LibraryImportPage.class);
 
 	/** container. */
 	LibraryImportComposite container;
+
+	/** overwriteCanFlipToNextPage. */
+	boolean overwriteCanFlipToNextPage = false;
 
 	/**
 	 * コンストラクタ.
@@ -47,7 +54,7 @@ public class LibraryImportPage extends WizardPage {
 		super(pageName);
 		setMessage(UIMessages.LibraryImportPage_this_message);
 		setTitle(UIMessages.LibraryImportPage_this_title);
-		setPageComplete(true); // 別に設定不要なので
+		//setPageComplete(true); // 別に設定不要なので
 	}
 
 	/**
@@ -55,6 +62,8 @@ public class LibraryImportPage extends WizardPage {
 	 */
 	@Override
 	public void createControl(Composite parent) {
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "createControl");
 
 		container = new LibraryImportComposite(parent, SWT.NONE);
 		setControl(container);
@@ -69,6 +78,29 @@ public class LibraryImportPage extends WizardPage {
 				setErrorMessage(event.text); // WizardPage
 
 				setPageComplete(event.text == null);
+
+				// ConfirmLicensePageのチェックもする.
+				((ConfirmLicensePage) getNextPage()).setLiceseContents();
+				overwriteCanFlipToNextPage = false;
+				if (getNextPage().isPageComplete() && isPageComplete()) {
+					overwriteCanFlipToNextPage = true;
+				}
+				getContainer().updateButtons();
+			}
+		});
+		// チェックボックス変更時.
+		container.addListener(UIEventHelper.TABLE_SELECTION_CHANGE, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				// ConfirmLicensePageのチェックもする.
+				((ConfirmLicensePage) getNextPage()).setLiceseContents();
+				overwriteCanFlipToNextPage = false;
+				if (getNextPage().isPageComplete() && isPageComplete()) {
+					overwriteCanFlipToNextPage = true;
+				}
+				getContainer().updateButtons();
 			}
 		});
 
@@ -76,24 +108,6 @@ public class LibraryImportPage extends WizardPage {
 		//container.initialize(null);
 
 		// TODO:要リファクタ
-
-		//		((WizardDialog) getWizard().getContainer()).addPageChangingListener(new IPageChangingListener() {
-		//
-		//			@Override
-		//			public void handlePageChanging(PageChangingEvent event) {
-		//
-		//				// next:
-		//				if (event.getCurrentPage() == getPreviousPage() && event.getTargetPage() == LibraryImportPage.this) {
-		//					// → LibraryImportPage.
-		//
-		//				}
-		//				// next:
-		//				if (event.getCurrentPage() == getNextPage() && event.getTargetPage() == LibraryImportPage.this) {
-		//					// LibraryImportPage ←.
-		//
-		//				}
-		//			}
-		//		});
 
 	}
 
@@ -104,11 +118,12 @@ public class LibraryImportPage extends WizardPage {
 	 */
 	@Override
 	public boolean canFlipToNextPage() {
-		String errorMessage = getWizard().getPage(PluginConstant.JavaProjectWizardFirstPageName).getErrorMessage();
-		if (errorMessage != null) {
-			setErrorMessage(errorMessage);
-		}
 
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "canFlipToNextPage");
+
+		if (overwriteCanFlipToNextPage){
+			return false;
+		}
 		return super.canFlipToNextPage();
 	}
 
@@ -121,32 +136,12 @@ public class LibraryImportPage extends WizardPage {
 	 * @return 変更あり
 	 */
 	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "initialize");
+
 		if (isControlCreated()) {
 			return container.initialize(jsProject, projectName, defaultInstallPath);
 		}
 		return false;
 	}
-
-	//
-	//	@Override
-	//	public void setVisible(boolean visible) {
-	//
-	//		// TODO:要修正 戻り遷移で再度設定されてしまう
-	//		super.setVisible(visible);
-	//		if (visible) {
-	//			// libraryListのnull対応.
-	//			LibraryList libraryList = RemoteContentManager.getLibraryList();
-	//			if (libraryList != null) {
-	//				BaseProject baseProject = ((StructureSelectPage) getPreviousPage()).getBaseProject();
-	//				if (baseProject != null) {
-	//					if (container.initialize(null, ((StructureSelectPage) getPreviousPage()).getProjectName(),
-	//							baseProject.getDefaultJsLibPath())) {
-	//						// 変更あり.
-	//						((ConfirmLicensePage) getNextPage()).clearCategory();
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-
 }

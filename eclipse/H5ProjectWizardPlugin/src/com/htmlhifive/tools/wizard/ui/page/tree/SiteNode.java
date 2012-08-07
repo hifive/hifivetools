@@ -17,7 +17,7 @@ package com.htmlhifive.tools.wizard.ui.page.tree;
 
 import org.eclipse.jface.viewers.TreeNode;
 
-import com.htmlhifive.tools.wizard.library.model.xml.Site;
+import com.htmlhifive.tools.wizard.library.xml.Site;
 
 /**
  * <H3>サイトノード.</H3>

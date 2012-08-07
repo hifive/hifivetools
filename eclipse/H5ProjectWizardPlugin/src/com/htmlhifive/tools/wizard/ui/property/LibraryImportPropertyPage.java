@@ -38,9 +38,11 @@ import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
+import com.htmlhifive.tools.wizard.download.DownloadModule;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
+import com.htmlhifive.tools.wizard.log.ResultStatus;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
-import com.htmlhifive.tools.wizard.ui.DownloadModule;
-import com.htmlhifive.tools.wizard.ui.ResultStatus;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.page.LibraryImportComposite;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
@@ -52,6 +54,8 @@ import com.htmlhifive.tools.wizard.utils.H5LogUtils;
  * @author fkubo
  */
 public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenchPropertyPage {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(LibraryImportPropertyPage.class);
 
 	/** container. */
 	LibraryImportComposite container;
@@ -102,6 +106,8 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	@Override
 	public void createControl(Composite parent) {
 
+		logger.log(Messages.TR0021, getClass().getName(), "createControl");
+
 		super.createControl(parent);
 
 		// 初期化.
@@ -110,8 +116,23 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		//setValid(true); // 常にOK
 	}
 
+	/**
+	 * JavaScriptProjectを取得する.
+	 * 
+	 * @return JavaScriptProject
+	 */
+	private IJavaScriptProject getJavaScriptProject() {
+
+		if (getElement().getAdapter(IJavaScriptElement.class) != null) {
+			return ((IJavaScriptElement) getElement().getAdapter(IJavaScriptElement.class)).getJavaScriptProject();
+		}
+		return null;
+	}
+
 	@Override
 	protected void performDefaults() {
+
+		logger.log(Messages.TR0021, getClass().getName(), "performDefaults");
 
 		container.refreshTreeLibrary(false, true);
 
@@ -119,6 +140,9 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 	@Override
 	public boolean okToLeave() {
+
+		logger.log(Messages.TR0021, getClass().getName(), "okToLeave");
+
 		// 変更が必要かを判定する.
 		if (!getApplyButton().isEnabled()) { // 変更チェック.
 			return super.okToLeave();
@@ -138,6 +162,8 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 	@Override
 	public boolean performCancel() {
+
+		logger.log(Messages.TR0021, getClass().getName(), "performCancel");
 
 		if (!getApplyButton().isEnabled()) { // 変更チェック.
 			return super.performCancel();
@@ -161,6 +187,8 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	 */
 	@Override
 	public boolean performOk() {
+
+		logger.log(Messages.TR0021, getClass().getName(), "performOk");
 
 		if (!getApplyButton().isEnabled()) { // 変更チェック.
 			return true;
@@ -217,19 +245,6 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		}
 
 		return logger.isSuccess();
-	}
-
-	/**
-	 * JavaScriptProjectを取得する.
-	 * 
-	 * @return JavaScriptProject
-	 */
-	private IJavaScriptProject getJavaScriptProject() {
-
-		if (getElement().getAdapter(IJavaScriptElement.class) != null) {
-			return ((IJavaScriptElement) getElement().getAdapter(IJavaScriptElement.class)).getJavaScriptProject();
-		}
-		return null;
 	}
 
 	/**

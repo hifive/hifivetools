@@ -15,10 +15,6 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,11 +50,12 @@ import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
 import com.htmlhifive.tools.wizard.RemoteContentManager;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.LibraryState;
-import com.htmlhifive.tools.wizard.library.model.xml.Category;
-import com.htmlhifive.tools.wizard.library.model.xml.Library;
-import com.htmlhifive.tools.wizard.library.model.xml.Site;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.LibraryState;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.library.xml.Library;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
@@ -75,6 +72,8 @@ import com.htmlhifive.tools.wizard.utils.H5IOUtils;
  * @author fkubo
  */
 public class LibraryImportComposite extends Composite {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(LibraryImportComposite.class);
 
 	private final Tree treeLibrary;
 	private final CheckboxTreeViewer treeViewerLibrary;
@@ -268,6 +267,47 @@ public class LibraryImportComposite extends Composite {
 	}
 
 	/**
+	 * 選択ライブラリ取得.
+	 * 
+	 * @return 選択ライブラリ.
+	 */
+	private Set<LibraryNode> getSelectedLibrarySet() {
+
+		return H5WizardPlugin.getInstance().getSelectedLibrarySet();
+	}
+
+	/**
+	 * ライブラリツリーを取得する.
+	 * 
+	 * @param e イベント
+	 * @return ライブラリツリー
+	 */
+	public Tree getTreeLibrary() {
+
+		return treeLibrary;
+	}
+
+	/**
+	 * 変更が必要かどうか.
+	 * 
+	 * @return 変更が必要かどうか
+	 */
+	public boolean isChanged() {
+
+		return tableSelection.getItemCount() > 0;
+	}
+
+	/**
+	 * インストールディレクトリを取得する.
+	 * 
+	 * @return インストールディレクトリ
+	 */
+	public String getDefaultInstallPath() {
+
+		return cmbDefaultInstallPath.getText();
+	}
+
+	/**
 	 * 初期化.
 	 * 
 	 * @param jsProject プロジェクト
@@ -276,6 +316,8 @@ public class LibraryImportComposite extends Composite {
 	 * @return 変更あり
 	 */
 	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "initialize");
 
 		// TODO:要リファクタ
 		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
@@ -326,6 +368,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param forceDefault 強制的にデフォルトに戻す
 	 */
 	public void refreshTreeLibrary(boolean checkedRecommanded, boolean forceDefault) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "refreshTreeLibrary");
 
 		LibraryList libraryList = RemoteContentManager.getLibraryList();
 
@@ -397,21 +441,13 @@ public class LibraryImportComposite extends Composite {
 	}
 
 	/**
-	 * 選択ライブラリ取得.
-	 * 
-	 * @return 選択ライブラリ.
-	 */
-	private Set<LibraryNode> getSelectedLibrarySet() {
-
-		return H5WizardPlugin.getInstance().getSelectedLibrarySet();
-	}
-
-	/**
 	 * ツリー選択イベント.
 	 * 
 	 * @param e イベント
 	 */
 	protected void do_treeLibrary_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_treeLibrary_widgetSelected");
 
 		// 詳細更新.
 
@@ -485,6 +521,9 @@ public class LibraryImportComposite extends Composite {
 	 * @param treeItem アイテム
 	 */
 	private void itemCheck(LibraryNode libraryNode, TreeItem treeItem) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "itemCheck");
+
 		if (libraryNode.isIncomplete()) {
 			if (treeItem.getChecked() && treeItem.getGrayed()) {
 				// 追加処理.
@@ -517,6 +556,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void effectTreeViewParentItem(TreeItem treeItem) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "effectTreeViewParentItem");
+
 		// 親処理.
 		boolean allChecked = true;
 		boolean anyChecked = false;
@@ -533,25 +574,27 @@ public class LibraryImportComposite extends Composite {
 	}
 
 	/**
-	 * ライブラリツリーを取得する.
+	 * インストールディレクトリを取得する.
 	 * 
-	 * @param e イベント
-	 * @return ライブラリツリー
+	 * @param paths フォルダ一覧
 	 */
-	public Tree getTreeLibrary() {
+	public void setDefaultInstallPath(IContainer[] paths) {
 
-		return treeLibrary;
+		String oldValue = cmbDefaultInstallPath.getText();
+		if (cmbDefaultInstallPath.getItemCount() > 0) {
+			cmbDefaultInstallPath.removeAll();
+		}
+		for (IContainer container : paths) {
+			if (!container.getProjectRelativePath().toString().isEmpty()) {
+				cmbDefaultInstallPath.add(container.getProjectRelativePath().toString());
+			}
+		}
+		if (!cmbDefaultInstallPath.getText().equals(oldValue)) {
+			cmbDefaultInstallPath.setText(oldValue);
+		}
 	}
 
-	/**
-	 * 変更が必要かどうか.
-	 * 
-	 * @return 変更が必要かどうか
-	 */
-	public boolean isChanged() {
-
-		return tableSelection.getItemCount() > 0;
-	}
+	// イベント処理系.
 
 	/**
 	 * 推奨設定ボタン.
@@ -559,6 +602,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param e イベント
 	 */
 	protected void do_btnRecommended_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_btnRecommended_widgetSelected");
 
 		// 一旦フィルターを解除する.
 		ViewerFilter[] viewerFilter = treeViewerLibrary.getFilters();
@@ -613,6 +658,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	protected void do_btnReload_widgetSelected(SelectionEvent e) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_btnReload_widgetSelected");
+
 		// リスト再取得.
 		RemoteContentManager.getLibraryList(true);
 
@@ -628,6 +675,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	protected void do_checkFilterLatest_widgetSelected(SelectionEvent e) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_checkFilterLatest_widgetSelected");
+
 		// 変更.
 		if (e == null || ((Button) e.widget).getSelection()) {
 			treeViewerLibrary.setFilters(new ViewerFilter[] { new LibraryTreeLatestViewerFilter() });
@@ -642,6 +691,8 @@ public class LibraryImportComposite extends Composite {
 	 * フィルター更新に伴うチェックの復元.
 	 */
 	private void refreshTreeViewerFilter() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "refreshTreeViewerFilter");
 
 		treeViewerLibrary.refresh(true);
 
@@ -678,6 +729,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void removeTableItem(LibraryNode libraryNode) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "removeTableItem");
+
 		//if (libraryNode.isExists() && !getSelectedLibrarySet().contains(libraryNode)) {
 		if (!getSelectedLibrarySet().contains(libraryNode) || libraryNode.isIncomplete()
 				&& libraryNode.getState() == LibraryState.ADD) {
@@ -712,6 +765,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void addTableItem(LibraryNode libraryNode) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "addTableItem");
+
 		if (libraryNode.isExists() && getSelectedLibrarySet().contains(libraryNode)) {
 			removeTableItem(libraryNode);
 		} else if (libraryNode.isExists()) {
@@ -728,6 +783,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param libraryState 操作状態
 	 */
 	private void setTableItem(LibraryNode libraryNode, LibraryState state) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "setTableItem");
 
 		// 状態を変更.
 		libraryNode.setState(state);
@@ -769,22 +826,32 @@ public class LibraryImportComposite extends Composite {
 		tableItem.setText(1, category.getName());
 		tableItem.setText(2, library.getVersion());
 		tableItem.setText(3, categoryNode.getPathLable());
-		List<String> files = new ArrayList<String>();
-		for (Site site : library.getSite()) {
-			if (site.getReplaceFileName() != null) {
-				files.add(site.getReplaceFileName());
-			} else if (site.getFilePattern() != null) {
-				files.add(site.getFilePattern());
-			} else {
-				try {
-					files.add(StringUtils.substringAfterLast(new URL(site.getUrl()).getPath(), "/"));
-				} catch (MalformedURLException e) {
-					// 無視.
-					files.add("---");
-				}
-			}
-		}
-		tableItem.setText(4, StringUtils.join(files, ","));
+
+		//		List<String> files = new ArrayList<String>();
+		//		for (Site site : library.getSite()) {
+		//			if (site.getReplaceFileName() != null) {
+		//				files.add(site.getReplaceFileName());
+		//			} else if (site.getFilePattern() != null) {
+		//				files.add(site.getFilePattern());
+		//			} else {
+		//				if (H5IOUtils.isClassResources(site.getUrl())){
+		//					files.add(StringUtils.substringAfterLast(site.getUrl(), "/"));
+		//				}else if (site.getReplaceFileName() != null){
+		//					files.add(site.getReplaceFileName());
+		//				}else{
+		//					try {
+		//						files.add(StringUtils.substringAfterLast(new URL(site.getUrl()).getPath(), "/"));
+		//					} catch (MalformedURLException e) {
+		//						// 無視.
+		//						files.add("---");
+		//					}
+		//				}
+		//			}
+		//		}
+		//}
+
+		// List生成時に無くても作成するよう変更
+		tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
 		if (!library.getSite().isEmpty()) {
 			tableItem.setText(5, library.getSite().get(0).getUrl() + " ...");
 		}
@@ -794,43 +861,14 @@ public class LibraryImportComposite extends Composite {
 
 	}
 
-
 	/**
 	 * テーブル変更時.
 	 */
 	protected void changeTableSelection() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "changeTableSelection");
+
 		UIEventHelper.notifyListeners(this, UIEventHelper.TABLE_SELECTION_CHANGE, tableSelection);
-	}
-
-	/**
-	 * インストールディレクトリを取得する.
-	 * 
-	 * @return インストールディレクトリ
-	 */
-	public String getDefaultInstallPath() {
-
-		return cmbDefaultInstallPath.getText();
-	}
-
-	/**
-	 * インストールディレクトリを取得する.
-	 * 
-	 * @param paths フォルダ一覧
-	 */
-	public void setDefaultInstallPath(IContainer[] paths) {
-
-		String oldValue = cmbDefaultInstallPath.getText();
-		if (cmbDefaultInstallPath.getItemCount() > 0) {
-			cmbDefaultInstallPath.removeAll();
-		}
-		for (IContainer container : paths) {
-			if (!container.getProjectRelativePath().toString().isEmpty()) {
-				cmbDefaultInstallPath.add(container.getProjectRelativePath().toString());
-			}
-		}
-		if (!cmbDefaultInstallPath.getText().equals(oldValue)) {
-			cmbDefaultInstallPath.setText(oldValue);
-		}
 	}
 
 	/**
@@ -839,6 +877,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param e イベント
 	 */
 	protected void do_cmbDefaultInstallPath_modifyText(ModifyEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_cmbDefaultInstallPath_modifyText");
 
 		if (treeLibrary.getItemCount() > 0) {
 			((CategoryNode[]) treeLibrary.getData())[0].getParent().setDefaultInstallPath(((Combo) e.widget).getText());
@@ -851,6 +891,8 @@ public class LibraryImportComposite extends Composite {
 	 * Returns whether this page's controls currently all contain valid values.
 	 */
 	void validatePage() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "validatePage");
 
 		// プロジェクト名のチェック.
 		String path = cmbDefaultInstallPath.getText();

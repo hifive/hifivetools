@@ -35,8 +35,10 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 
 import com.htmlhifive.tools.wizard.RemoteContentManager;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.xml.Info;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.xml.Info;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
@@ -47,6 +49,8 @@ import com.htmlhifive.tools.wizard.ui.UIMessages;
  * @author fkubo
  */
 public class StructureSelectComposite extends Composite {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(StructureSelectComposite.class);
 
 	final Combo comboZip;
 	private final Button buttonReload;
@@ -137,103 +141,11 @@ public class StructureSelectComposite extends Composite {
 		linkInfo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		linkInfo.setVisible(false);
 
+		// 開始後、ページ経由で初期設定されるので、ここでは呼ばない.
 		// 初期設定(初期表示なのでここでOK).
-		setInputComboZip();
+		//setInputComboZip();
 
-		textProject.setFocus();
-	}
-
-	/**
-	 * プロジェクト名を設定する.
-	 * 
-	 * @param name プロジェクト名
-	 */
-	public void setProjectName(String name) {
-
-		textProject.setText(name);
-		textProject.setSelection(textProject.getText().length());
-		textProject.setFocus();
-
-	}
-
-	/**
-	 * 再読込ボタン処理.
-	 * 
-	 * @param e イベント
-	 */
-	protected void do_buttonReload_widgetSelected(SelectionEvent e) {
-
-		RemoteContentManager.getLibraryList(true);
-
-		setInputComboZip();
-
-		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
-	}
-
-	/**
-	 * コンボ最新化.
-	 */
-	private void setInputComboZip() {
-
-		comboZip.removeAll();
-
-		LibraryList libraryList = RemoteContentManager.getLibraryList();
-		// libraryListのnull対応.
-		if (libraryList == null) {
-			UIEventHelper.setErrorMessage(this, Messages.SE0053.format());
-			lblListInfo.setText(Messages.PI0151.format());
-			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
-			return;
-		}
-		lblListInfo.setText(libraryList.getInfo());
-		if (libraryList.getSource() == null) {
-			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
-		} else {
-			lblListInfo.setForeground(null);
-		}
-
-		for (Info info : libraryList.getInfoMap().values()) {
-			comboZip.add(info.getTitle());
-		}
-		if (comboZip.getItemCount() > 0) {
-			comboZip.select(0);
-			Info info = libraryList.getInfoMap().get(comboZip.getText());
-			linkInfo.setText(info.getDescription());
-			linkInfo.setVisible(true);
-		}
-	}
-
-	/**
-	 * コンボ選択.
-	 * 
-	 * @param e イベント
-	 */
-	protected void do_comboZip_widgetSelected(SelectionEvent e) {
-
-		if (comboZip.getText() == null) {
-			linkInfo.setVisible(false);
-		} else {
-			LibraryList libraryList = RemoteContentManager.getLibraryList();
-			// libraryListのnull対応.
-			if (libraryList == null) {
-				return;
-			}
-			Info info = libraryList.getInfoMap().get(comboZip.getText());
-			linkInfo.setText(info.getDescription());
-			linkInfo.setVisible(true);
-		}
-		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
-	}
-
-	/**
-	 * テキスト変更処理.
-	 * 
-	 * @param e イベント
-	 */
-	protected void do_textProject_modifyText(ModifyEvent e) {
-
-		validatePage();
-		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
+		//textProject.setFocus();
 	}
 
 	/**
@@ -250,10 +162,124 @@ public class StructureSelectComposite extends Composite {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(textProject.getText());
 	}
 
+	// イベント処理系
+
+	/**
+	 * プロジェクト名を設定する.
+	 * 
+	 * @param name プロジェクト名
+	 */
+	public void setProjectName(String name) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "setProjectName");
+
+		textProject.setText(name);
+		textProject.setSelection(textProject.getText().length());
+		textProject.setFocus();
+
+	}
+
+	/**
+	 * 再読込ボタン処理.
+	 * 
+	 * @param e イベント
+	 */
+	protected void do_buttonReload_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_buttonReload_widgetSelected");
+
+		RemoteContentManager.getLibraryList(true);
+
+		setInputComboZip();
+
+		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
+	}
+
+	/**
+	 * コンボ最新化.
+	 */
+	public void setInputComboZip() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "setInputComboZip");
+
+		comboZip.removeAll();
+
+		LibraryList libraryList = RemoteContentManager.getLibraryList();
+		// libraryListのnull対応.
+		if (libraryList == null) {
+			UIEventHelper.setErrorMessage(this, Messages.SE0053.format());
+			lblListInfo.setText(Messages.PI0151.format());
+			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+			linkInfo.getParent().layout();
+			linkInfo.getParent().getParent().layout();
+			return;
+		}
+		UIEventHelper.setErrorMessage(this, null);
+		lblListInfo.setText(libraryList.getInfo());
+		if (libraryList.getSource() == null) {
+			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
+		} else {
+			lblListInfo.setForeground(null);
+		}
+
+		for (Info info : libraryList.getInfoMap().values()) {
+			comboZip.add(info.getTitle());
+		}
+		if (comboZip.getItemCount() > 0) {
+			comboZip.select(0);
+			Info info = libraryList.getInfoMap().get(comboZip.getText());
+			linkInfo.setText(info.getDescription());
+			linkInfo.setVisible(true);
+		}
+		linkInfo.getParent().layout();
+		linkInfo.getParent().getParent().layout();
+	}
+
+	/**
+	 * コンボ選択.
+	 * 
+	 * @param e イベント
+	 */
+	protected void do_comboZip_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_comboZip_widgetSelected");
+
+		if (comboZip.getText() == null) {
+			linkInfo.setVisible(false);
+		} else {
+			LibraryList libraryList = RemoteContentManager.getLibraryList();
+			// libraryListのnull対応.
+			if (libraryList == null) {
+				return;
+			}
+			Info info = libraryList.getInfoMap().get(comboZip.getText());
+			linkInfo.setText(info.getDescription());
+			linkInfo.setVisible(true);
+		}
+		linkInfo.getParent().layout();
+		linkInfo.getParent().getParent().layout();
+		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
+	}
+
+	/**
+	 * テキスト変更処理.
+	 * 
+	 * @param e イベント
+	 */
+	protected void do_textProject_modifyText(ModifyEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_textProject_modifyText");
+
+		validatePage();
+		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
+	}
+
 	/**
 	 * Returns whether this page's controls currently all contain valid values.
 	 */
 	void validatePage() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "validatePage");
 
 		// プロジェクト名のチェック.
 		String name = textProject.getText();

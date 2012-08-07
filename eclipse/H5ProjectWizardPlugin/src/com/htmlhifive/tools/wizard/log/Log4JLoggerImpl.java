@@ -26,7 +26,8 @@ import com.htmlhifive.tools.wizard.log.messages.MessagesBase.Message;
  * @author fkubo
  */
 public class Log4JLoggerImpl implements PluginLogger {
-
+	/** callerFQCN. */
+	private static final String callerFQCN = Log4JLoggerImpl.class.getName();
 	/**
 	 * ロガー実体.
 	 */
@@ -61,7 +62,8 @@ public class Log4JLoggerImpl implements PluginLogger {
 	public void log(Message message, Throwable e, Object... params) {
 
 		if (isEnabledFor(message.getLevel())) {
-			logger.log(convertInnerLoglevel(message.getLevel()), message.format(params), e);
+			//logger.log(convertInnerLoglevel(message.getLevel()), message.format(params), e);
+			logger.log(callerFQCN, convertInnerLoglevel(message.getLevel()), message.format(params), e);
 		}
 
 	}

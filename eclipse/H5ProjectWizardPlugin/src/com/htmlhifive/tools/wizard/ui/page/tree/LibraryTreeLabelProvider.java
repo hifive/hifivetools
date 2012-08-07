@@ -27,8 +27,8 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
-import com.htmlhifive.tools.wizard.PluginConstant;
-import com.htmlhifive.tools.wizard.library.model.LibraryState;
+import com.htmlhifive.tools.wizard.PluginResource;
+import com.htmlhifive.tools.wizard.library.LibraryState;
 
 /**
  * <H3>ツリーラベルプロバイダ.</H3>
@@ -69,18 +69,18 @@ public class LibraryTreeLabelProvider extends LabelProvider implements ITableLab
 		if (columnIndex == 0) {
 			if (element instanceof CategoryNode) {
 				// カテゴリ.
-				return PluginConstant.IMG_CATEGORY;
+				return PluginResource.IMG_CATEGORY;
 			}
 
 			if (element instanceof LibraryNode) {
 				LibraryNode libraryNode = (LibraryNode) element;
 
 				if (libraryNode.isInError()) {
-					return PluginConstant.IMG_REFACTORING_ERROR;
+					return PluginResource.IMG_REFACTORING_ERROR;
 				} else if (libraryNode.getState() == LibraryState.DEFAULT && libraryNode.isIncomplete()) {
-					return PluginConstant.IMG_REFACTORING_WARNING;
+					return PluginResource.IMG_REFACTORING_WARNING;
 				} else if (libraryNode.getState() == LibraryState.DEFAULT && libraryNode.isRecommended()) {
-					return PluginConstant.IMG_QUICK_ASSIST;
+					return PluginResource.IMG_QUICK_ASSIST;
 				} else {
 					return libraryNode.getState().getImage();
 				}

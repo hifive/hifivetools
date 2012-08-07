@@ -51,11 +51,11 @@
 		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.4" conf="log->*" transitive="false" />
 
 		<!-- test -->
+		<dependency org="com.googlecode.jmockit" name="jmockit" rev="0.999.14" conf="test->*" transitive="false" />
 		<!--
 			<dependency org="junit" name="junit" rev="4.10" conf="test->*" transitive="false" />
 			<dependency org="org.dbunit" name="dbunit" rev="2.4.8" conf="test->*" transitive="false" />
 			<dependency org="org.springframework" name="spring-test" rev="3.1.1.RELEASE" conf="test->*" transitive="false" />
-			<dependency org="com.googlecode.jmockit" name="jmockit" rev="0.999.14" conf="test->*" transitive="true">
 			<exclude name="log4j" />
 			<exclude name="slf4j-api" />
 			<exclude name="commons-logging" />

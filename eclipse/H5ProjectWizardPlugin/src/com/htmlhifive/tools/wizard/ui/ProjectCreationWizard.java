@@ -24,18 +24,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.jface.dialogs.IPageChangedListener;
-import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.jsdt.internal.ui.wizards.JavaProjectWizard;
-import org.eclipse.wst.jsdt.internal.ui.wizards.JavaProjectWizardFirstPage;
-import org.eclipse.wst.jsdt.internal.ui.wizards.NewWizardMessages;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
-import com.htmlhifive.tools.wizard.library.model.xml.BaseProject;
-import com.htmlhifive.tools.wizard.library.model.xml.Nature;
+import com.htmlhifive.tools.wizard.download.DownloadModule;
+import com.htmlhifive.tools.wizard.library.xml.BaseProject;
+import com.htmlhifive.tools.wizard.library.xml.Nature;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
+import com.htmlhifive.tools.wizard.log.ResultStatus;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.page.ConfirmLicensePage;
 import com.htmlhifive.tools.wizard.ui.page.LibraryImportPage;
@@ -50,6 +49,8 @@ import com.htmlhifive.tools.wizard.utils.H5LogUtils;
  */
 // public class ProjectCreationWizard extends BasicNewResourceWizard {
 public class ProjectCreationWizard extends JavaProjectWizard {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(ProjectCreationWizard.class);
 
 	/**
 	 * メインページ.
@@ -83,6 +84,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 	@Override
 	public void dispose() {
+
 		downloadModule.close();
 		super.dispose();
 	}
@@ -92,6 +94,8 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 	 */
 	@Override
 	public void addPages() {
+
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "addPages");
 
 		structureSelectPage = new StructureSelectPage("structureSelectPage");
 		addPage(structureSelectPage);
@@ -112,6 +116,8 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 	 */
 	@Override
 	public boolean performFinish() {
+
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "performFinish");
 
 		// 結果ページに移動.
 		// getContainer().showPage(resultPage);
@@ -158,6 +164,9 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 	 * @param logger ロガー
 	 */
 	private void removeProject(ResultStatus logger) {
+
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "removeProject");
+
 		final IProject proj = structureSelectPage.getProjectHandle();
 		if (proj != null && proj.exists()) {
 			try {
@@ -242,7 +251,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 					monitor.worked(1000); // 状態変更 1000
 
 					// 文字列置換.
-					for (com.htmlhifive.tools.wizard.library.model.xml.File file : baseProject.getReplace().getFile()) {
+					for (com.htmlhifive.tools.wizard.library.xml.File file : baseProject.getReplace().getFile()) {
 						H5IOUtils.convertProjectName(getShell(), proj, file.getName());
 						// SE0069=INFO,リソース({0})内のプロジェクト名を変更しました。
 						logger.log(Messages.SE0069, file.getName());
@@ -313,25 +322,27 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 	@Override
 	public void createPageControls(Composite pageContainer) {
 
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "createPageControls");
+
 		super.createPageControls(pageContainer);
 
-		((WizardDialog) getContainer()).addPageChangedListener(new IPageChangedListener() {
-
-			@Override
-			public void pageChanged(PageChangedEvent event) {
-
-				if (event.getSelectedPage() instanceof LibraryImportPage) {
-					// プロジェクト名を設定する.
-					((JavaProjectWizardFirstPage) getPage(NewWizardMessages.JavaProjectWizardFirstPage_page_pageName))
-					.setName(ProjectCreationWizard.this.structureSelectPage.getProjectName());
-				}
-
-				if (event.getSelectedPage() instanceof ConfirmLicensePage) {
-					// ライセンスのタブを更新する.
-					((ConfirmLicensePage) getPage("confirmLicensePage")).setLiceseContents();
-				}
-			}
-		});
+		//		((WizardDialog) getContainer()).addPageChangedListener(new IPageChangedListener() {
+		//
+		//			@Override
+		//			public void pageChanged(PageChangedEvent event) {
+		//
+		//				if (event.getSelectedPage() instanceof LibraryImportPage) {
+		//					// プロジェクト名を設定する.
+		//					((JavaProjectWizardFirstPage) getPage(NewWizardMessages.JavaProjectWizardFirstPage_page_pageName))
+		//					.setName(ProjectCreationWizard.this.structureSelectPage.getProjectName());
+		//				}
+		//
+		//				if (event.getSelectedPage() instanceof ConfirmLicensePage) {
+		//					// ライセンスのタブを更新する.
+		//					((ConfirmLicensePage) getPage("confirmLicensePage")).setLiceseContents();
+		//				}
+		//			}
+		//		});
 	}
 
 }

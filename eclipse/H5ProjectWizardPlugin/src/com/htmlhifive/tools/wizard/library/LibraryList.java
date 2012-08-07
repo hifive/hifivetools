@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.htmlhifive.tools.wizard.library.model;
+package com.htmlhifive.tools.wizard.library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,13 +39,13 @@ import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.IPackageFragmentRoot;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
 
-import com.htmlhifive.tools.wizard.library.model.xml.BaseProject;
-import com.htmlhifive.tools.wizard.library.model.xml.Category;
-import com.htmlhifive.tools.wizard.library.model.xml.Info;
-import com.htmlhifive.tools.wizard.library.model.xml.Libraries;
-import com.htmlhifive.tools.wizard.library.model.xml.Library;
-import com.htmlhifive.tools.wizard.library.model.xml.LibraryRef;
-import com.htmlhifive.tools.wizard.library.model.xml.Site;
+import com.htmlhifive.tools.wizard.library.xml.BaseProject;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.library.xml.Info;
+import com.htmlhifive.tools.wizard.library.xml.Libraries;
+import com.htmlhifive.tools.wizard.library.xml.Library;
+import com.htmlhifive.tools.wizard.library.xml.LibraryRef;
+import com.htmlhifive.tools.wizard.library.xml.Site;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.page.tree.CategoryNode;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
@@ -248,72 +248,97 @@ public class LibraryList {
 				libraryNode.setRecommended(libraryRefMap.containsValue(libraryNode.getValue()));
 
 				// 存在チェック.
-				if (jsProject != null) {
-					libraryNode.setExists(false);
-					libraryNode.setState(LibraryState.DEFAULT);
+				//				if (jsProject != null) {
+				libraryNode.setExists(false);
+				libraryNode.setState(LibraryState.DEFAULT);
 
-					boolean libraryFullExists = false;
-					boolean libraryExists = false;
-					IContainer lastContainer = null;
-					List<String> lastExistsFileList = null;
-					//List<String> lastNoExistsFileList = null;
+				boolean libraryFullExists = false;
+				boolean libraryExists = false;
+				IContainer lastContainer = null;
+				List<String> lastExistsFileList = null;
+				List<String> lastAllFileList = null;
+				//List<String> lastNoExistsFileList = null;
 
-					// Container単位ここから
-					for (IContainer container : checkContainers) {
-						IContainer folder = container;
-						if (StringUtils.isNotEmpty(categoryNode.getInstallSubPath())) {
-							folder = container.getFolder(Path.fromOSString(categoryNode.getInstallSubPath()));
-						}
-
-						List<String> existsFileList = new ArrayList<String>();
-						List<String> noExistsFileList = new ArrayList<String>();
-
-						if (folder.getRawLocation() != null) {
-							// Site単位ここから
-							boolean allExists = true;
-							for (Site site : libraryNode.getValue().getSite()) {
-								// ここで一部不足しているかどうか判る
-								if (checkSite(site, folder, existsFileList, noExistsFileList)) {
-									// 存在している.
-									libraryExists = true;
-									lastExistsFileList = existsFileList;
-									//lastNoExistsFileList = noExistsFileList;
-									lastContainer = container;
-								} else {
-									// 存在していない.
-									allExists = false;
-								}
-							}
-							// Site単位ここまで
-							if (allExists) {
-								// 全て存在しているので終了.
-								libraryFullExists = true;
-								lastContainer = container;
-								break;
-							}
-						}
+				if (checkContainers.length == 0) {
+					// 全て存在していない場合(名前だけ設定しておく).
+					List<String> noExistsFileList = new ArrayList<String>();
+					for (Site site : libraryNode.getValue().getSite()) {
+						checkSite(site, null, null, noExistsFileList);
 					}
-					// Container単位ここまで
 
-					if (libraryFullExists) {
-						// 全て存在している場合.
-						categoryNode.setParentPath(lastContainer);
-						libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
-						libraryNode.setExists(true);
-						libraryNode.setIncomplete(false);
-						libraryNode.setState(LibraryState.EXISTS);
-					} else if (libraryExists) {
-						// 一部存在している場合.
-						categoryNode.setParentPath(lastContainer);
-						libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
-						libraryNode.setExists(false); // 一応falseにしておく
-						libraryNode.setIncomplete(true);
-						// 存在していないファイルログ
-						//for (String name : lastNoExistsFileList) {
-						//	H5LogUtils.putLog(null, Messages.SE0081, name);
-						//}
+					libraryNode.setFileList(noExistsFileList.toArray(new String[0]));
+					libraryNode.setExists(false); // 一応falseにしておく
+					libraryNode.setIncomplete(false);
+
+					return checkContainers;
+				}
+
+				// Container単位ここから
+				for (IContainer container : checkContainers) {
+					IContainer folder = container;
+					if (StringUtils.isNotEmpty(categoryNode.getInstallSubPath())) {
+						folder = container.getFolder(Path.fromOSString(categoryNode.getInstallSubPath()));
+					}
+
+					List<String> existsFileList = new ArrayList<String>();
+					List<String> noExistsFileList = new ArrayList<String>();
+					List<String> allFileList = new ArrayList<String>();
+
+					if (folder.getRawLocation() != null) {
+						// Site単位ここから
+						boolean allExists = true;
+						for (Site site : libraryNode.getValue().getSite()) {
+							// ここで一部不足しているかどうか判る
+							if (checkSite(site, folder, existsFileList, noExistsFileList)) {
+								// 存在している.
+								libraryExists = true;
+								lastExistsFileList = existsFileList;
+								//lastNoExistsFileList = noExistsFileList;
+								lastContainer = container;
+							} else {
+								// 存在していない.
+								allExists = false;
+							}
+						}
+						allFileList.addAll(existsFileList);
+						allFileList.addAll(noExistsFileList);
+						lastAllFileList = allFileList;
+
+						// Site単位ここまで
+						if (allExists) {
+							// 全て存在しているので終了.
+							libraryFullExists = true;
+							lastContainer = container;
+							break;
+						}
 					}
 				}
+				// Container単位ここまで
+
+				if (libraryFullExists) {
+					// 全て存在している場合.
+					categoryNode.setParentPath(lastContainer);
+					libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
+					libraryNode.setExists(true);
+					libraryNode.setIncomplete(false);
+					libraryNode.setState(LibraryState.EXISTS);
+				} else if (libraryExists) {
+					// 一部存在している場合.
+					categoryNode.setParentPath(lastContainer);
+					libraryNode.setFileList(lastExistsFileList.toArray(new String[0]));
+					libraryNode.setExists(false); // 一応falseにしておく
+					libraryNode.setIncomplete(true);
+					// 存在していないファイルログ
+					//for (String name : lastNoExistsFileList) {
+					//	H5LogUtils.putLog(null, Messages.SE0081, name);
+					//}
+				} else {
+					// 全て存在していない場合(名前だけ設定しておく).
+					libraryNode.setFileList(lastAllFileList.toArray(new String[0]));
+					libraryNode.setExists(false); // 一応falseにしておく
+					libraryNode.setIncomplete(false);
+				}
+				//				}
 			}
 			// LibraryNode単位ここまで
 		}
@@ -327,6 +352,7 @@ public class LibraryList {
 	 * @return ライブラリの存在チェックを行うルートフォルダ
 	 */
 	private IContainer[] getCheckContainers(IJavaScriptProject jsProject) {
+
 		IContainer[] checkContainers = new IContainer[0];
 		if (jsProject != null) {
 			//			defaultInstallContainer = getDefaultInstallPath(jsProject);
@@ -399,7 +425,7 @@ public class LibraryList {
 		}
 
 		IContainer savedFolder = folder;
-		if (site.getExtractPath() != null) {
+		if (site.getExtractPath() != null && folder != null) {
 			savedFolder = folder.getFolder(Path.fromOSString(site.getExtractPath()));// .getRawLocation().toFile();
 		}
 
@@ -418,18 +444,22 @@ public class LibraryList {
 				if (!wildCardStr.contains("*")) { // *の時はパスを除去するので
 					wildCardPath = StringUtils.substringBeforeLast(site.getFilePattern(), "/");
 					// folder = new File(folder, wildCardPath);
-					savedFolder = folder.getFolder(Path.fromOSString(wildCardPath));
+					if (folder != null) {
+						savedFolder = folder.getFolder(Path.fromOSString(wildCardPath));
+					}
 				}
 			}
 
-			if (site.getReplaceFileName() != null) {
-				fileList = savedFolder.getRawLocation().toFile()
-						.list(new WildcardFileFilter(site.getReplaceFileName()));
-			} else if (savedFolder != null) {
-				if (wildCardStr != null) {
-					fileList = savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(wildCardStr));
+			if (savedFolder != null) {
+				if (site.getReplaceFileName() != null) {
+					fileList = savedFolder.getRawLocation().toFile()
+							.list(new WildcardFileFilter(site.getReplaceFileName()));
 				} else {
-					fileList = savedFolder.getRawLocation().toFile().list();
+					if (wildCardStr != null) {
+						fileList = savedFolder.getRawLocation().toFile().list(new WildcardFileFilter(wildCardStr));
+					} else {
+						fileList = savedFolder.getRawLocation().toFile().list();
+					}
 				}
 			}
 			if (fileList != null && fileList.length > 0) {
@@ -440,23 +470,35 @@ public class LibraryList {
 				} else {
 					existsFileList.addAll(Arrays.asList(fileList));
 				}
-			} else {
+			} else if (savedFolder != null) {
 				noExistsFileList.add(savedFolder.getFullPath().toString() + "/" + wildCardStr);
+			} else {
+				// 存在しないが展開時のファイルとして存在しないリストに追加しておく.
+				noExistsFileList.add(wildCardStr);
 			}
 
 		} else {
 			// zip以外.
 			IFile file = null;
-			if (site.getReplaceFileName() != null) {
-				file = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
+			if (savedFolder != null) {
+				if (site.getReplaceFileName() != null) {
+					file = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
+				} else {
+					file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(path, "/")));
+				}
+				if (file.exists()) {
+					fileList = new String[] { file.getName() };
+					existsFileList.add(file.getName());
+				} else {
+					noExistsFileList.add(file.getFullPath().toString());
+				}
 			} else {
-				file = savedFolder.getFile(Path.fromOSString(StringUtils.substringAfterLast(path, "/")));
-			}
-			if (file.exists()) {
-				fileList = new String[] { file.getName() };
-				existsFileList.add(file.getName());
-			} else {
-				noExistsFileList.add(file.getFullPath().toString());
+				// 存在しないが展開時のファイルとして存在しないリストに追加しておく.
+				if (site.getReplaceFileName() != null) {
+					noExistsFileList.add(site.getReplaceFileName());
+				} else {
+					noExistsFileList.add(StringUtils.substringAfterLast(path, "/"));
+				}
 			}
 		}
 		// ここで一部不足しているかどうか判る
@@ -472,6 +514,7 @@ public class LibraryList {
 	 * @return ライブラリの情報.
 	 */
 	public String getInfo() {
+
 		if (getSource() == null) {
 			return Messages.PI0152.format(getLastModified());
 		}
@@ -484,6 +527,7 @@ public class LibraryList {
 	 * @return source.
 	 */
 	public String getSource() {
+
 		return source;
 	}
 
@@ -493,6 +537,7 @@ public class LibraryList {
 	 * @param source source.
 	 */
 	public void setSource(String source) {
+
 		this.source = source;
 	}
 
@@ -502,6 +547,7 @@ public class LibraryList {
 	 * @return lastModified.
 	 */
 	public Date getLastModified() {
+
 		return lastModified;
 	}
 
@@ -511,6 +557,7 @@ public class LibraryList {
 	 * @param lastModified lastModified.
 	 */
 	public void setLastModified(Date lastModified) {
+
 		this.lastModified = lastModified;
 	}
 }

@@ -20,9 +20,12 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.htmlhifive.tools.wizard.library.LibraryFileParser;
-import com.htmlhifive.tools.wizard.library.LibraryFileParserFactory;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.parser.LibraryFileParser;
+import com.htmlhifive.tools.wizard.library.parser.LibraryFileParserFactory;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.library.xml.Library;
+import com.htmlhifive.tools.wizard.library.xml.Site;
 
 /**
  * <H3>ConfigFileParserFactoryTest</H3>

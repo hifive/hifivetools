@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.htmlhifive.tools.wizard.library;
+package com.htmlhifive.tools.wizard.library.parser;
 
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
+import java.io.InputStream;
 
 /**
- * 設定ファイルを解析するインターフェース.
+ * パーサのファクトリクラス.
  * 
  * @author fkubo
  */
-public interface LibraryFileParser {
+public abstract class LibraryFileParserFactory {
 
 	/**
-	 * ライブラリ情報を取得する.
+	 * コードアシストのパーサを生成する.<br>
+	 * 生成できない場合はnullを返却.
 	 * 
-	 * @return ライブラリ情報.
+	 * @param is オプションインプットストリーム.
+	 * @return パーサ.
 	 * @throws ParseException 解析例外.
 	 */
-	LibraryList getLibraryList() throws ParseException;
+	public static LibraryFileParser createParser(InputStream is) throws ParseException {
+
+		return new LibraryFileParserImpl(is);
+	}
 
 }

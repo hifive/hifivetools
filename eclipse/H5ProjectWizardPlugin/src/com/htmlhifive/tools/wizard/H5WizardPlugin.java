@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
+import com.htmlhifive.tools.wizard.library.LibraryList;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
 
 /**

@@ -28,6 +28,8 @@
       <import plugin="org.eclipse.wst.jsdt.ui"/>
       <import plugin="org.eclipse.equinox.p2.ui"/>
       <import plugin="org.apache.commons.httpclient"/>
+      <import plugin="org.apache.commons.logging"/>
+      <import plugin="org.apache.commons.codec"/>
    </requires>
 
    <plugin

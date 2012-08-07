@@ -21,8 +21,8 @@ import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.viewers.TreeNode;
 
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.xml.Category;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.xml.Category;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
 /**
@@ -72,6 +72,7 @@ public class RootNode extends TreeNode implements LibraryTreeNode {
 	 * @return defaultInstallPath.
 	 */
 	public String getDefaultInstallPath() {
+
 		return defaultInstallPath;
 	}
 
@@ -81,6 +82,7 @@ public class RootNode extends TreeNode implements LibraryTreeNode {
 	 * @param defaultInstallPath defaultInstallPath.
 	 */
 	public void setDefaultInstallPath(String defaultInstallPath) {
+
 		this.defaultInstallPath = defaultInstallPath;
 	}
 
@@ -90,6 +92,7 @@ public class RootNode extends TreeNode implements LibraryTreeNode {
 	 * @return defaultProjectPath.
 	 */
 	public IContainer getDefaultProjectPath() {
+
 		return defaultProjectPath;
 	}
 
@@ -99,6 +102,7 @@ public class RootNode extends TreeNode implements LibraryTreeNode {
 	 * @param defaultProjectPath defaultProjectPath.
 	 */
 	public void setDefaultProjectPath(IContainer defaultProjectPath) {
+
 		this.defaultProjectPath = defaultProjectPath;
 	}
 

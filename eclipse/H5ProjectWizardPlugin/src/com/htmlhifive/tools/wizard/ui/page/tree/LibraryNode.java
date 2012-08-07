@@ -17,8 +17,8 @@ package com.htmlhifive.tools.wizard.ui.page.tree;
 
 import org.eclipse.jface.viewers.TreeNode;
 
-import com.htmlhifive.tools.wizard.library.model.LibraryState;
-import com.htmlhifive.tools.wizard.library.model.xml.Library;
+import com.htmlhifive.tools.wizard.library.LibraryState;
+import com.htmlhifive.tools.wizard.library.xml.Library;
 
 /**
  * <H3>ライブラリノード.</H3>
@@ -146,6 +146,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 * @return 全てが揃っているかどうか.
 	 */
 	public boolean isIncomplete() {
+
 		return incomplete;
 	}
 
@@ -155,6 +156,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 * @param incomplete 全てが揃っているかどうか.
 	 */
 	public void setIncomplete(boolean incomplete) {
+
 		this.incomplete = incomplete;
 	}
 
@@ -164,6 +166,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 * @return エラーを含むかどうか.
 	 */
 	public boolean isInError() {
+
 		return inError;
 	}
 
@@ -173,6 +176,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 * @param inError エラーを含むかどうか.
 	 */
 	public void setInError(boolean inError) {
+
 		this.inError = inError;
 	}
 
@@ -248,6 +252,7 @@ public class LibraryNode extends TreeNode implements LibraryTreeNode {
 	 * @return ライセンスチェックが必要かどうか
 	 */
 	public boolean isNeedConfirmDialog() {
+
 		if (!isAddable()) {
 			return false;
 		}

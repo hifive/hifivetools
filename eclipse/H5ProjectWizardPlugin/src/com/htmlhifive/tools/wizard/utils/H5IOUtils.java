@@ -173,6 +173,7 @@ public abstract class H5IOUtils {
 	 * @return URLがクラスパスリソースを対象としているかどうか
 	 */
 	public static boolean isClassResources(String url) {
+
 		return url.startsWith("/");
 	}
 
@@ -183,6 +184,7 @@ public abstract class H5IOUtils {
 	 * @return クエリを除いたパス
 	 */
 	public static String getURLPath(String siteUrl) {
+
 		try {
 			if (!H5IOUtils.isClassResources(siteUrl)) {
 				// クエリを除く.
