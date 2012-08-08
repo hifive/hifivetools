@@ -12,7 +12,7 @@ import org.eclipse.core.net.proxy.IProxyService;
 
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 
-public class URLConnectionExImpl extends URLConnectionImpl {
+public class URLConnectionImplEx extends URLConnectionImpl {
 	private Proxy proxy;
 	private String proxyAuthorization;
 
@@ -21,7 +21,7 @@ public class URLConnectionExImpl extends URLConnectionImpl {
 	 * 
 	 * @param urlStr URL
 	 */
-	public URLConnectionExImpl(String urlStr) {
+	public URLConnectionImplEx(String urlStr) {
 
 		super(urlStr);
 	}
@@ -42,8 +42,8 @@ public class URLConnectionExImpl extends URLConnectionImpl {
 				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(data.getHost(), data.getPort()));
 				if (data.getUserId() != null) {
 					proxyAuthorization = "Basic "
-							+ Base64.encodeBase64(new StringBuilder(data.getUserId()).append(":")
-									.append(data.getPassword()).toString().getBytes());
+							+ new String(Base64.encodeBase64(new StringBuilder(data.getUserId()).append(":")
+									.append(data.getPassword()).toString().getBytes()));
 				}
 			}
 		}

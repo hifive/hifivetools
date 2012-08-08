@@ -18,7 +18,6 @@ package com.htmlhifive.tools.wizard.ui.page;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
@@ -174,8 +173,8 @@ public class ConfirmLicenseComposite extends Composite {
 									if (!"about:blank".equals(((Browser) event.widget).getUrl())) {
 										// 遷移させない.
 										event.doit = false;
-										MessageDialog.openInformation(getShell(), Messages.SE0117.format(),
-												Messages.SE0118.format());
+										//MessageDialog.openInformation(getShell(), Messages.SE0117.format(),
+										//Messages.SE0118.format());
 									}
 								}
 

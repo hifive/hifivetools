@@ -176,8 +176,10 @@ public abstract class RemoteContentManager {
 				BufferedInputStream bufferIs = null;
 				try {
 					IConnectMethod method = ConnectMethodFactory.getMethod(urlStr, true);
-					method.setConnectionTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
-					method.setProxy(downloadModule.getProxyService());
+					if (!H5IOUtils.isClassResources(urlStr)) {
+						method.setConnectionTimeout(PluginConstant.URL_LIBRARY_LIST_CONNECTION_TIMEOUT);
+						method.setProxy(downloadModule.getProxyService());
+					}
 					InputStream is = method.getInputStream();
 					if (is == null) {
 						resultStatus.log(Messages.SE0046, urlStr);

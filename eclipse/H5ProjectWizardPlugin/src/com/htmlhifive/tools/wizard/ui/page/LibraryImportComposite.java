@@ -83,6 +83,7 @@ public class LibraryImportComposite extends Composite {
 	private final Button checkFilterLatest;
 	private final Combo cmbDefaultInstallPath;
 	private final ScrolledComposite scrolledComposite;
+	private final Button btnReload;
 
 	private IJavaScriptProject jsProject = null;
 	private String projectName = null;
@@ -135,7 +136,7 @@ public class LibraryImportComposite extends Composite {
 		});
 		btnRecommended.setText(UIMessages.LibraryImportComposite_btnRecommended_text);
 
-		Button btnReload = new Button(groupAll, SWT.NONE);
+		btnReload = new Button(groupAll, SWT.NONE);
 		btnReload.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		btnReload.addSelectionListener(new SelectionAdapter() {
 
@@ -322,14 +323,18 @@ public class LibraryImportComposite extends Composite {
 		// TODO:要リファクタ
 		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
 				&& StringUtils.equals(cmbDefaultInstallPath.getText(), defaultInstallPath)) {
-			// 変更不可.
+			// 既に設定済なので処理しない.
 			return false;
 		}
 
 		this.jsProject = jsProject;
 		this.projectName = projectName;
 		if (jsProject != null) {
+			// Wizardからの呼び出し.
 			this.projectName = jsProject.getProject().getName();
+			btnReload.setEnabled(false);
+		} else {
+			btnReload.setEnabled(true);
 		}
 
 		// 選択を除去.
@@ -457,7 +462,13 @@ public class LibraryImportComposite extends Composite {
 			categoryNode = (CategoryNode) treeItem.getData();
 		} else if (treeItem.getData() instanceof LibraryNode) {
 			LibraryNode libraryNode = (LibraryNode) treeItem.getData();
-			treeLibrary.setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
+			if (libraryNode.isIncomplete() && libraryNode.getState() == LibraryState.DEFAULT) {
+				treeLibrary.setToolTipText(Messages.PI0135.format(UIMessages.LibraryState_INCOMPLETE));
+			} else if (libraryNode.isInError() && libraryNode.getState() == LibraryState.DEFAULT) {
+				treeLibrary.setToolTipText(Messages.PI0135.format(UIMessages.LibraryState_ERROR));
+			} else {
+				treeLibrary.setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
+			}
 			treeItem.getParent().setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
 			categoryNode = libraryNode.getParent();
 		}
@@ -851,7 +862,9 @@ public class LibraryImportComposite extends Composite {
 		//}
 
 		// List生成時に無くても作成するよう変更
-		tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
+		if (libraryNode.getFileList() != null) {
+			tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
+		}
 		if (!library.getSite().isEmpty()) {
 			tableItem.setText(5, library.getSite().get(0).getUrl() + " ...");
 		}

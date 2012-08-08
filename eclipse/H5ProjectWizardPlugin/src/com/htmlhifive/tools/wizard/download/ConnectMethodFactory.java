@@ -24,7 +24,7 @@ public abstract class ConnectMethodFactory {
 
 		if (isFirst) {
 			//return new HttpGetMethodImpl(urlStr);
-			return new URLConnectionExImpl(urlStr);
+			return new URLConnectionImplEx(urlStr);
 		}
 
 		return new URLConnectionImpl(urlStr);

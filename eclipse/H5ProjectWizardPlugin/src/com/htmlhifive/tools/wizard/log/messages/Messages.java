@@ -294,7 +294,7 @@ public abstract class Messages extends MessagesBase {
 	/** PI0141=INFO,ライブラリ定義情報取得の準備中.... */
 	public static final Message PI0141 = createMessage("PI0141");
 
-	/** PI0142=INFO,ライブラリ定義情報{0}をダウンロード中.... */
+	/** PI0142=INFO,ライブラリ定義情報をダウンロード中.... */
 	public static final Message PI0142 = createMessage("PI0142");
 
 	/** PI0143=INFO,[{0}/{1}bytes] {2}. */
