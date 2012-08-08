@@ -109,6 +109,8 @@ public class StructureSelectPage extends WizardPage {
 
 				// プロジェクト名を設定する.
 				javaProjectWizardFirstPage.setName(getProjectName());
+
+				StructureSelectPage.this.changeProject = true;
 			}
 		});
 

@@ -270,7 +270,7 @@ public class LibraryList {
 					libraryNode.setExists(false); // 一応falseにしておく
 					libraryNode.setIncomplete(false);
 
-					return checkContainers;
+					continue;
 				}
 
 				// Container単位ここから
