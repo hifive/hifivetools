@@ -65,6 +65,7 @@ import com.htmlhifive.tools.wizard.ui.page.tree.LibraryTreeLabelProvider;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryTreeLatestViewerFilter;
 import com.htmlhifive.tools.wizard.ui.page.tree.RootNode;
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
+import com.htmlhifive.tools.wizard.utils.H5LogUtils;
 
 /**
  * <H3>ライブラリインポート用コンポジット.</H3>
@@ -97,6 +98,8 @@ public class LibraryImportComposite extends Composite {
 	public LibraryImportComposite(Composite parent, int style) {
 
 		super(parent, style);
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "<init>");
+
 		setLayout(new GridLayout(1, false));
 
 		Label lblInfo = new Label(this, SWT.NONE);
@@ -321,20 +324,24 @@ public class LibraryImportComposite extends Composite {
 		logger.log(Messages.TR0001, getClass().getSimpleName(), "initialize");
 
 		// TODO:要リファクタ
-		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
-				&& StringUtils.equals(cmbDefaultInstallPath.getText(), defaultInstallPath)) {
+		//		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
+		//		&& StringUtils.equals(cmbDefaultInstallPath.getText(), defaultInstallPath)) {
+		if (StringUtils.equals(this.projectName, projectName)
+				&& (defaultInstallPath == null || StringUtils.equals(cmbDefaultInstallPath.getText(),
+						defaultInstallPath))) {
 			// 既に設定済なので処理しない.
 			return false;
 		}
 
 		this.jsProject = jsProject;
-		this.projectName = projectName;
-		if (jsProject != null) {
-			// Wizardからの呼び出し.
-			this.projectName = jsProject.getProject().getName();
-			btnReload.setEnabled(false);
-		} else {
+		if (this.jsProject != null) {
+			// PropertyPageからの呼び出し.
+			this.projectName = this.jsProject.getProject().getName();
 			btnReload.setEnabled(true);
+		} else {
+			// WizardPageからの呼び出し.
+			this.projectName = projectName;
+			btnReload.setEnabled(false);
 		}
 
 		// 選択を除去.
@@ -414,12 +421,16 @@ public class LibraryImportComposite extends Composite {
 		}
 
 		// チェック.
-		RootNode rootNode = new RootNode(libraryList);
-		IContainer[] containers = libraryList.checkLibrary(jsProject, projectName, cmbDefaultInstallPath.getText(),
-				rootNode);
-		setDefaultInstallPath(containers);
+		if (projectName != null) {
+			RootNode rootNode = new RootNode(libraryList);
+			IContainer[] containers = libraryList.checkLibrary(jsProject, projectName, cmbDefaultInstallPath.getText(),
+					rootNode);
+			setDefaultInstallPath(containers);
 
-		treeViewerLibrary.setInput(rootNode.getChildren());
+			treeViewerLibrary.setInput(rootNode.getChildren());
+		} else {
+			H5LogUtils.putLog(null, Messages.SE0023, "projectName is null");
+		}
 
 		treeViewerLibrary.refresh(true);
 

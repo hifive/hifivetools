@@ -23,13 +23,28 @@ import org.eclipse.core.net.proxy.IProxyService;
 
 import com.htmlhifive.tools.wizard.PluginConstant;
 
+/**
+ * <H3>HttpClientを利用したURL接続.<br>
+ * パス無しNTLMが通らないため、現在使用していない.</H3>
+ * 
+ * @author fkubo
+ */
 public class HttpGetMethodImpl implements IConnectMethod {
 
+	/** urlStr. */
 	protected final String urlStr;
+	/** client. */
 	protected final HttpClient client;
+	/** method. */
 	protected final HttpMethod method;
+	/** connectionTimeout. */
 	protected int connectionTimeout = 10000; // デフォルト10秒としておく
 
+	/**
+	 * コンストラクタ.
+	 * 
+	 * @param urlStr URL
+	 */
 	public HttpGetMethodImpl(String urlStr) {
 
 		this.urlStr = urlStr;
@@ -37,6 +52,11 @@ public class HttpGetMethodImpl implements IConnectMethod {
 		method = new GetMethod(urlStr);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#setConnectionTimeout(int)
+	 */
 	@Override
 	public void setConnectionTimeout(int connectionTimeout) {
 
@@ -44,6 +64,11 @@ public class HttpGetMethodImpl implements IConnectMethod {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#setProxy(org.eclipse.core.net.proxy.IProxyService)
+	 */
 	@Override
 	public void setProxy(IProxyService proxyService) {
 
@@ -62,26 +87,15 @@ public class HttpGetMethodImpl implements IConnectMethod {
 							new UsernamePasswordCredentials(data.getUserId(), data.getPassword()));
 
 				}
-
-				//				client.getParams().setParameter(CredentialsProvider.PROVIDER, new CredentialsProvider() {
-				//
-				//					@Override
-				//					public Credentials getCredentials(AuthScheme scheme, String host, int port, boolean proxy)
-				//							throws CredentialsNotAvailableException {
-				//
-				//						if (proxy) {
-				//
-				//							return new UsernamePasswordCredentials("fkubo", "");
-				//						}
-				//						// TODO 自動生成されたメソッド・スタブ
-				//						return null;
-				//					}
-				//				});
-				//
 			}
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#connect()
+	 */
 	@Override
 	public boolean connect() throws IOException {
 
@@ -96,6 +110,11 @@ public class HttpGetMethodImpl implements IConnectMethod {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#getContentLength()
+	 */
 	@Override
 	public int getContentLength() {
 
@@ -103,6 +122,11 @@ public class HttpGetMethodImpl implements IConnectMethod {
 		return Integer.valueOf(header.getValue());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#getInputStream()
+	 */
 	@Override
 	public InputStream getInputStream() throws IOException {
 
@@ -115,6 +139,11 @@ public class HttpGetMethodImpl implements IConnectMethod {
 		return method.getResponseBodyAsStream();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#getLastModified()
+	 */
 	@Override
 	public Date getLastModified() {
 
@@ -128,6 +157,11 @@ public class HttpGetMethodImpl implements IConnectMethod {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.htmlhifive.tools.wizard.download.IConnectMethod#close()
+	 */
 	@Override
 	public void close() {
 

@@ -471,7 +471,16 @@ public class LibraryList {
 					existsFileList.addAll(Arrays.asList(fileList));
 				}
 			} else if (savedFolder != null) {
-				noExistsFileList.add(savedFolder.getFullPath().toString() + "/" + wildCardStr);
+				//noExistsFileList.add(savedFolder.getFullPath().toString() + "/" + wildCardStr);
+				noExistsFileList.add(savedFolder.getProjectRelativePath().toString() + "/" + wildCardStr);
+				if ((savedFolder.getFullPath().toString() + "/" + wildCardStr).startsWith(savedFolder.getFullPath()
+						.toString() + "/")) {
+					noExistsFileList.add((savedFolder.getFullPath().toString() + "/" + wildCardStr).substring(folder
+							.getFullPath().toString().length() + 1));
+				} else {
+					noExistsFileList.add(savedFolder.getFullPath().toString() + "/" + wildCardStr);
+				}
+				//folder
 			} else {
 				// 存在しないが展開時のファイルとして存在しないリストに追加しておく.
 				noExistsFileList.add(wildCardStr);
@@ -490,7 +499,13 @@ public class LibraryList {
 					fileList = new String[] { file.getName() };
 					existsFileList.add(file.getName());
 				} else {
-					noExistsFileList.add(file.getFullPath().toString());
+					//noExistsFileList.add(file.getFullPath().toString());
+					if (file.getFullPath().toString().startsWith(folder.getFullPath().toString() + "/")) {
+						noExistsFileList.add(file.getFullPath().toString()
+								.substring(folder.getFullPath().toString().length() + 1));
+					} else {
+						noExistsFileList.add(file.getFullPath().toString());
+					}
 				}
 			} else {
 				// 存在しないが展開時のファイルとして存在しないリストに追加しておく.

@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -66,6 +67,9 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	public LibraryImportPropertyPage() {
 
 		super();
+
+		logger.log(Messages.TR0021, getClass().getName(), "<init>");
+
 		// setMessage(UIMessages.WizardPropertyPage_this_message);
 		// setTitle(UIMessages.WizardPropertyPage_this_title);
 	}
@@ -78,9 +82,25 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	@Override
 	protected Control createContents(Composite parent) {
 
+		logger.log(Messages.TR0021, getClass().getName(), "createContents");
+
 		container = new LibraryImportComposite(parent, SWT.NONE);
 
-		// イベント通知受付.
+		// 下からのメッセージを受ける.
+		container.addListener(UIEventHelper.SET_MESSAGE, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				// メッセージを設定.
+				setErrorMessage(event.text); // WizardPage
+
+				setValid(event.text == null);
+
+				getContainer().updateButtons();
+			}
+		});
+		// チェックボックス変更時.
 		container.addListener(UIEventHelper.TABLE_SELECTION_CHANGE, new Listener() {
 
 			@Override
@@ -92,28 +112,55 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					getDefaultsButton().setEnabled(enabled);
 					getApplyButton().setEnabled(enabled);
 				}
+
+				getContainer().updateButtons();
 			}
 		});
 
 		return container;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.jface.preference.PreferencePage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
-	public void createControl(Composite parent) {
+	public void setVisible(boolean visible) {
 
-		logger.log(Messages.TR0021, getClass().getName(), "createControl");
+		logger.log(Messages.TR0021, getClass().getSimpleName(), "setVisible");
 
-		super.createControl(parent);
 
-		// 初期化.
-		container.initialize(getJavaScriptProject(), null, null);
+		if (visible) {
+			// 初期化.
+			IJavaScriptProject jsProject = getJavaScriptProject();
+			if (jsProject != null) {
+				container.initialize(jsProject, jsProject.getProject().getName(), null);
+			} else {
+				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
+			}
+		}
 
-		//setValid(true); // 常にOK
+		// TODO 自動生成されたメソッド・スタブ
+		super.setVisible(visible);
+	}
+
+	/**
+	 * 初期化.
+	 * 
+	 * @param jsProject プロジェクト
+	 * @param projectName プロジェクト名
+	 * @param defaultInstallPath 初期インストール場所
+	 * @return 変更あり
+	 */
+	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+
+		logger.log(Messages.TR0021, getClass().getSimpleName(), "initialize");
+
+		if (isControlCreated()) {
+			// 初期化.
+			if (jsProject != null) {
+				return container.initialize(jsProject, null, null);
+			} else {
+				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -123,8 +170,15 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	 */
 	private IJavaScriptProject getJavaScriptProject() {
 
-		if (getElement().getAdapter(IJavaScriptElement.class) != null) {
-			return ((IJavaScriptElement) getElement().getAdapter(IJavaScriptElement.class)).getJavaScriptProject();
+		logger.debug("getElement().getClass(): " + getElement().getClass());
+		logger.debug("getElement().getAdapter(IJavaScriptElement.class): "
+				+ getElement().getAdapter(IJavaScriptElement.class));
+
+		IAdaptable adaptable = getElement();
+		if (adaptable != null) {
+			if (adaptable.getAdapter(IJavaScriptElement.class) != null) {
+				return ((IJavaScriptElement) adaptable.getAdapter(IJavaScriptElement.class)).getJavaScriptProject();
+			}
 		}
 		return null;
 	}
@@ -168,8 +222,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		if (!getApplyButton().isEnabled()) { // 変更チェック.
 			return super.performCancel();
 		}
-
-		// TODO:正しく動作しないのでコメントアウト
+		// FIXME: Eclipse 3.7 だと正しく動作しないのでコメントアウト
 		//		if (!MessageDialog.openConfirm(null, Messages.SE0111.format(), Messages.SE0112.format())) {
 		//			return false;
 		//		}
@@ -291,7 +344,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
+					logger.log(e, Messages.SE0023, "");
 					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
 					downloadModule.close();

@@ -65,7 +65,7 @@ public abstract class Messages extends MessagesBase {
 	/** SE0022=ERROR,エラー. */
 	public static final Message SE0022 = createMessage("SE0022");
 
-	/** SE0023=ERROR,予期しない例外が発生しました。. */
+	/** SE0023=ERROR,予期しない例外が発生しました。原因:{0}. */
 	public static final Message SE0023 = createMessage("SE0023");
 
 	/** SE0024=ERROR,({0})を操作中に入出力例外が発生しました。. */

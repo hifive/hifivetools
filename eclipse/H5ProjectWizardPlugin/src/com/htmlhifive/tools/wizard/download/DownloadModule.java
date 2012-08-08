@@ -67,8 +67,6 @@ import com.htmlhifive.tools.wizard.utils.H5IOUtils;
  */
 public class DownloadModule {
 
-	private final int DEFAULT_BUFFER_SIZE = 4096;
-
 	/** 外部接続用ProxyTracker. */
 	private final ServiceTracker<IProxyService, Object> proxyTracker;
 
@@ -543,10 +541,10 @@ public class DownloadModule {
 
 				} catch (IOException e) { // CoreException. IOException
 					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
+					logger.log(e, Messages.SE0023, "");
 				} catch (CoreException e) { // CoreException. IOException
 					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
+					logger.log(e, Messages.SE0023, "");
 				}
 			}
 		}

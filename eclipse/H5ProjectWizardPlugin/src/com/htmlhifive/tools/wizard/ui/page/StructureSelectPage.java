@@ -66,6 +66,9 @@ public class StructureSelectPage extends WizardPage {
 	public StructureSelectPage(String pageName) {
 
 		super(pageName);
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "<init>");
+
 		setDescription("");
 		setMessage(UIMessages.StructureSelectPage_this_message);
 		setTitle(UIMessages.StructureSelectPage_this_title);
@@ -109,7 +112,7 @@ public class StructureSelectPage extends WizardPage {
 			}
 		});
 
-		// ページ切替時の処理.
+		// ページ初期表示時の処理.
 		((IPageChangeProvider) getContainer()).addPageChangedListener(new IPageChangedListener() {
 			@Override
 			public void pageChanged(PageChangedEvent event) {

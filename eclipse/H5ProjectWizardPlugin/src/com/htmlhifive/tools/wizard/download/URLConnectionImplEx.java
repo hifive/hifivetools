@@ -12,6 +12,12 @@ import org.eclipse.core.net.proxy.IProxyService;
 
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 
+/**
+ * <H3>URLクラスを利用した接続実装.<br>
+ * Proxyはパラメータで設定する.</H3>
+ * 
+ * @author fkubo
+ */
 public class URLConnectionImplEx extends URLConnectionImpl {
 	private Proxy proxy;
 	private String proxyAuthorization;

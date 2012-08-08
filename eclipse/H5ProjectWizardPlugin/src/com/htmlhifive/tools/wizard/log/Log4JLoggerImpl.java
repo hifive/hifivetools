@@ -28,9 +28,7 @@ import com.htmlhifive.tools.wizard.log.messages.MessagesBase.Message;
 public class Log4JLoggerImpl implements PluginLogger {
 	/** callerFQCN. */
 	private static final String callerFQCN = Log4JLoggerImpl.class.getName();
-	/**
-	 * ロガー実体.
-	 */
+	/** logger. */
 	private final Logger logger;
 
 	/**

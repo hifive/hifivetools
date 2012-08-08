@@ -52,6 +52,9 @@ public class LibraryImportPage extends WizardPage {
 	public LibraryImportPage(String pageName) {
 
 		super(pageName);
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "<init>");
+
 		setMessage(UIMessages.LibraryImportPage_this_message);
 		setTitle(UIMessages.LibraryImportPage_this_title);
 		//setPageComplete(true); // 別に設定不要なので
@@ -80,7 +83,7 @@ public class LibraryImportPage extends WizardPage {
 				setPageComplete(event.text == null);
 
 				// ConfirmLicensePageのチェックもする.
-				((ConfirmLicensePage) getNextPage()).setLiceseContents();
+				//TABLE_SELECTION_CHANGEしているので省略 ((ConfirmLicensePage) getNextPage()).setLiceseContents();
 				overwriteCanFlipToNextPage = false;
 				if (getNextPage().isPageComplete() && isPageComplete()) {
 					overwriteCanFlipToNextPage = true;

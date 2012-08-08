@@ -12,9 +12,18 @@ import org.eclipse.core.net.proxy.IProxyService;
 
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 
+/**
+ * <H3>URLクラスを利用した接続実装.<br>
+ * Proxyはシステムプロパティを利用する.</H3>
+ * 
+ * @author fkubo
+ */
 public class URLConnectionImpl implements IConnectMethod {
+	/** urlStr. */
 	protected final String urlStr;
+	/** connectionTimeout. */
 	protected int connectionTimeout = 10000; // デフォルト10秒としておく
+	/** connection. */
 	protected URLConnection connection;
 
 	/**

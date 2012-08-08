@@ -71,6 +71,9 @@ public class ConfirmLicenseComposite extends Composite {
 	public ConfirmLicenseComposite(Composite parent, int style) {
 
 		super(parent, style);
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "<init>");
+
 		setLayout(new GridLayout(1, false));
 
 		Label lblHifiveLicense = new Label(this, SWT.NONE);

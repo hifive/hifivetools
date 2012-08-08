@@ -15,7 +15,10 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
+import org.eclipse.jface.dialogs.IPageChangeProvider;
+import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
@@ -50,6 +53,9 @@ public class ConfirmLicensePage extends WizardPage {
 	public ConfirmLicensePage(String pageName) {
 
 		super(pageName);
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "<init>");
+
 		setMessage(UIMessages.ConfirmLicensePage_this_message);
 		setTitle(UIMessages.LicenseListPage_this_title);
 		//setPageComplete(false);
@@ -78,6 +84,19 @@ public class ConfirmLicensePage extends WizardPage {
 			}
 		});
 
+		// ページ初期表示時の処理.
+		((IPageChangeProvider) getContainer()).addPageChangedListener(new IPageChangedListener() {
+			@Override
+			public void pageChanged(PageChangedEvent event) {
+
+				if (event.getSelectedPage() == ConfirmLicensePage.this && event.getSource() == getContainer()) {
+
+					setLiceseContents();
+
+				}
+			}
+		});
+
 		// ページ切替時の処理.
 		((WizardDialog) getContainer()).addPageChangingListener(new IPageChangingListener() {
 
@@ -95,6 +114,7 @@ public class ConfirmLicensePage extends WizardPage {
 				//					initFlag = true;
 				//					return;
 				//				}
+
 				// 次のページ遷移時.
 				//if (event.getCurrentPage() == ConfirmLicensePage.this && event.getTargetPage() == getPreviousPage()) {
 				if (event.getCurrentPage() == ConfirmLicensePage.this) {

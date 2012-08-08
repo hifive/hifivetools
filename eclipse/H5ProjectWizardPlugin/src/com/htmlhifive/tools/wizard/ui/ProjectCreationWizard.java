@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.jsdt.internal.ui.wizards.JavaProjectWizard;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
@@ -79,11 +78,15 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 
 		super();
 
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "<init>");
+
 		downloadModule = new DownloadModule();
 	}
 
 	@Override
 	public void dispose() {
+
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "dispose");
 
 		downloadModule.close();
 		super.dispose();
@@ -137,7 +140,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 		} catch (InvocationTargetException e) {
 			final Throwable ex = e.getTargetException();
 			// SE0023=ERROR,予期しない例外が発生しました。
-			logger.log(ex, Messages.SE0023);
+			logger.log(ex, Messages.SE0023, "");
 
 			// We were cancelled...
 			removeProject(logger);
@@ -304,7 +307,7 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 					throw new InterruptedException(e.getMessage());
 				} catch (CoreException e) {
 					// SE0023=ERROR,予期しない例外が発生しました。
-					logger.log(e, Messages.SE0023);
+					logger.log(e, Messages.SE0023, "");
 					throw new InvocationTargetException(e, Messages.SE0023.format());
 				} finally {
 					monitor.done();
@@ -313,36 +316,4 @@ public class ProjectCreationWizard extends JavaProjectWizard {
 		};
 
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @see org.eclipse.jface.wizard.Wizard#createPageControls(org.eclipse.swt.widgets.Composite)
-	 */
-	@Override
-	public void createPageControls(Composite pageContainer) {
-
-		logger.log(Messages.TR0031, getClass().getSimpleName(), "createPageControls");
-
-		super.createPageControls(pageContainer);
-
-		//		((WizardDialog) getContainer()).addPageChangedListener(new IPageChangedListener() {
-		//
-		//			@Override
-		//			public void pageChanged(PageChangedEvent event) {
-		//
-		//				if (event.getSelectedPage() instanceof LibraryImportPage) {
-		//					// プロジェクト名を設定する.
-		//					((JavaProjectWizardFirstPage) getPage(NewWizardMessages.JavaProjectWizardFirstPage_page_pageName))
-		//					.setName(ProjectCreationWizard.this.structureSelectPage.getProjectName());
-		//				}
-		//
-		//				if (event.getSelectedPage() instanceof ConfirmLicensePage) {
-		//					// ライセンスのタブを更新する.
-		//					((ConfirmLicensePage) getPage("confirmLicensePage")).setLiceseContents();
-		//				}
-		//			}
-		//		});
-	}
-
 }

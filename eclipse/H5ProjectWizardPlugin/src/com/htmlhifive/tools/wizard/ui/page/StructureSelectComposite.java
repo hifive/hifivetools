@@ -72,6 +72,8 @@ public class StructureSelectComposite extends Composite {
 
 		super(parent, style);
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "<init>");
+
 		setLayout(new GridLayout(2, false));
 
 		final GridData gridData2 = new GridData();
