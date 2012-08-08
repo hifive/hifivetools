@@ -100,10 +100,10 @@ public class LibraryImportPage extends WizardPage {
 				if (getNextPage().isPageComplete() && isPageComplete()) {
 					overwriteCanFlipToNextPage = true;
 				}
-				System.out.println("StructureSelectPage: "
-						+ getWizard().getPage("structureSelectPage").isPageComplete());
-				System.out.println("LibraryImportPage: " + getWizard().getPage("libraryImportPage").isPageComplete());
-				System.out.println("ConfirmLicensePage: " + getWizard().getPage("confirmLicensePage").isPageComplete());
+				//				System.out.println("StructureSelectPage: "
+				//						+ getWizard().getPage("structureSelectPage").isPageComplete());
+				//				System.out.println("LibraryImportPage: " + getWizard().getPage("libraryImportPage").isPageComplete());
+				//				System.out.println("ConfirmLicensePage: " + getWizard().getPage("confirmLicensePage").isPageComplete());
 				getContainer().updateButtons();
 			}
 		});
