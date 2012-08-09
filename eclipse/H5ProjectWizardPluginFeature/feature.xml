@@ -22,13 +22,11 @@
       <import plugin="org.eclipse.ui" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.core.net"/>
+      <import plugin="org.eclipse.equinox.p2.ui"/>
       <import plugin="org.eclipse.wst.jsdt.core"/>
       <import plugin="org.eclipse.wst.jsdt.ui"/>
-      <import plugin="org.eclipse.equinox.p2.ui"/>
       <import plugin="org.apache.commons.httpclient"/>
-      <import plugin="org.apache.commons.logging"/>
       <import plugin="org.apache.commons.codec"/>
    </requires>
 

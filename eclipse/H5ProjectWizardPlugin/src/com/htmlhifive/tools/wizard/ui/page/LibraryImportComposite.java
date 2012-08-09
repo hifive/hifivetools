@@ -849,29 +849,6 @@ public class LibraryImportComposite extends Composite {
 		tableItem.setText(2, library.getVersion());
 		tableItem.setText(3, categoryNode.getPathLable());
 
-		//		List<String> files = new ArrayList<String>();
-		//		for (Site site : library.getSite()) {
-		//			if (site.getReplaceFileName() != null) {
-		//				files.add(site.getReplaceFileName());
-		//			} else if (site.getFilePattern() != null) {
-		//				files.add(site.getFilePattern());
-		//			} else {
-		//				if (H5IOUtils.isClassResources(site.getUrl())){
-		//					files.add(StringUtils.substringAfterLast(site.getUrl(), "/"));
-		//				}else if (site.getReplaceFileName() != null){
-		//					files.add(site.getReplaceFileName());
-		//				}else{
-		//					try {
-		//						files.add(StringUtils.substringAfterLast(new URL(site.getUrl()).getPath(), "/"));
-		//					} catch (MalformedURLException e) {
-		//						// 無視.
-		//						files.add("---");
-		//					}
-		//				}
-		//			}
-		//		}
-		//}
-
 		// List生成時に無くても作成するよう変更
 		if (libraryNode.getFileList() != null) {
 			tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
@@ -908,6 +885,26 @@ public class LibraryImportComposite extends Composite {
 			((CategoryNode[]) treeLibrary.getData())[0].getParent().setDefaultInstallPath(((Combo) e.widget).getText());
 			treeViewerLibrary.refresh(true);
 		}
+
+		// テーブルにもあるので状態変更のみ.
+		if (tableSelection.getItemCount() > 0) {
+			for (TableItem tableItem : tableSelection.getItems()) {
+				LibraryNode libraryNode = (LibraryNode) tableItem.getData();
+				//				tableItem.setText(0, libraryNode.getState().getText());
+				//				tableItem.setText(1, libraryNode.getParent().getValue().getName());
+				//				tableItem.setText(2, libraryNode.getValue().getVersion());
+				tableItem.setText(3, libraryNode.getParent().getPathLable());
+
+				//				// List生成時に無くても作成するよう変更
+				//				if (libraryNode.getFileList() != null) {
+				//					tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
+				//				}
+				//				if (!libraryNode.getValue().getSite().isEmpty()) {
+				//					tableItem.setText(5, libraryNode.getValue().getSite().get(0).getUrl() + " ...");
+				//				}
+			}
+		}
+
 		validatePage();
 	}
 

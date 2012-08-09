@@ -41,7 +41,7 @@ public class ConfigFileParserFactoryTest {
 	public void testCreateParser() throws Exception {
 
 		InputStream is = null;
-		is = ConfigFileParserFactoryTest.class.getResourceAsStream("default-libraries.xml");
+		is = ConfigFileParserFactoryTest.class.getResourceAsStream("/local-libraries.xml");
 		LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
 		try {
 			LibraryList list = parser.getLibraryList();

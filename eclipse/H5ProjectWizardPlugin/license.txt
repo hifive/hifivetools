@@ -59,6 +59,16 @@ Simple Logging Facade for Java (SLF4J)
 URL:http://www.slf4j.org/
 License:MIT license
 	http://www.opensource.org/licenses/mit-license.php
-Local Modifications: add noescape flag.
+Local Modifications: None.
+
+-----
+Code in:
+lib/test/jmockit-0.999.14.jar
+	
+jmockit
+URL:http://code.google.com/p/jmockit/
+License:MIT license
+	http://www.opensource.org/licenses/mit-license.php
+Local Modifications: None.
 
 -----

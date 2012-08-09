@@ -125,7 +125,6 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 		logger.log(Messages.TR0021, getClass().getSimpleName(), "setVisible");
 
-
 		if (visible) {
 			// 初期化.
 			IJavaScriptProject jsProject = getJavaScriptProject();
@@ -170,9 +169,8 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 	 */
 	private IJavaScriptProject getJavaScriptProject() {
 
-		logger.debug("getElement().getClass(): " + getElement().getClass());
-		logger.debug("getElement().getAdapter(IJavaScriptElement.class): "
-				+ getElement().getAdapter(IJavaScriptElement.class));
+		//logger.debug("getElement().getClass(): " + getElement().getClass());
+		//logger.debug("getElement().getAdapter(IJavaScriptElement.class): " + getElement().getAdapter(IJavaScriptElement.class));
 
 		IAdaptable adaptable = getElement();
 		if (adaptable != null) {

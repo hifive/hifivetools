@@ -16,9 +16,9 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.core.internal.net.ProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.junit.Test;
+
 /**
- * <H3>
- * ConnectMethodFactoryのテストクラス.</H3>
+ * <H3>ConnectMethodFactoryのテストクラス.</H3>
  * 
  * @author fkubo
  */
@@ -54,12 +54,9 @@ public class ConnectMethodFactoryTest {
 		final boolean isFirst = true;
 		new Expectations() {
 			{
-				// 例 : mocked.get(anyString); result = 200;
-
 				proxyService.select((URI) any);
 				//type: HTTP host: proxy10.sysrdc.ns-sol.co.jp port: 9000 user: null password: null reqAuth: false source: WINDOWS_IE dynamic: false
-				//ProxyData proxyData = new ProxyData("HTTP", "localhost", 3128, false, "WINDOWS_IE");
-				ProxyData proxyData = new ProxyData("HTTP", "proxy10.sysrdc.ns-sol.co.jp", 9000, false, "WINDOWS_IE");
+				ProxyData proxyData = new ProxyData("HTTP", "localhost", 3128, false, "WINDOWS_IE"); // TODO:プロキシを立てる必要あり
 				result = new ProxyData[] { proxyData };
 			}
 		};
@@ -73,7 +70,8 @@ public class ConnectMethodFactoryTest {
 		System.out.println(IOUtils.toString(actual.getInputStream()));
 
 		// Assert：結果が正しいこと
-		assertThat(actual.getClass().getName(), is(HttpGetMethodImpl.class.getName()));
+		// 現在変更中 assertThat(actual.getClass().getName(), is(HttpGetMethodImpl.class.getName()));
+		assertThat(actual.getClass().getName(), is(URLConnectionImplEx.class.getName()));
 		assertThat(actual, notNullValue());
 	}
 
@@ -82,18 +80,15 @@ public class ConnectMethodFactoryTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
 	public void testGetMethodStringboolean02(final IProxyService proxyService) throws IOException {
 
 		// Arrange：正常系
-		final String urlStr = "http://stackoverflow.com/";//"http://www.htmlhifive.com";
+		final String urlStr = "http://www.htmlhifive.com";
 		final boolean isFirst = false;
 		new Expectations(){{
-			// 例 : mocked.get(anyString); result = 200;
-
 			proxyService.select((URI) any);
-			//ProxyData proxyData = new ProxyData("http", "localhost", 3128, false, urlStr);
-			ProxyData proxyData = new ProxyData("http", "proxy10.sysrdc.ns-sol.co.jp", 9000, true, urlStr);
+			ProxyData proxyData = new ProxyData("HTTP", "localhost", 3128, false, "WINDOWS_IE"); // TODO:プロキシを立てる必要あり
 			result = new ProxyData[] { proxyData };
 		}};
 
