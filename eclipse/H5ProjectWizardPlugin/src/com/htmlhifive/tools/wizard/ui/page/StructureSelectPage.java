@@ -116,6 +116,9 @@ public class StructureSelectPage extends WizardPage {
 				javaProjectWizardFirstPage.setName(getProjectName());
 
 				StructureSelectPage.this.container.validatePage();
+
+				((LibraryImportPage) getNextPage()).setPageComplete(false);//falseにしておく.
+				getContainer().updateButtons();
 			}
 		});
 		container.addListener(UIEventHelper.LIST_RELOAD, new Listener() {
@@ -126,6 +129,9 @@ public class StructureSelectPage extends WizardPage {
 				StructureSelectPage.this.refreshList = true;
 
 				StructureSelectPage.this.container.validatePage();
+
+				((LibraryImportPage) getNextPage()).setPageComplete(false);//falseにしておく.
+				getContainer().updateButtons();
 			}
 		});
 
@@ -240,5 +246,4 @@ public class StructureSelectPage extends WizardPage {
 		}
 		return libraryList.getInfoBaseProjectMap().get(container.comboZip.getText());
 	}
-
 }
