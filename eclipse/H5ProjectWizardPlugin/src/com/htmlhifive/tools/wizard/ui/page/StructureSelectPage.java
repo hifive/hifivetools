@@ -111,6 +111,7 @@ public class StructureSelectPage extends WizardPage {
 				javaProjectWizardFirstPage.setName(getProjectName());
 
 				StructureSelectPage.this.changeProject = true;
+				StructureSelectPage.this.container.validatePage();
 			}
 		});
 
