@@ -194,7 +194,7 @@ public class StructureSelectComposite extends Composite {
 
 		setInputComboZip();
 
-		UIEventHelper.notifyListeners(this, UIEventHelper.PROJECT_CHANGE);
+		UIEventHelper.notifyListeners(this, UIEventHelper.LIST_RELOAD);
 	}
 
 	/**

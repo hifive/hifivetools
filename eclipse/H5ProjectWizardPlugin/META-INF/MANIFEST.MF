@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.6.0",
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %Bundle-Vendor
-Export-Package: com.htmlhifive.tools.wizard;uses:="com.htmlhifive.tools.wizard.library,org.eclipse.ui.plugin,org.eclipse.swt.graphics"
+Export-Package: com.htmlhifive.tools.wizard;uses:="org.eclipse.swt.graphics,org.eclipse.ui.plugin,com.htmlhifive.tools.wizard.library"
 Bundle-ClassPath: .,
  lib/commons/commons-io-2.1.jar,
  lib/commons/commons-lang-2.6.jar,

@@ -24,6 +24,9 @@ public abstract class UIEventHelper {
 	/** EVENT_TABLE_SELECTION_CHANGE. */
 	public static final int TABLE_SELECTION_CHANGE = 10004;
 
+	/** LIST_RELOAD. */
+	public static final int LIST_RELOAD = 10005;
+
 	/**
 	 * 変更があった時.
 	 * 

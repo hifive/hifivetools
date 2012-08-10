@@ -55,6 +55,9 @@ public class StructureSelectPage extends WizardPage {
 	/** changeProject. */
 	private boolean changeProject = true;
 
+	/** refreshList. */
+	private boolean refreshList = true;
+
 	/** initFlag. */
 	private boolean initFlag = false;
 
@@ -104,13 +107,24 @@ public class StructureSelectPage extends WizardPage {
 			@Override
 			public void handleEvent(Event event) {
 
+				StructureSelectPage.this.changeProject = true;
+
 				JavaProjectWizardFirstPage javaProjectWizardFirstPage = (JavaProjectWizardFirstPage) getWizard()
 						.getPage(NewWizardMessages.JavaProjectWizardFirstPage_page_pageName);
 
 				// プロジェクト名を設定する.
 				javaProjectWizardFirstPage.setName(getProjectName());
 
-				StructureSelectPage.this.changeProject = true;
+				StructureSelectPage.this.container.validatePage();
+			}
+		});
+		container.addListener(UIEventHelper.LIST_RELOAD, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				StructureSelectPage.this.refreshList = true;
+
 				StructureSelectPage.this.container.validatePage();
 			}
 		});
@@ -153,9 +167,9 @@ public class StructureSelectPage extends WizardPage {
 				// 次のページ遷移時.
 				if (event.getCurrentPage() == StructureSelectPage.this && event.getTargetPage() == getNextPage()) {
 
-					if (StructureSelectPage.this.changeProject) {
-						ConfirmLicensePage confirmLicensePage = (ConfirmLicensePage) getWizard().getPage(
-								"confirmLicensePage");
+					if (StructureSelectPage.this.changeProject || StructureSelectPage.this.refreshList) {
+						//ConfirmLicensePage confirmLicensePage = (ConfirmLicensePage) getWizard().getPage(
+						//"confirmLicensePage");
 						LibraryImportPage libraryImportPage = (LibraryImportPage) getWizard().getPage(
 								"libraryImportPage");
 						//						JavaProjectWizardFirstPage javaProjectWizardFirstPage = (JavaProjectWizardFirstPage) getWizard()
@@ -166,9 +180,10 @@ public class StructureSelectPage extends WizardPage {
 
 						BaseProject baseProject = getBaseProject();
 						if (baseProject != null) {
-							if (libraryImportPage.initialize(null, getProjectName(), baseProject.getDefaultJsLibPath())) {
+							if (libraryImportPage.initialize(null, getProjectName(), baseProject.getDefaultJsLibPath(),
+									refreshList)) {
 								// 変更あり.
-								confirmLicensePage.clearCategory();
+								//confirmLicensePage.clearCategory();
 
 								StructureSelectPage.this.changeProject = false;
 							}

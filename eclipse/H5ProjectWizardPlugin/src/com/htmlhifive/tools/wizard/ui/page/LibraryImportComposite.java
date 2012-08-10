@@ -317,16 +317,20 @@ public class LibraryImportComposite extends Composite {
 	 * @param jsProject プロジェクト
 	 * @param projectName プロジェクト名
 	 * @param defaultInstallPath 初期インストール場所
+	 * @param forceClear 強制的に初期化する
+	 * @param enableReload 再読み込みを有効にするかどうか
 	 * @return 変更あり
 	 */
-	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath,
+			boolean forceClear, boolean enableReload) {
 
 		logger.log(Messages.TR0001, getClass().getSimpleName(), "initialize");
 
 		// TODO:要リファクタ
 		//		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
 		//		&& StringUtils.equals(cmbDefaultInstallPath.getText(), defaultInstallPath)) {
-		if (StringUtils.equals(this.projectName, projectName)
+		if (!forceClear
+				&& StringUtils.equals(this.projectName, projectName)
 				&& (defaultInstallPath == null || StringUtils.equals(cmbDefaultInstallPath.getText(),
 						defaultInstallPath))) {
 			// 既に設定済なので処理しない.
@@ -337,12 +341,11 @@ public class LibraryImportComposite extends Composite {
 		if (this.jsProject != null) {
 			// PropertyPageからの呼び出し.
 			this.projectName = this.jsProject.getProject().getName();
-			btnReload.setEnabled(true);
 		} else {
 			// WizardPageからの呼び出し.
 			this.projectName = projectName;
-			btnReload.setEnabled(false);
 		}
+		btnReload.setEnabled(enableReload);
 
 		// 選択を除去.
 		H5WizardPlugin.getInstance().getSelectedLibrarySet().clear();
@@ -682,11 +685,14 @@ public class LibraryImportComposite extends Composite {
 
 		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_btnReload_widgetSelected");
 
+		UIEventHelper.notifyListeners(this, UIEventHelper.LIST_RELOAD);
+
 		// リスト再取得.
-		RemoteContentManager.getLibraryList(true);
+		//RemoteContentManager.getLibraryList(true);
 
 		// 一覧をダウンロード.
-		refreshTreeLibrary(false, true);
+		//refreshTreeLibrary(false, true);
+
 
 	}
 
@@ -931,5 +937,14 @@ public class LibraryImportComposite extends Composite {
 
 		// 正常.
 		UIEventHelper.setErrorMessage(this, null);
+	}
+
+	/**
+	 * projectNameを設定します.
+	 * 
+	 * @param projectName projectName
+	 */
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 }

@@ -140,14 +140,16 @@ public class LibraryImportPage extends WizardPage {
 	 * @param jsProject プロジェクト
 	 * @param projectName プロジェクト名
 	 * @param defaultInstallPath 初期インストール場所
+	 * @param forceClear 強制的に初期化する
 	 * @return 変更あり
 	 */
-	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath,
+			boolean forceClear) {
 
 		logger.log(Messages.TR0011, getClass().getSimpleName(), "initialize");
 
 		if (isControlCreated()) {
-			return container.initialize(jsProject, projectName, defaultInstallPath);
+			return container.initialize(jsProject, projectName, defaultInstallPath, forceClear, false);
 		}
 		return false;
 	}

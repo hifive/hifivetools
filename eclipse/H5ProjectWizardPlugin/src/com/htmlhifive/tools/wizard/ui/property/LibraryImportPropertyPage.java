@@ -116,51 +116,87 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 				getContainer().updateButtons();
 			}
 		});
+		container.addListener(UIEventHelper.LIST_RELOAD, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				// 初期化.
+				IJavaScriptProject jsProject = getJavaScriptProject();
+				if (jsProject != null) {
+					container.initialize(jsProject, jsProject.getProject().getName(), null, true, true);
+				} else {
+					//if (getElement() instanceof IProject) {
+					//container.initialize(null, ((IProject) getElement()).getName(), null, true);
+					//}
+					container.initialize(null, null, null, true, true);
+
+					H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
+				}
+			}
+		});
 
 		return container;
 	}
 
-	@Override
-	public void setVisible(boolean visible) {
-
-		logger.log(Messages.TR0021, getClass().getSimpleName(), "setVisible");
-
-		if (visible) {
-			// 初期化.
-			IJavaScriptProject jsProject = getJavaScriptProject();
-			if (jsProject != null) {
-				container.initialize(jsProject, jsProject.getProject().getName(), null);
-			} else {
-				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
-			}
-		}
-
-		// TODO 自動生成されたメソッド・スタブ
-		super.setVisible(visible);
-	}
-
 	/**
-	 * 初期化.
+	 * {@inheritDoc}
 	 * 
-	 * @param jsProject プロジェクト
-	 * @param projectName プロジェクト名
-	 * @param defaultInstallPath 初期インストール場所
-	 * @return 変更あり
+	 * @see org.eclipse.jface.preference.PreferencePage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
-	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+	@Override
+	public void createControl(Composite parent) {
 
-		logger.log(Messages.TR0021, getClass().getSimpleName(), "initialize");
+		super.createControl(parent);
 
-		if (isControlCreated()) {
-			// 初期化.
-			if (jsProject != null) {
-				return container.initialize(jsProject, null, null);
-			} else {
-				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
-			}
+		// 初期化.
+		IJavaScriptProject jsProject = getJavaScriptProject();
+		if (jsProject != null) {
+			container.initialize(jsProject, jsProject.getProject().getName(), null, false, true);
+		} else {
+			H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
 		}
-		return false;
 	}
+
+	//	@Override
+	//	public void setVisible(boolean visible) {
+	//
+	//		logger.log(Messages.TR0021, getClass().getSimpleName(), "setVisible");
+	//
+	//		// TODO 自動生成されたメソッド・スタブ
+	//		super.setVisible(visible);
+	//
+	//		if (visible) {
+	//			// 初期化.
+	//			IJavaScriptProject jsProject = getJavaScriptProject();
+	//			if (jsProject != null) {
+	//				container.initialize(jsProject, jsProject.getProject().getName(), null, false, true);
+	//			} else {
+	//				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
+	//			}
+	//		}
+	//	}
+
+	//	/**
+	//	 * 初期化.
+	//	 *
+	//	 * @return 変更あり
+	//	 */
+	//	public boolean initialize() {
+	//
+	//		logger.log(Messages.TR0021, getClass().getSimpleName(), "initialize");
+	//
+	//		if (isControlCreated()) {
+	//			// 初期化.
+	//			IJavaScriptProject jsProject = getJavaScriptProject();
+	//			if (jsProject != null) {
+	//				return container.initialize(jsProject, jsProject.getProject().getName(), null, false);
+	//			} else {
+	//				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
+	//			}
+	//		}
+	//		return false;
+	//	}
 
 	/**
 	 * JavaScriptProjectを取得する.
@@ -196,7 +232,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		logger.log(Messages.TR0021, getClass().getName(), "okToLeave");
 
 		// 変更が必要かを判定する.
-		if (!getApplyButton().isEnabled()) { // 変更チェック.
+		if (getJavaScriptProject() == null || !getApplyButton().isEnabled()) { // 変更チェック.
 			return super.okToLeave();
 		}
 
