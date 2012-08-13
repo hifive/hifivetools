@@ -17,13 +17,14 @@ package com.htmlhifive.tools.wizard.library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
@@ -263,7 +264,7 @@ public class LibraryList {
 					// 全て存在していない場合(名前だけ設定しておく).
 					List<String> noExistsFileList = new ArrayList<String>();
 					for (Site site : libraryNode.getValue().getSite()) {
-						checkSite(site, null, null, noExistsFileList);
+						checkSite(site, null, categoryNode.getInstallSubPath(), null, noExistsFileList);
 					}
 
 					libraryNode.setFileList(noExistsFileList.toArray(new String[0]));
@@ -276,9 +277,6 @@ public class LibraryList {
 				// Container単位ここから
 				for (IContainer container : checkContainers) {
 					IContainer folder = container;
-					if (StringUtils.isNotEmpty(categoryNode.getInstallSubPath())) {
-						folder = container.getFolder(Path.fromOSString(categoryNode.getInstallSubPath()));
-					}
 
 					List<String> existsFileList = new ArrayList<String>();
 					List<String> noExistsFileList = new ArrayList<String>();
@@ -289,7 +287,8 @@ public class LibraryList {
 						boolean allExists = true;
 						for (Site site : libraryNode.getValue().getSite()) {
 							// ここで一部不足しているかどうか判る
-							if (checkSite(site, folder, existsFileList, noExistsFileList)) {
+							if (checkSite(site, folder, categoryNode.getInstallSubPath(), existsFileList,
+									noExistsFileList)) {
 								// 存在している.
 								libraryExists = true;
 								lastExistsFileList = existsFileList;
@@ -360,7 +359,21 @@ public class LibraryList {
 
 			try {
 				// JavaScriptのライブラリを検索する.
-				Set<IContainer> set = new LinkedHashSet<IContainer>();
+				Set<IContainer> set = new TreeSet<IContainer>(new Comparator<IContainer>() {
+					@Override
+					public int compare(IContainer o1, IContainer o2) {
+						if (o1 == o2) {
+							return 0;
+						}
+						if (o1 == null) {
+							return 1;
+						}
+						if (o2 == null) {
+							return -1;
+						}
+						return o1.getFullPath().toString().compareToIgnoreCase(o2.getFullPath().toString());
+					}
+				});
 				for (IIncludePathEntry entry : jsProject.getResolvedIncludepath(true)) {
 					if (entry.getContentKind() == IPackageFragmentRoot.K_SOURCE) {
 						// Includeの指定がないものを優先的にインストール先として利用する
@@ -378,11 +391,7 @@ public class LibraryList {
 										.findMember(entry.getPath());
 								set.add(parentContainer);
 								if (parentContainer.exists()) {
-									for (IResource res : parentContainer.members()) {
-										if (res.getType() == IResource.FOLDER) {
-											set.add((IContainer) res);
-										}
-									}
+									addChildFolder(parentContainer, set); // 子階層のフォルダも追加.
 								}
 							}
 						} catch (CoreException ignore) {
@@ -408,6 +417,22 @@ public class LibraryList {
 	}
 
 	/**
+	 * 子階層のフォルダを追加する.
+	 * 
+	 * @param parentContainer 親フォルダ
+	 * @param set Set
+	 * @throws CoreException コア例外
+	 */
+	private static void addChildFolder(IContainer parentContainer, Set<IContainer> set) throws CoreException {
+		for (IResource res : parentContainer.members()) {
+			if (res.getType() == IResource.FOLDER) {
+				set.add((IContainer) res); // 子階層のフォルダも追加.
+				addChildFolder((IContainer) res, set);
+			}
+		}
+	}
+
+	/**
 	 * サイトごとのファイル存在チェックを行う.
 	 * 
 	 * @param site サイト
@@ -416,7 +441,8 @@ public class LibraryList {
 	 * @param noExistsFileList 存在していないファイルリスト
 	 * @return 存在していればtrueを返す
 	 */
-	private boolean checkSite(Site site, IContainer folder, List<String> existsFileList, List<String> noExistsFileList) {
+	private boolean checkSite(Site site, IContainer folder, String installSubPath, List<String> existsFileList,
+			List<String> noExistsFileList) {
 
 		String siteUrl = site.getUrl();
 		String path = H5IOUtils.getURLPath(siteUrl);
@@ -425,8 +451,12 @@ public class LibraryList {
 		}
 
 		IContainer savedFolder = folder;
-		if (site.getExtractPath() != null && folder != null) {
-			savedFolder = folder.getFolder(Path.fromOSString(site.getExtractPath()));// .getRawLocation().toFile();
+		if (StringUtils.isNotEmpty(installSubPath) && savedFolder != null) {
+			savedFolder = savedFolder.getFolder(Path.fromOSString(installSubPath));
+		}
+
+		if (StringUtils.isNotEmpty(site.getExtractPath()) && savedFolder != null) {
+			savedFolder = savedFolder.getFolder(Path.fromOSString(site.getExtractPath()));// .getRawLocation().toFile();
 		}
 
 		String[] fileList = null;
@@ -440,7 +470,7 @@ public class LibraryList {
 				// パス以外を取得.
 				wildCardStr = StringUtils.substringAfterLast(site.getFilePattern(), "/");
 
-				// パスを取得.
+				// wildCardPathに*が含まれる場合はそこからパスを取得する.
 				if (!wildCardStr.contains("*")) { // *の時はパスを除去するので
 					wildCardPath = StringUtils.substringBeforeLast(site.getFilePattern(), "/");
 					// folder = new File(folder, wildCardPath);
@@ -489,6 +519,7 @@ public class LibraryList {
 		} else {
 			// zip以外.
 			IFile file = null;
+
 			if (savedFolder != null) {
 				if (site.getReplaceFileName() != null) {
 					file = savedFolder.getFile(Path.fromOSString(site.getReplaceFileName()));
@@ -499,7 +530,7 @@ public class LibraryList {
 					fileList = new String[] { file.getName() };
 					existsFileList.add(file.getName());
 				} else {
-					//noExistsFileList.add(file.getFullPath().toString());
+					// 存在しない場合
 					if (file.getFullPath().toString().startsWith(folder.getFullPath().toString() + "/")) {
 						noExistsFileList.add(file.getFullPath().toString()
 								.substring(folder.getFullPath().toString().length() + 1));

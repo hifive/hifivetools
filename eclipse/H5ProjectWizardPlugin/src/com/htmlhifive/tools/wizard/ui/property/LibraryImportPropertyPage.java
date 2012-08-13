@@ -17,6 +17,7 @@ package com.htmlhifive.tools.wizard.ui.property;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -35,8 +37,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
-import org.eclipse.wst.jsdt.core.IJavaScriptElement;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
+import org.eclipse.wst.jsdt.core.JavaScriptCore;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
 import com.htmlhifive.tools.wizard.download.DownloadModule;
@@ -44,6 +46,7 @@ import com.htmlhifive.tools.wizard.log.PluginLogger;
 import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
 import com.htmlhifive.tools.wizard.log.ResultStatus;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
+import com.htmlhifive.tools.wizard.ui.ProjectCreationWizard;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.page.LibraryImportComposite;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryNode;
@@ -158,24 +161,38 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		}
 	}
 
-	//	@Override
-	//	public void setVisible(boolean visible) {
-	//
-	//		logger.log(Messages.TR0021, getClass().getSimpleName(), "setVisible");
-	//
-	//		// TODO 自動生成されたメソッド・スタブ
-	//		super.setVisible(visible);
-	//
-	//		if (visible) {
-	//			// 初期化.
-	//			IJavaScriptProject jsProject = getJavaScriptProject();
-	//			if (jsProject != null) {
-	//				container.initialize(jsProject, jsProject.getProject().getName(), null, false, true);
-	//			} else {
-	//				H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
-	//			}
-	//		}
-	//	}
+	@Override
+	public void setVisible(boolean visible) {
+
+		logger.log(Messages.TR0021, getClass().getSimpleName(), "setVisible");
+
+		if (visible){
+			if (getJavaScriptProject() == null) {
+				if (addNature((IProject) getElement().getAdapter(IProject.class), JavaScriptCore.NATURE_ID)) {
+					MessageDialog.openInformation(getShell(), Messages.SE0121.format(), Messages.SE0122.format());
+					// 閉じる.
+					if (getContainer() instanceof PreferenceDialog){
+						((PreferenceDialog)getContainer()).close();
+					}
+					return;
+				}
+				setVisible(false);
+				return;
+			}
+		}
+
+		super.setVisible(visible);
+
+		//			if (visible) {
+		//				// 初期化.
+		//				IJavaScriptProject jsProject = getJavaScriptProject();
+		//				if (jsProject != null) {
+		//					container.initialize(jsProject, jsProject.getProject().getName(), null, false, true);
+		//				} else {
+		//					H5LogUtils.putLog(null, Messages.SE0023, "JavaScriptProject is null");
+		//				}
+		//			}
+	}
 
 	//	/**
 	//	 * 初期化.
@@ -210,11 +227,68 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 
 		IAdaptable adaptable = getElement();
 		if (adaptable != null) {
-			if (adaptable.getAdapter(IJavaScriptElement.class) != null) {
-				return ((IJavaScriptElement) adaptable.getAdapter(IJavaScriptElement.class)).getJavaScriptProject();
+			IProject project = (IProject) adaptable.getAdapter(IProject.class);
+			IJavaScriptProject jsProject = null;
+			try {
+				jsProject = (IJavaScriptProject) project.getNature(JavaScriptCore.NATURE_ID);
+			} catch (CoreException e) {
+				// 無視.
+			}
+			if (jsProject != null) {
+				return jsProject;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Natureの存在チェック.
+	 * 
+	 * @param project プロジェクト
+	 * @param natureId NatureID
+	 * @return 変更したかどうか.
+	 */
+	private boolean addNature(IProject project, String natureId) {
+			// JSNatureを追加する.
+			if (MessageDialog.openQuestion(getShell(), Messages.SE0119.format(), Messages.SE0120.format(getTitle()))) {
+				// ロガーを生成.
+				final ResultStatus logger = new ResultStatus();
+
+				try {
+					// ライブラリダウンロード.
+
+					final IRunnableWithProgress downloadRunnable = getAddNatureRunnnable(logger, project, natureId);
+
+					ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+					dialog.run(false, false, downloadRunnable);
+					
+					// 実行したので一度閉じる.
+					return true;
+				} catch (InvocationTargetException e) {
+					final Throwable ex = e.getTargetException();
+
+					H5LogUtils.putLog(ex, Messages.SE0025);
+
+				} catch (InterruptedException e) {
+					logger.setInterrupted(true);
+					// We were cancelled...
+					//removeProject(logger);
+
+				} finally {
+					//					// 結果表示.
+					//					logger.showDialog(Messages.PI0138);
+					if (logger.isSuccess()) {
+						return true;
+					}
+
+					// ファイルの存在チェック更新(チェックを戻す).
+					container.refreshTreeLibrary(false, true);
+					// SE0103=INFO,ライブラリの状態を最新化しました。
+					logger.log(Messages.SE0103);
+				}
+
+			}
+		return false;
 	}
 
 	@Override
@@ -232,7 +306,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		logger.log(Messages.TR0021, getClass().getName(), "okToLeave");
 
 		// 変更が必要かを判定する.
-		if (getJavaScriptProject() == null || !getApplyButton().isEnabled()) { // 変更チェック.
+		if (getJavaScriptProject() == null || !getApplyButton().isEnabled() || H5WizardPlugin.getInstance().getSelectedLibrarySet().isEmpty()) { // 変更チェック.
 			return super.okToLeave();
 		}
 
@@ -388,4 +462,41 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 		};
 
 	}
+
+	/**
+	 * Nature追加処理を行なうRunnable を取得.
+	 * 
+	 * @param logger ロガー
+	 * @return Nature追加処理を行なうRunnable
+	 */
+	private static IRunnableWithProgress getAddNatureRunnnable(final ResultStatus logger, final IProject project,
+			final String natureId) {
+
+		return new IRunnableWithProgress() {
+
+			@Override
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				try {
+					// SE0065=INFO,Nature{0}を追加します。
+					logger.log(Messages.SE0065, natureId);
+
+					ProjectCreationWizard.addNature(project, monitor, natureId);
+
+					// SE0066=INFO,Nature{0}を追加しました。
+					logger.log(Messages.SE0066, natureId);
+				} catch (CoreException e) {
+
+					// 失敗にはしない.
+					// SE0067=INFO,Nature{0}追加に失敗しました。
+					logger.logIgnoreSetSuccess(e, Messages.SE0067, natureId);
+
+					// SE0031=ERROR,プラグインがインストールされていない可能性があります。name={0}, natureId={1}
+					//H5LogUtils.putLog(e, Messages.SE0031, nature.getName(), nature.getId());
+					H5LogUtils.showLog(e, Messages.SE0032, Messages.SE0031, "", natureId);
+				}
+
+			}
+		};
+	}
+
 }

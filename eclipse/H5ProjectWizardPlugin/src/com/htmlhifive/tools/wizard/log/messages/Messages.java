@@ -234,6 +234,18 @@ public abstract class Messages extends MessagesBase {
 	/** SE0118=INFO,ここでは遷移できません。. */
 	public static final Message SE0118 = createMessage("SE0118");
 
+	/** SE0119=INFO,確認. */
+	public static final Message SE0119 = createMessage("SE0119");
+
+	/** SE0120=INFO,このプロジェクトで{0}を開くには\nJavaScriptプロジェクトにする必要(JavaScript Natureの追加)があります。\n変更しますか？. */
+	public static final Message SE0120 = createMessage("SE0120");
+
+	/** SE0121=INFO,確認. */
+	public static final Message SE0121 = createMessage("SE0121");
+
+	/** SE0122=INFO,設定を有効にするため、プロパティページを一度閉じます。. */
+	public static final Message SE0122 = createMessage("SE0122");
+
 	// #taskName
 	/** PI0101=INFO,プロジェクトのディレクトリ構成を作成中.... */
 	public static final Message PI0101 = createMessage("PI0101");
