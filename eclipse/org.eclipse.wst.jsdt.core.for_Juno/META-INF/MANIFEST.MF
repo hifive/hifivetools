@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: org.eclipse.wst.jsdt.core;singleton:=true
-Bundle-Version: 1.0.0.vqualifier
+Bundle-Version: 1.1.201.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
