@@ -99,19 +99,25 @@ public class LibraryTreeLabelProvider extends LabelProvider implements ITableLab
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
 
-		if (columnIndex == 1 && element instanceof CategoryNode) {
-			CategoryNode categoryNode = (CategoryNode) element;
-			boolean installed = false;
-			if (categoryNode.getChildren() != null) {
-				for (TreeNode node : categoryNode.getChildren()) {
-					if (((LibraryNode) node).isExists()) {
-						installed = true;
-						break;
+		if (columnIndex == 1) {
+			if (element instanceof CategoryNode) {
+				CategoryNode categoryNode = (CategoryNode) element;
+				boolean installed = false;
+				if (categoryNode.getChildren() != null) {
+					for (TreeNode node : categoryNode.getChildren()) {
+						if (((LibraryNode) node).isExists()) {
+							installed = true;
+							break;
+						}
 					}
 				}
-			}
-			if (!installed) {
-				return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
+				if (!installed) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
+				}
+			} else if (element instanceof LibraryNode) {
+				if (!((LibraryNode) element).isExists()) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
+				}
 			}
 		}
 		return null;

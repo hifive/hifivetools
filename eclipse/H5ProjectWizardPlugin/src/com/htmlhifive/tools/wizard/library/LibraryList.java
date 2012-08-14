@@ -282,7 +282,7 @@ public class LibraryList {
 					List<String> noExistsFileList = new ArrayList<String>();
 					List<String> allFileList = new ArrayList<String>();
 
-					if (folder.getRawLocation() != null) {
+					if (folder.exists()) {//if (folder.getRawLocation() != null) {projectが通らないので.
 						// Site単位ここから
 						boolean allExists = true;
 						for (Site site : libraryNode.getValue().getSite()) {
@@ -404,7 +404,7 @@ public class LibraryList {
 				set.add(jsProject.getProject()); // 一応追加しておく.
 
 				if (!set.isEmpty()) {
-					checkContainers = set.toArray(new IContainer[0]);
+					checkContainers = set.toArray(new IContainer[set.size()]);
 					//					if (defaultInstallContainer == null) {
 					//						defaultInstallContainer = set.iterator().next();
 					//					}
