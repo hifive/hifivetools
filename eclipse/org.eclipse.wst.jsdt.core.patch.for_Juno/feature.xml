@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.wst.jsdt.core.patch"
+      id="org.eclipse.wst.jsdt.core.patch.juno"
       label="%feature.name"
       version="1.0.0.vqualifier"
       provider-name="%feature.vendor"
       plugin="org.eclipse.wst.jsdt.core"
       license-feature="org.eclipse.wst.jsdt.feature"
-	license-feature-version="1.4.0.v201111090639-7H7DFeHFC7sRemSZcWdQy5">
+      license-feature-version="1.4.0.v201111090639-7H7DFeHFC7sRemSZcWdQy5">
 
    <description>
       %feature.description
