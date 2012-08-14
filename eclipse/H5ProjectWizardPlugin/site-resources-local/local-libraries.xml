@@ -21,14 +21,17 @@ limitations under the License.
 
 <a>http://www.htmlhifive.com</a>
 ]]></license>
-			<info>
-				<title>hifive library</title>
-				<description>hifive base library</description>
-			</info>
 			<info lang="ja">
-				<title>hifive ライブラリ</title>
+				<title>hifive フレームワーク</title>
 				<description><![CDATA[
-hifive の動作に必要なライブラリ
+hifive のフレームワークです。
+<a>http://www.htmlhifive.com</a>
+				]]></description>
+			</info>
+			<info>
+				<title>hifive framework</title>
+				<description><![CDATA[
+This is hifive framework.
 <a>http://www.htmlhifive.com</a>
 				]]></description>
 			</info>
@@ -48,6 +51,38 @@ hifive の動作に必要なライブラリ
 
 
 	<base-projects>
+		<base-project default-js-lib-path="WebContent/res/lib" url="http://www.htmlhifive.com/eclipse-plugins/site-resources/projects/wtp.zip?wizard-plugin">
+			<info lang="ja">
+				<title>1. hifive 基本構成 WTP プロジェクト</title>
+				<description>[hifive利用時の基本構成]
+				・JavaSriptプロジェクトがベース
+				・Tomcatプラグイン設定済
+				・WebContentsがドキュメントルートの動的Webプロジェクト(Java環境)
+				・サンプルのHTMLとしてhifiveのStep3を含む(hifive利用バージョンは1.0.4を利用)
+				</description>
+			</info>
+			<info>
+				<title>1. hifive basic configuration WTP project</title>
+				<description>[hifive when using basic configuration]
+				・JavaSript project is based.
+				・Tomcat plug-in configured.
+				・WebContents is a dynamic Web project (Java environment) of the document root.
+				・Including hifive Step3 as sample HTML (hifive version using 1.0.4).
+				</description>
+			</info>
+			<replace>
+				<file name="/.jslint"/>
+				<file name="/.codeassist"/>
+				<file name="/.tomcatplugin"/>
+				<file name="/.settings/org.eclipse.wst.common.component"/>
+				<file name="/WebContent/index.html"/>
+			</replace>
+			<natures>
+				<nature id="org.eclipse.jdt.core.javanature" name="java" />
+				<nature id="com.sysdeo.eclipse.tomcat.tomcatnature"  name="tomcat"/>
+			</natures>
+		</base-project>
+
 		<base-project default-js-lib-path="WebContent/res/lib" url="/projects/wtp.zip">
 			<info lang="ja">
 				<title>hifive 基本構成 WTP プロジェクト</title>

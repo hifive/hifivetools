@@ -1,0 +1,22 @@
+2012/08/07 NS Solutions Corporation
+
+/org.eclipse.wst.jsdt.core/src/org/eclipse/wst/jsdt/internal/compiler/lookup/CompilationUnitScope.java
+line no 432-437
+------------------------------------------------------------------------------------------------
+				// start 2012/08/07
+				// classScope.buildInferredType(sourceType, environment.defaultPackage, null);
+				if(classScope != null){
+					classScope.buildInferredType(sourceType, environment.defaultPackage, null);
+				}
+				// end 2012/08/07
+------------------------------------------------------------------------------------------------
+
+line no 669-674
+------------------------------------------------------------------------------------------------
+			// start 2012/08/07
+			// if (inferredType.binding != null )
+			// inferredType.binding.classScope.connectTypeHierarchy();
+			if (inferredType.binding != null && inferredType.binding.classScope != null)
+				inferredType.binding.classScope.connectTypeHierarchy();
+			// end 2012/08/07
+------------------------------------------------------------------------------------------------

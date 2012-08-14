@@ -20,9 +20,12 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.htmlhifive.tools.wizard.library.LibraryFileParser;
-import com.htmlhifive.tools.wizard.library.LibraryFileParserFactory;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.parser.LibraryFileParser;
+import com.htmlhifive.tools.wizard.library.parser.LibraryFileParserFactory;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.library.xml.Library;
+import com.htmlhifive.tools.wizard.library.xml.Site;
 
 /**
  * <H3>ConfigFileParserFactoryTest</H3>
@@ -38,7 +41,7 @@ public class ConfigFileParserFactoryTest {
 	public void testCreateParser() throws Exception {
 
 		InputStream is = null;
-		is = ConfigFileParserFactoryTest.class.getResourceAsStream("default-libraries.xml");
+		is = ConfigFileParserFactoryTest.class.getResourceAsStream("/local-libraries.xml");
 		LibraryFileParser parser = LibraryFileParserFactory.createParser(is);
 		try {
 			LibraryList list = parser.getLibraryList();

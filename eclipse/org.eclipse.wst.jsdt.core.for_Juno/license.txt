@@ -1,0 +1,11 @@
+This product licensed under
+EPL(http://www.eclipse.org/legal/epl-v10.html).
+
+-----
+This product is based on
+JavaScript Development Tools (JSDT)
+
+URL:http://www.eclipse.org/webtools/jsdt/
+License:EPL
+	http://www.eclipse.org/legal/epl-v10.html
+Local Modifications: Only CompilationUnitScope.java is modified for bugfix.

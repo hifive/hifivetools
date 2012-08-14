@@ -24,9 +24,9 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.TreeNode;
 
-import com.htmlhifive.tools.wizard.library.model.xml.Category;
-import com.htmlhifive.tools.wizard.library.model.xml.Info;
-import com.htmlhifive.tools.wizard.library.model.xml.Library;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.library.xml.Info;
+import com.htmlhifive.tools.wizard.library.xml.Library;
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 
 /**
@@ -154,6 +154,7 @@ public class CategoryNode extends TreeNode implements LibraryTreeNode {
 	 * @param parentPath parentPath
 	 */
 	public void setParentPath(IContainer parentPath) {
+
 		this.parentPath = parentPath;
 	}
 
