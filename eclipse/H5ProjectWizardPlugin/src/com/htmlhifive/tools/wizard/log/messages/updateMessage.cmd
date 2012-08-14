@@ -9,7 +9,7 @@ rem set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_31
 rem Šî–{İ’èî•ñ
 set exe_mode=plugin
 set inputfile=messages.txt
-set outfile=messages.properties
+set outfile=messages_ja.properties
 set java_class_name=Messages
 set java_base_class_package=%java_package_name%
 set java_base_class_name=MessagesBase

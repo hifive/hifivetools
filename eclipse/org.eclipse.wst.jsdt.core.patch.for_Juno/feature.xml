@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.wst.jsdt.core.patch.juno"
+      label="%feature.name"
+      version="1.0.0.vqualifier"
+      provider-name="%feature.vendor"
+      plugin="org.eclipse.wst.jsdt.core"
+      license-feature="org.eclipse.wst.jsdt.feature"
+      license-feature-version="1.4.0.v201111090639-7H7DFeHFC7sRemSZcWdQy5">
+
+   <description>
+      %feature.description
+   </description>
+
+   <copyright>
+      %feature.copyright.notice
+   </copyright>
+
+   <license url="">
+      %feature.license.agreement
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.wst.jsdt.feature" version="1.4.0.v201111090639-7H7DFeHFC7sRemSZcWdQy5" patch="true"/>
+      <import plugin="org.eclipse.core.resources" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.2.0" match="compatible"/>
+      <import plugin="org.eclipse.text" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.core" version="3.5.0" match="compatible"/>
+      <import plugin="com.ibm.icu"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.wst.jsdt.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

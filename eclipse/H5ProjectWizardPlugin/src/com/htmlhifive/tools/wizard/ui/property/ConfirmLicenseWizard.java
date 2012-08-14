@@ -16,8 +16,10 @@
 package com.htmlhifive.tools.wizard.ui.property;
 
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Composite;
 
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
+import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.page.ConfirmLicensePage;
 
 /**
@@ -26,6 +28,8 @@ import com.htmlhifive.tools.wizard.ui.page.ConfirmLicensePage;
  * @author fkubo
  */
 public class ConfirmLicenseWizard extends Wizard {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(ConfirmLicenseWizard.class);
 
 	/** ライセンス確認ページ. */
 	private ConfirmLicensePage confirmLicensePage;
@@ -36,19 +40,12 @@ public class ConfirmLicenseWizard extends Wizard {
 	@Override
 	public void addPages() {
 
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "addPages");
+
 		confirmLicensePage = new ConfirmLicensePage("confirmLicensePage");
 		addPage(confirmLicensePage);
 
 		setNeedsProgressMonitor(false);
-
-	}
-
-	@Override
-	public void createPageControls(Composite pageContainer) {
-
-		super.createPageControls(pageContainer);
-
-		confirmLicensePage.setLiceseContents();
 
 	}
 
@@ -57,6 +54,8 @@ public class ConfirmLicenseWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
+
+		logger.log(Messages.TR0031, getClass().getSimpleName(), "performFinish");
 
 		// ここでは処理せず終了.
 

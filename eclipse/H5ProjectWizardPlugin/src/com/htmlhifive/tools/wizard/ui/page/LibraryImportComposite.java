@@ -15,10 +15,6 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,11 +50,12 @@ import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 
 import com.htmlhifive.tools.wizard.H5WizardPlugin;
 import com.htmlhifive.tools.wizard.RemoteContentManager;
-import com.htmlhifive.tools.wizard.library.model.LibraryList;
-import com.htmlhifive.tools.wizard.library.model.LibraryState;
-import com.htmlhifive.tools.wizard.library.model.xml.Category;
-import com.htmlhifive.tools.wizard.library.model.xml.Library;
-import com.htmlhifive.tools.wizard.library.model.xml.Site;
+import com.htmlhifive.tools.wizard.library.LibraryList;
+import com.htmlhifive.tools.wizard.library.LibraryState;
+import com.htmlhifive.tools.wizard.library.xml.Category;
+import com.htmlhifive.tools.wizard.library.xml.Library;
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
 import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
@@ -68,6 +65,7 @@ import com.htmlhifive.tools.wizard.ui.page.tree.LibraryTreeLabelProvider;
 import com.htmlhifive.tools.wizard.ui.page.tree.LibraryTreeLatestViewerFilter;
 import com.htmlhifive.tools.wizard.ui.page.tree.RootNode;
 import com.htmlhifive.tools.wizard.utils.H5IOUtils;
+import com.htmlhifive.tools.wizard.utils.H5LogUtils;
 
 /**
  * <H3>ライブラリインポート用コンポジット.</H3>
@@ -75,6 +73,8 @@ import com.htmlhifive.tools.wizard.utils.H5IOUtils;
  * @author fkubo
  */
 public class LibraryImportComposite extends Composite {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(LibraryImportComposite.class);
 
 	private final Tree treeLibrary;
 	private final CheckboxTreeViewer treeViewerLibrary;
@@ -84,6 +84,7 @@ public class LibraryImportComposite extends Composite {
 	private final Button checkFilterLatest;
 	private final Combo cmbDefaultInstallPath;
 	private final ScrolledComposite scrolledComposite;
+	private final Button btnReload;
 
 	private IJavaScriptProject jsProject = null;
 	private String projectName = null;
@@ -97,6 +98,8 @@ public class LibraryImportComposite extends Composite {
 	public LibraryImportComposite(Composite parent, int style) {
 
 		super(parent, style);
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "<init>");
+
 		setLayout(new GridLayout(1, false));
 
 		Label lblInfo = new Label(this, SWT.NONE);
@@ -136,7 +139,7 @@ public class LibraryImportComposite extends Composite {
 		});
 		btnRecommended.setText(UIMessages.LibraryImportComposite_btnRecommended_text);
 
-		Button btnReload = new Button(groupAll, SWT.NONE);
+		btnReload = new Button(groupAll, SWT.NONE);
 		btnReload.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		btnReload.addSelectionListener(new SelectionAdapter() {
 
@@ -268,27 +271,81 @@ public class LibraryImportComposite extends Composite {
 	}
 
 	/**
+	 * 選択ライブラリ取得.
+	 * 
+	 * @return 選択ライブラリ.
+	 */
+	private Set<LibraryNode> getSelectedLibrarySet() {
+
+		return H5WizardPlugin.getInstance().getSelectedLibrarySet();
+	}
+
+	/**
+	 * ライブラリツリーを取得する.
+	 * 
+	 * @param e イベント
+	 * @return ライブラリツリー
+	 */
+	public Tree getTreeLibrary() {
+
+		return treeLibrary;
+	}
+
+	/**
+	 * 変更が必要かどうか.
+	 * 
+	 * @return 変更が必要かどうか
+	 */
+	public boolean isChanged() {
+
+		return tableSelection.getItemCount() > 0;
+	}
+
+	/**
+	 * インストールディレクトリを取得する.
+	 * 
+	 * @return インストールディレクトリ
+	 */
+	public String getDefaultInstallPath() {
+
+		return cmbDefaultInstallPath.getText();
+	}
+
+	/**
 	 * 初期化.
 	 * 
 	 * @param jsProject プロジェクト
 	 * @param projectName プロジェクト名
 	 * @param defaultInstallPath 初期インストール場所
+	 * @param forceClear 強制的に初期化する
+	 * @param enableReload 再読み込みを有効にするかどうか
 	 * @return 変更あり
 	 */
-	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath) {
+	public boolean initialize(IJavaScriptProject jsProject, String projectName, String defaultInstallPath,
+			boolean forceClear, boolean enableReload) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "initialize");
 
 		// TODO:要リファクタ
-		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
-				&& StringUtils.equals(cmbDefaultInstallPath.getText(), defaultInstallPath)) {
-			// 変更不可.
+		//		if (jsProject == null && StringUtils.equals(this.projectName, projectName)
+		//		&& StringUtils.equals(cmbDefaultInstallPath.getText(), defaultInstallPath)) {
+		if (!forceClear
+				&& StringUtils.equals(this.projectName, projectName)
+				&& (defaultInstallPath == null || StringUtils.equals(cmbDefaultInstallPath.getText(),
+						defaultInstallPath))) {
+			// 既に設定済なので処理しない.
 			return false;
 		}
 
 		this.jsProject = jsProject;
-		this.projectName = projectName;
-		if (jsProject != null) {
-			this.projectName = jsProject.getProject().getName();
+		if (this.jsProject != null) {
+			// PropertyPageからの呼び出し.
+			this.projectName = this.jsProject.getProject().getName();
+		} else {
+			// WizardPageからの呼び出し.
+			this.projectName = projectName;
 		}
+		btnReload.setEnabled(enableReload);
 
 		// 選択を除去.
 		H5WizardPlugin.getInstance().getSelectedLibrarySet().clear();
@@ -326,6 +383,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param forceDefault 強制的にデフォルトに戻す
 	 */
 	public void refreshTreeLibrary(boolean checkedRecommanded, boolean forceDefault) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "refreshTreeLibrary");
 
 		LibraryList libraryList = RemoteContentManager.getLibraryList();
 
@@ -365,12 +424,16 @@ public class LibraryImportComposite extends Composite {
 		}
 
 		// チェック.
-		RootNode rootNode = new RootNode(libraryList);
-		IContainer[] containers = libraryList.checkLibrary(jsProject, projectName, cmbDefaultInstallPath.getText(),
-				rootNode);
-		setDefaultInstallPath(containers);
+		if (projectName != null) {
+			RootNode rootNode = new RootNode(libraryList);
+			IContainer[] containers = libraryList.checkLibrary(jsProject, projectName, cmbDefaultInstallPath.getText(),
+					rootNode);
+			setDefaultInstallPath(containers);
 
-		treeViewerLibrary.setInput(rootNode.getChildren());
+			treeViewerLibrary.setInput(rootNode.getChildren());
+		} else {
+			H5LogUtils.putLog(null, Messages.SE0023, "projectName is null");
+		}
 
 		treeViewerLibrary.refresh(true);
 
@@ -397,21 +460,13 @@ public class LibraryImportComposite extends Composite {
 	}
 
 	/**
-	 * 選択ライブラリ取得.
-	 * 
-	 * @return 選択ライブラリ.
-	 */
-	private Set<LibraryNode> getSelectedLibrarySet() {
-
-		return H5WizardPlugin.getInstance().getSelectedLibrarySet();
-	}
-
-	/**
 	 * ツリー選択イベント.
 	 * 
 	 * @param e イベント
 	 */
 	protected void do_treeLibrary_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_treeLibrary_widgetSelected");
 
 		// 詳細更新.
 
@@ -421,7 +476,13 @@ public class LibraryImportComposite extends Composite {
 			categoryNode = (CategoryNode) treeItem.getData();
 		} else if (treeItem.getData() instanceof LibraryNode) {
 			LibraryNode libraryNode = (LibraryNode) treeItem.getData();
-			treeLibrary.setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
+			if (libraryNode.isIncomplete() && libraryNode.getState() == LibraryState.DEFAULT) {
+				treeLibrary.setToolTipText(Messages.PI0135.format(UIMessages.LibraryState_INCOMPLETE));
+			} else if (libraryNode.isInError() && libraryNode.getState() == LibraryState.DEFAULT) {
+				treeLibrary.setToolTipText(Messages.PI0135.format(UIMessages.LibraryState_ERROR));
+			} else {
+				treeLibrary.setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
+			}
 			treeItem.getParent().setToolTipText(Messages.PI0135.format(libraryNode.getState().getText()));
 			categoryNode = libraryNode.getParent();
 		}
@@ -485,6 +546,9 @@ public class LibraryImportComposite extends Composite {
 	 * @param treeItem アイテム
 	 */
 	private void itemCheck(LibraryNode libraryNode, TreeItem treeItem) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "itemCheck");
+
 		if (libraryNode.isIncomplete()) {
 			if (treeItem.getChecked() && treeItem.getGrayed()) {
 				// 追加処理.
@@ -517,6 +581,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void effectTreeViewParentItem(TreeItem treeItem) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "effectTreeViewParentItem");
+
 		// 親処理.
 		boolean allChecked = true;
 		boolean anyChecked = false;
@@ -533,25 +599,27 @@ public class LibraryImportComposite extends Composite {
 	}
 
 	/**
-	 * ライブラリツリーを取得する.
+	 * インストールディレクトリを取得する.
 	 * 
-	 * @param e イベント
-	 * @return ライブラリツリー
+	 * @param paths フォルダ一覧
 	 */
-	public Tree getTreeLibrary() {
+	public void setDefaultInstallPath(IContainer[] paths) {
 
-		return treeLibrary;
+		String oldValue = cmbDefaultInstallPath.getText();
+		if (cmbDefaultInstallPath.getItemCount() > 0) {
+			cmbDefaultInstallPath.removeAll();
+		}
+		for (IContainer container : paths) {
+			if (!container.getProjectRelativePath().toString().isEmpty()) {
+				cmbDefaultInstallPath.add(container.getProjectRelativePath().toString());
+			}
+		}
+		if (!cmbDefaultInstallPath.getText().equals(oldValue)) {
+			cmbDefaultInstallPath.setText(oldValue);
+		}
 	}
 
-	/**
-	 * 変更が必要かどうか.
-	 * 
-	 * @return 変更が必要かどうか
-	 */
-	public boolean isChanged() {
-
-		return tableSelection.getItemCount() > 0;
-	}
+	// イベント処理系.
 
 	/**
 	 * 推奨設定ボタン.
@@ -559,6 +627,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param e イベント
 	 */
 	protected void do_btnRecommended_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_btnRecommended_widgetSelected");
 
 		// 一旦フィルターを解除する.
 		ViewerFilter[] viewerFilter = treeViewerLibrary.getFilters();
@@ -613,11 +683,16 @@ public class LibraryImportComposite extends Composite {
 	 */
 	protected void do_btnReload_widgetSelected(SelectionEvent e) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_btnReload_widgetSelected");
+
+		UIEventHelper.notifyListeners(this, UIEventHelper.LIST_RELOAD);
+
 		// リスト再取得.
-		RemoteContentManager.getLibraryList(true);
+		//RemoteContentManager.getLibraryList(true);
 
 		// 一覧をダウンロード.
-		refreshTreeLibrary(false, true);
+		//refreshTreeLibrary(false, true);
+
 
 	}
 
@@ -627,6 +702,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param e イベント
 	 */
 	protected void do_checkFilterLatest_widgetSelected(SelectionEvent e) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_checkFilterLatest_widgetSelected");
 
 		// 変更.
 		if (e == null || ((Button) e.widget).getSelection()) {
@@ -642,6 +719,8 @@ public class LibraryImportComposite extends Composite {
 	 * フィルター更新に伴うチェックの復元.
 	 */
 	private void refreshTreeViewerFilter() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "refreshTreeViewerFilter");
 
 		treeViewerLibrary.refresh(true);
 
@@ -678,6 +757,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void removeTableItem(LibraryNode libraryNode) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "removeTableItem");
+
 		//if (libraryNode.isExists() && !getSelectedLibrarySet().contains(libraryNode)) {
 		if (!getSelectedLibrarySet().contains(libraryNode) || libraryNode.isIncomplete()
 				&& libraryNode.getState() == LibraryState.ADD) {
@@ -712,6 +793,8 @@ public class LibraryImportComposite extends Composite {
 	 */
 	private void addTableItem(LibraryNode libraryNode) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "addTableItem");
+
 		if (libraryNode.isExists() && getSelectedLibrarySet().contains(libraryNode)) {
 			removeTableItem(libraryNode);
 		} else if (libraryNode.isExists()) {
@@ -728,6 +811,8 @@ public class LibraryImportComposite extends Composite {
 	 * @param libraryState 操作状態
 	 */
 	private void setTableItem(LibraryNode libraryNode, LibraryState state) {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "setTableItem");
 
 		// 状態を変更.
 		libraryNode.setState(state);
@@ -769,22 +854,11 @@ public class LibraryImportComposite extends Composite {
 		tableItem.setText(1, category.getName());
 		tableItem.setText(2, library.getVersion());
 		tableItem.setText(3, categoryNode.getPathLable());
-		List<String> files = new ArrayList<String>();
-		for (Site site : library.getSite()) {
-			if (site.getReplaceFileName() != null) {
-				files.add(site.getReplaceFileName());
-			} else if (site.getFilePattern() != null) {
-				files.add(site.getFilePattern());
-			} else {
-				try {
-					files.add(StringUtils.substringAfterLast(new URL(site.getUrl()).getPath(), "/"));
-				} catch (MalformedURLException e) {
-					// 無視.
-					files.add("---");
-				}
-			}
+
+		// List生成時に無くても作成するよう変更
+		if (libraryNode.getFileList() != null) {
+			tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
 		}
-		tableItem.setText(4, StringUtils.join(files, ","));
 		if (!library.getSite().isEmpty()) {
 			tableItem.setText(5, library.getSite().get(0).getUrl() + " ...");
 		}
@@ -794,43 +868,14 @@ public class LibraryImportComposite extends Composite {
 
 	}
 
-
 	/**
 	 * テーブル変更時.
 	 */
 	protected void changeTableSelection() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "changeTableSelection");
+
 		UIEventHelper.notifyListeners(this, UIEventHelper.TABLE_SELECTION_CHANGE, tableSelection);
-	}
-
-	/**
-	 * インストールディレクトリを取得する.
-	 * 
-	 * @return インストールディレクトリ
-	 */
-	public String getDefaultInstallPath() {
-
-		return cmbDefaultInstallPath.getText();
-	}
-
-	/**
-	 * インストールディレクトリを取得する.
-	 * 
-	 * @param paths フォルダ一覧
-	 */
-	public void setDefaultInstallPath(IContainer[] paths) {
-
-		String oldValue = cmbDefaultInstallPath.getText();
-		if (cmbDefaultInstallPath.getItemCount() > 0) {
-			cmbDefaultInstallPath.removeAll();
-		}
-		for (IContainer container : paths) {
-			if (!container.getProjectRelativePath().toString().isEmpty()) {
-				cmbDefaultInstallPath.add(container.getProjectRelativePath().toString());
-			}
-		}
-		if (!cmbDefaultInstallPath.getText().equals(oldValue)) {
-			cmbDefaultInstallPath.setText(oldValue);
-		}
 	}
 
 	/**
@@ -840,10 +885,32 @@ public class LibraryImportComposite extends Composite {
 	 */
 	protected void do_cmbDefaultInstallPath_modifyText(ModifyEvent e) {
 
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "do_cmbDefaultInstallPath_modifyText");
+
 		if (treeLibrary.getItemCount() > 0) {
 			((CategoryNode[]) treeLibrary.getData())[0].getParent().setDefaultInstallPath(((Combo) e.widget).getText());
 			treeViewerLibrary.refresh(true);
 		}
+
+		// テーブルにもあるので状態変更のみ.
+		if (tableSelection.getItemCount() > 0) {
+			for (TableItem tableItem : tableSelection.getItems()) {
+				LibraryNode libraryNode = (LibraryNode) tableItem.getData();
+				//				tableItem.setText(0, libraryNode.getState().getText());
+				//				tableItem.setText(1, libraryNode.getParent().getValue().getName());
+				//				tableItem.setText(2, libraryNode.getValue().getVersion());
+				tableItem.setText(3, libraryNode.getParent().getPathLable());
+
+				//				// List生成時に無くても作成するよう変更
+				//				if (libraryNode.getFileList() != null) {
+				//					tableItem.setText(4, StringUtils.join(libraryNode.getFileList(), ","));
+				//				}
+				//				if (!libraryNode.getValue().getSite().isEmpty()) {
+				//					tableItem.setText(5, libraryNode.getValue().getSite().get(0).getUrl() + " ...");
+				//				}
+			}
+		}
+
 		validatePage();
 	}
 
@@ -851,6 +918,8 @@ public class LibraryImportComposite extends Composite {
 	 * Returns whether this page's controls currently all contain valid values.
 	 */
 	void validatePage() {
+
+		logger.log(Messages.TR0001, getClass().getSimpleName(), "validatePage");
 
 		// プロジェクト名のチェック.
 		String path = cmbDefaultInstallPath.getText();
@@ -868,5 +937,14 @@ public class LibraryImportComposite extends Composite {
 
 		// 正常.
 		UIEventHelper.setErrorMessage(this, null);
+	}
+
+	/**
+	 * projectNameを設定します.
+	 * 
+	 * @param projectName projectName
+	 */
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 }

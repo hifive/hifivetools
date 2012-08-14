@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.htmlhifive.tomcat_3.3.0.vqualifier.jar" id="com.htmlhifive.tomcat" version="3.3.0.vqualifier">
-      <category name="hifive Plugins"/>
-   </feature>
    <feature url="features/com.htmlhifive.tools.codeassist_1.1.0.vqualifier.jar" id="com.htmlhifive.tools.codeassist" version="1.1.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
    <feature url="features/com.htmlhifive.tools.jslint_1.2.0.vqualifier.jar" id="com.htmlhifive.tools.jslint" version="1.2.0.vqualifier">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/com.htmlhifive.tools.tomcat_3.3.0.vqualifier.jar" id="com.htmlhifive.tools.tomcat" version="3.3.0.vqualifier">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.jsdt.core.patch.juno_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch.juno" version="1.0.0.vqualifier" patch="true">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.jsdt.core.patch.indigo_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch.indigo" version="1.0.0.vqualifier" patch="true">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.jsdt.core.patch.indigo.source_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch.indigo.source" version="1.0.0.vqualifier" patch="true">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.jsdt.core.patch.juno.source_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch.juno.source" version="1.0.0.vqualifier" patch="true">
+      <category name="hifive Plugins"/>
+   </feature>
+   <feature url="features/com.htmlhifive.tools.wizard_1.1.0.vqualifier.jar" id="com.htmlhifive.tools.wizard" version="1.1.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
    <category-def name="hifive Plugins" label="hifive プラグイン"/>

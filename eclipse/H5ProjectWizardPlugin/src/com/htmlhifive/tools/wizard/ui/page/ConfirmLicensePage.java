@@ -15,12 +15,21 @@
  */
 package com.htmlhifive.tools.wizard.ui.page;
 
+import org.eclipse.jface.dialogs.IPageChangeProvider;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.IPageChangingListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.dialogs.PageChangingEvent;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
+import com.htmlhifive.tools.wizard.log.PluginLogger;
+import com.htmlhifive.tools.wizard.log.PluginLoggerFactory;
+import com.htmlhifive.tools.wizard.log.messages.Messages;
 import com.htmlhifive.tools.wizard.ui.UIEventHelper;
 import com.htmlhifive.tools.wizard.ui.UIMessages;
 
@@ -30,6 +39,8 @@ import com.htmlhifive.tools.wizard.ui.UIMessages;
  * @author fkubo
  */
 public class ConfirmLicensePage extends WizardPage {
+	/** ロガー. */
+	private static PluginLogger logger = PluginLoggerFactory.getLogger(ConfirmLicensePage.class);
 
 	/** container. */
 	ConfirmLicenseComposite container;
@@ -42,9 +53,12 @@ public class ConfirmLicensePage extends WizardPage {
 	public ConfirmLicensePage(String pageName) {
 
 		super(pageName);
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "<init>");
+
 		setMessage(UIMessages.ConfirmLicensePage_this_message);
 		setTitle(UIMessages.LicenseListPage_this_title);
-		setPageComplete(false);
+		//setPageComplete(false);
 	}
 
 	/**
@@ -54,6 +68,8 @@ public class ConfirmLicensePage extends WizardPage {
 	 */
 	@Override
 	public void createControl(Composite parent) {
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "createControl");
 
 		container = new ConfirmLicenseComposite(parent, SWT.NONE);
 		setControl(container);
@@ -67,12 +83,58 @@ public class ConfirmLicensePage extends WizardPage {
 				setPageComplete(event.doit);
 			}
 		});
+
+		// ページ初期表示時の処理.
+		((IPageChangeProvider) getContainer()).addPageChangedListener(new IPageChangedListener() {
+			@Override
+			public void pageChanged(PageChangedEvent event) {
+
+				if (event.getSelectedPage() == ConfirmLicensePage.this && event.getSource() == getContainer()) {
+
+					setLiceseContents();
+
+				}
+			}
+		});
+
+		// ページ切替時の処理.
+		((WizardDialog) getContainer()).addPageChangingListener(new IPageChangingListener() {
+
+			@Override
+			public void handlePageChanging(PageChangingEvent event) {
+
+				//				// 画面表示時.
+				//				if (!initFlag && event.getCurrentPage() != getNextPage()
+				//						&& event.getTargetPage() == StructureSelectPage.this) {
+				//					// 初期プロジェクト名.
+				//					container.setProjectName("hifive-web");
+				//
+				//					// チェック.
+				//					container.setInputComboZip();
+				//					initFlag = true;
+				//					return;
+				//				}
+
+				// 次のページ遷移時.
+				//if (event.getCurrentPage() == ConfirmLicensePage.this && event.getTargetPage() == getPreviousPage()) {
+				if (event.getCurrentPage() == ConfirmLicensePage.this) {
+					container.rejected();
+					container.setLiceseContents();
+				}
+
+			}
+		});
+
 	}
 
 	/**
 	 * ライセンスコンテンツを設定する.
+	 * 
+	 * @param isWizard ウィザードかプロパティページからか.
 	 */
 	public void setLiceseContents() {
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "setLiceseContents");
 
 		container.setLiceseContents();
 	}
@@ -81,6 +143,8 @@ public class ConfirmLicensePage extends WizardPage {
 	 * カテゴリをクリアする
 	 */
 	public void clearCategory() {
+
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "clearCategory");
 
 		container.clearCategory();
 	}
@@ -93,7 +157,8 @@ public class ConfirmLicensePage extends WizardPage {
 	@Override
 	public boolean canFlipToNextPage() {
 
+		logger.log(Messages.TR0011, getClass().getSimpleName(), "canFlipToNextPage");
+
 		return false; // 次の画面(JS関連)は見せない.
 	}
-
 }

@@ -53,9 +53,8 @@ public class UIMessages extends NLS {
 	public static String LibraryImportPageComposite_label_text;
 	public static String LibraryImportPageComposite_tree_root_text;
 	public static String LibraryState_ADD;
-	public static String LibraryState_DOWNLOAD_ERROR;
+	public static String LibraryState_ERROR;
 	public static String LibraryState_EXIST;
-	public static String LibraryState_EXTRACT_ERROR;
 	public static String LibraryState_INCOMPLETE;
 	public static String LibraryState_REMOVE;
 	public static String LibraryState2_INSTALLED;

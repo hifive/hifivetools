@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.htmlhifive.tomcat"
+      id="com.htmlhifive.tools.tomcat"
       label="hifive Tomcat Plugin"
       version="3.3.0.vqualifier"
       plugin="com.sysdeo.eclipse.tomcat">

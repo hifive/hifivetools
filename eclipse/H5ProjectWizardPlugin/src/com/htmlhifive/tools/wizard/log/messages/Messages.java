@@ -31,6 +31,18 @@ public abstract class Messages extends MessagesBase {
 		addResourceBundle(ResourceBundle.getBundle("com.htmlhifive.tools.wizard.log.messages.messages"));
 	}
 
+	/** TR0001=INFO,Composite: {0}.{1}が呼ばれました。. */
+	public static final Message TR0001 = createMessage("TR0001");
+
+	/** TR0011=INFO,WizardPage: {0}.{1}が呼ばれました。. */
+	public static final Message TR0011 = createMessage("TR0011");
+
+	/** TR0021=INFO,PropertyPage: {0}.{1}が呼ばれました。. */
+	public static final Message TR0021 = createMessage("TR0021");
+
+	/** TR0031=INFO,Wizard: {0}.{1}が呼ばれました。. */
+	public static final Message TR0031 = createMessage("TR0031");
+
 	// #エラーメッセージ
 	/** SE0001=ERROR,ロガーの初期化に失敗しました。. */
 	public static final Message SE0001 = createMessage("SE0001");
@@ -53,7 +65,7 @@ public abstract class Messages extends MessagesBase {
 	/** SE0022=ERROR,エラー. */
 	public static final Message SE0022 = createMessage("SE0022");
 
-	/** SE0023=ERROR,予期しない例外が発生しました。. */
+	/** SE0023=ERROR,予期しない例外が発生しました。原因:{0}. */
 	public static final Message SE0023 = createMessage("SE0023");
 
 	/** SE0024=ERROR,({0})を操作中に入出力例外が発生しました。. */
@@ -95,7 +107,8 @@ public abstract class Messages extends MessagesBase {
 	/** SE0051=ERROR,プロジェクト名が入力されていません。. */
 	public static final Message SE0051 = createMessage("SE0051");
 
-	/** SE0052=ERROR,既にプロジェクトが存在します。. */
+	// #A project with this name already exists.
+	/** SE0052=ERROR,この名前のプロジェクトは既に存在します。. */
 	public static final Message SE0052 = createMessage("SE0052");
 
 	/** SE0053=ERROR,ライブラリ定義情報が取得できません。Eclipseのネットワーク接続設定を確認して下さい。. */
@@ -221,6 +234,18 @@ public abstract class Messages extends MessagesBase {
 	/** SE0118=INFO,ここでは遷移できません。. */
 	public static final Message SE0118 = createMessage("SE0118");
 
+	/** SE0119=INFO,確認. */
+	public static final Message SE0119 = createMessage("SE0119");
+
+	/** SE0120=INFO,このプロジェクトで{0}を開くには\nJavaScriptプロジェクトにする必要(JavaScript Natureの追加)があります。\n変更しますか？. */
+	public static final Message SE0120 = createMessage("SE0120");
+
+	/** SE0121=INFO,確認. */
+	public static final Message SE0121 = createMessage("SE0121");
+
+	/** SE0122=INFO,設定を有効にするため、プロパティページを一度閉じます。. */
+	public static final Message SE0122 = createMessage("SE0122");
+
 	// #taskName
 	/** PI0101=INFO,プロジェクトのディレクトリ構成を作成中.... */
 	public static final Message PI0101 = createMessage("PI0101");
@@ -243,6 +268,9 @@ public abstract class Messages extends MessagesBase {
 
 	/** PI0114=INFO,ライブラリ({0} {1})を更新中.... */
 	public static final Message PI0114 = createMessage("PI0114");
+
+	/** PI0115=INFO,[{0}/{1}bytes] {2}. */
+	public static final Message PI0115 = createMessage("PI0115");
 
 	// #result
 	/** PI0131=INFO,処理結果. */
@@ -268,6 +296,21 @@ public abstract class Messages extends MessagesBase {
 
 	/** PI0138=INFO,ライブラリの更新. */
 	public static final Message PI0138 = createMessage("PI0138");
+
+	/** PI0139=ERROR,ライブラリの取得エラー. */
+	public static final Message PI0139 = createMessage("PI0139");
+
+	/** PI0140=ERROR,ライブラリの取得に失敗しました。続行できません。. */
+	public static final Message PI0140 = createMessage("PI0140");
+
+	/** PI0141=INFO,ライブラリ定義情報取得の準備中.... */
+	public static final Message PI0141 = createMessage("PI0141");
+
+	/** PI0142=INFO,ライブラリ定義情報をダウンロード中.... */
+	public static final Message PI0142 = createMessage("PI0142");
+
+	/** PI0143=INFO,[{0}/{1}bytes] {2}. */
+	public static final Message PI0143 = createMessage("PI0143");
 
 	/** PI0151=INFO,ライブラリ定義情報: 未取得. */
 	public static final Message PI0151 = createMessage("PI0151");
