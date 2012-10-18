@@ -21,7 +21,7 @@
    <feature url="features/org.eclipse.wst.jsdt.core.patch.juno.source_1.0.0.vqualifier.jar" id="org.eclipse.wst.jsdt.core.patch.juno.source" version="1.0.0.vqualifier" patch="true">
       <category name="hifive Plugins"/>
    </feature>
-   <feature url="features/com.htmlhifive.tools.wizard_1.1.0.vqualifier.jar" id="com.htmlhifive.tools.wizard" version="1.1.0.vqualifier">
+   <feature url="features/com.htmlhifive.tools.wizard_1.2.0.vqualifier.jar" id="com.htmlhifive.tools.wizard" version="1.2.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
    <category-def name="hifive Plugins" label="hifive プラグイン"/>
