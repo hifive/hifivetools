@@ -68,7 +68,8 @@ import com.htmlhifive.tools.wizard.utils.H5IOUtils;
 public class DownloadModule {
 
 	/** 外部接続用ProxyTracker. */
-	private final ServiceTracker<IProxyService, Object> proxyTracker;
+	//private final ServiceTracker<IProxyService, Object> proxyTracker; // eclipse3.6対応.
+	private final ServiceTracker proxyTracker;
 
 	/** defaultOverwriteMode. */
 	private int defaultOverwriteMode = 0;
@@ -83,8 +84,10 @@ public class DownloadModule {
 	 */
 	public DownloadModule() {
 
-		this.proxyTracker = new ServiceTracker<IProxyService, Object>(H5WizardPlugin.getInstance().getBundle()
-				.getBundleContext(), IProxyService.class, null);
+		//this.proxyTracker = new ServiceTracker<IProxyService, Object>(H5WizardPlugin.getInstance().getBundle()
+				//.getBundleContext(), IProxyService.class, null); // eclipse3.6対応.
+		this.proxyTracker = new ServiceTracker(H5WizardPlugin.getInstance().getBundle()
+				.getBundleContext(), IProxyService.class.getName(), null);
 		proxyTracker.open();
 
 	}

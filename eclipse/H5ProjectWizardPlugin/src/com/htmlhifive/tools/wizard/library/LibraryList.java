@@ -158,7 +158,7 @@ public class LibraryList {
 			Info targetInfo = null;
 			Info defaultInfo = null;
 			for (Info info : baseProject.getInfo()) {
-				if (info.getLang() == null) {
+				if (info.getLang() == null || defaultInfo == null) {
 					defaultInfo = info;
 				}
 				if (Locale.getDefault().getLanguage().equals(info.getLang())) {
@@ -168,8 +168,10 @@ public class LibraryList {
 			if (targetInfo == null) {
 				targetInfo = defaultInfo;
 			}
-			infoMap.put(targetInfo.getTitle(), targetInfo);
-			infoBaseProjectMap.put(targetInfo.getTitle(), baseProject);
+			if (targetInfo != null){
+				infoMap.put(targetInfo.getTitle(), targetInfo);
+				infoBaseProjectMap.put(targetInfo.getTitle(), baseProject);
+			}
 		}
 	}
 
