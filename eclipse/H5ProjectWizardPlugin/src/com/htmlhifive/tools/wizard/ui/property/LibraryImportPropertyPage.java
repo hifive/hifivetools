@@ -161,6 +161,7 @@ public class LibraryImportPropertyPage extends PropertyPage implements IWorkbenc
 				public void pageChanged(PageChangedEvent event) {
 
 					if (event.getSelectedPage() == LibraryImportPropertyPage.this) {
+						// 基本的にプラグインの設定としてJavaScriptプロジェクトの追加は呼ばれないようにしたので、ここは呼ばれない.
 						if (getJavaScriptProject() == null) {
 							setVisible(false);
 							if (addNature((IProject) getElement().getAdapter(IProject.class), JavaScriptCore.NATURE_ID)) {

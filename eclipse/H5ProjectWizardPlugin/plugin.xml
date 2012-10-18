@@ -23,6 +23,11 @@
             class="com.htmlhifive.tools.wizard.ui.property.LibraryImportPropertyPage"
             id="com.htmlhifive.tools.wizard.ui.WizardPropertyPage"
             name="%Page-Name">
+         <enabledWhen>
+             <adapt type="org.eclipse.core.resources.IProject">
+                 <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.wst.jsdt.core.jsNature"/>
+             </adapt>
+         </enabledWhen>
       </page>
    </extension>
 </plugin>

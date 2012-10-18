@@ -207,8 +207,8 @@ public class StructureSelectComposite extends Composite {
 		comboZip.removeAll();
 
 		LibraryList libraryList = RemoteContentManager.getLibraryList();
-		// libraryListのnull対応.
-		if (libraryList == null) {
+		// libraryListのnull対応 基本プロジェクトが空の場合も含む.
+		if (libraryList == null || libraryList.getInfoBaseProjectMap().isEmpty()) {
 			UIEventHelper.setErrorMessage(this, Messages.SE0053.format());
 			lblListInfo.setText(Messages.PI0151.format());
 			lblListInfo.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
