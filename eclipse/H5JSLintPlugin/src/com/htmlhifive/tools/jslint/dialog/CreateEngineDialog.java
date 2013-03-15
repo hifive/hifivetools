@@ -361,7 +361,7 @@ public class CreateEngineDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(534, 325);
+		return new Point(653, 375);
 	}
 
 	@Override
