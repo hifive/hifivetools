@@ -18,7 +18,6 @@ package com.htmlhifive.tools.codeassist.core.proposal.checker;
 
 import java.util.regex.Pattern;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
@@ -98,9 +97,11 @@ abstract class AbstractSuffixProposalChecker extends AbstractObjectProposalCheck
 	boolean suffixCheckCodeAssist(CompilationUnitDeclaration unitDeclaration, ObjectLiteralBean suffixBean,
 			Pattern suffixPattern) {
 
-		// コントローラのノードを収集
+		// サフィックス一致のノードを収集
 		NodeCollector collector = NodeCollectorFactory.createNodeCollector(suffixBean);
+		// unitDeclarationをウォークしサフィックス一致のノードを収集する.
 		collector.collect(unitDeclaration);
+		// コレクターからコード補完情報を取得
 		SuffixAssistNodeInfo info = CheckerUtils.getAssistNodeInfo(collector, unitDeclaration);
 		// コード補完呼び出しのコードがnullだったらfalse
 		memberAccess = info.getMemberAccess();
@@ -113,6 +114,7 @@ abstract class AbstractSuffixProposalChecker extends AbstractObjectProposalCheck
 		if (!checkCodeAssistNodeFlg) {
 			return false;
 		}
+		// コード補完時の文字列
 		this.codeAssistStr = memberAccess.getReceiver().toString();
 		logger.log(Messages.DB0005, this.codeAssistStr);
 		String firstSegMemberAccess = CheckerUtils.getRootObject(codeAssistStr);

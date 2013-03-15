@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 import org.eclipse.wst.jsdt.core.IJavaScriptProject;
 import org.eclipse.wst.jsdt.core.IJavaScriptUnit;
 import org.eclipse.wst.jsdt.core.JavaScriptModelException;
@@ -112,6 +111,7 @@ public abstract class AbstractObjectProposalChecker implements ProposalChecker {
 		CompilationResult compilationResult = new CompilationResult((ICompilationUnit) unit, 1, 1,
 				compilerOptions.maxProblemsPerUnit);
 		try {
+			// ASTパースを行いルートオブジェクトを取得
 			CompilationUnitDeclaration unitDeclaration = parser.dietParse((ICompilationUnit) unit, compilationResult,
 					invocationOffset - 1);
 			// プラグインでコード補完をする必要があるかチェック.

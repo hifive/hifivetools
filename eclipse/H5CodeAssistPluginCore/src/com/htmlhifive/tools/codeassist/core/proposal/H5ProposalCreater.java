@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -87,9 +86,10 @@ public class H5ProposalCreater extends AbstractProposalCreator {
 			RootChildrenElem targetElem = null;
 			RootChildrenElem[] allElem = bean.getElemList();
 			for (RootChildrenElem rootChildrenElem : allElem) {
-
+				// プラグインでコード補完を出す必要があるかどうかをチェックする.
 				checker = CheckerFactory.createChecker(getContext().getCompilationUnit(), getContext().getProject(),
 						rootChildrenElem);
+				// チェッカーのチェックを実行することでコード補完の必要があれば内部に情報を格納する.
 				boolean createFlg = checker.check(getContext().getInvocationOffset());
 				if (createFlg) {
 					targetElem = rootChildrenElem;
@@ -101,7 +101,7 @@ public class H5ProposalCreater extends AbstractProposalCreator {
 				return Collections.emptyList();
 			}
 			logger.log(Messages.DB0001, true);
-			// 振り分け
+			// 振り分け 現状の補完対象はObjectLiteralのもののみ.
 			if (targetElem instanceof ObjectLiteralBean) {
 				return createProposalForObjectLiteralBean((ObjectLiteralBean) targetElem,
 						checker.existDefaultCodeAssist(), checker.getDummyCodeInfo());
@@ -128,35 +128,45 @@ public class H5ProposalCreater extends AbstractProposalCreator {
 	private List<ICompletionProposal> createProposalForObjectLiteralBean(ObjectLiteralBean objBean,
 			boolean existDefaultCodeAssist, DummyCodeInfo[] codeInfo) throws JavaScriptModelException {
 
+		// コード補完情報格納用リスト.
 		List<ICompletionProposal> resultList = new ArrayList<ICompletionProposal>();
 		ProposalContext context = getContext();
 
 		// ダミーコード生成用.
 		StringBuilder sb = new StringBuilder();
+		// コンパイル単位の種痘
 		IJavaScriptUnit targetUnit = context.getCompilationUnit();
 		IPackageFragment fragment = context.getProject().getPackageFragments()[0];
-		// 疑似jsファイル.
+		// 疑似jsファイルの生成.このダミーファイル内で補完を実行する.
 		IJavaScriptUnit tempUnit = fragment.getJavaScriptUnit(NAME_TEMPJSFILE)
 				.getWorkingCopy(new NullProgressMonitor());
 		// ダミーに実コードを追加.
 		sb.append(targetUnit.getBuffer().getContents());
 		for (DummyCodeInfo dummyCodeInfo : codeInfo) {
+			// ダミーコードを生成し疑似jsファイルの適切な位置に追加する.
 			CodeBuilder builder = CodeBuilderFactory.createCodeBuilder(dummyCodeInfo);
 			addObject(builder, objBean);
 			builder.build(sb, dummyCodeInfo.getInsertPosition());
 		}
+		// 実ファイルとダミーコードを追加した文字列を疑似jsファイルに反映
 		tempUnit.getBuffer().setContents(sb.toString());
+		// 補完収集オブジェクトの生成.
 		CompletionProposalCollector collector = new CompletionProposalCollector(tempUnit);
+		// 補完を実行.補完結果はcollector内に格納される.
 		tempUnit.codeComplete(context.getInvocationOffset(), collector);
+		// 補完情報の取得
 		IJavaCompletionProposal[] proposals = collector.getJavaCompletionProposals();
 		logger.log(Messages.DB0002, existDefaultCodeAssist);
 		if (existDefaultCodeAssist) {
+			// デフォルトの補完が存在する.
 			// デフォルトのコード補完と被らないように定義したメソッドのみ抽出する.
 			for (IJavaCompletionProposal proposal : proposals) {
 				addOptionProposal(resultList, proposal, objBean);
 			}
 		} else {
+
 			for (IJavaCompletionProposal proposal : proposals) {
+				// デフォルトの補完が存在しない場合、定義ファイルで定義された補完情報以外の情報もresultListに追加する.
 				if (!addOptionProposal(resultList, proposal, objBean)) {
 					resultList.add(proposal);
 				}
