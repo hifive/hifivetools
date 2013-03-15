@@ -66,17 +66,6 @@ public final class JSLintPluginConstant {
 	public static final String OPTION_SEPARATOR = ",";
 
 	/**
-	 * デフォルトのソースURL. TODO 外部化.
-	 * 
-	 */
-	public static final String SOURCE_URL_JSHINT = "https://raw.github.com/jshint/jshint/master/jshint.js";
-
-	/**
-	 * ダウンロード先URL.TODO 外部化.
-	 */
-	public static final String SOURCE_URL_JSLINT = "https://raw.github.com/douglascrockford/JSLint/master/jslint.js";
-
-	/**
 	 * コンストラクタ.
 	 */
 	private JSLintPluginConstant() {

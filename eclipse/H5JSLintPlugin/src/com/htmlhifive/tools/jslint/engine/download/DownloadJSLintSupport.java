@@ -16,7 +16,7 @@
  */
 package com.htmlhifive.tools.jslint.engine.download;
 
-import com.htmlhifive.tools.jslint.JSLintPluginConstant;
+import com.htmlhifive.tools.jslint.PropertyUtils;
 import com.htmlhifive.tools.jslint.engine.option.Engine;
 
 /**
@@ -48,7 +48,7 @@ public class DownloadJSLintSupport extends AbstractDownloadEngineSupport impleme
 	@Override
 	public String getEngineSourceUrl() {
 
-		return JSLintPluginConstant.SOURCE_URL_JSLINT;
+		return PropertyUtils.getProperty("path.jslint.js");
 	}
 
 	/*
