@@ -71,6 +71,11 @@ public class AddJSDocCommentNode implements AddCommentNode {
 			while (true) {
 				int commentAbsolutePosition = comment.getAbsolutePosition();
 				if (commentAbsolutePosition <= absolutePosition) {
+
+					// System.out.println(comment.getAbsolutePosition());
+					// System.out.println(node.getAbsolutePosition());
+					// System.out.println(((AstNode)node.getNext()).getAbsolutePosition());
+
 					logger.debug("-------------------------------------");
 					logger.debug("comment value : " + comment.getValue());
 					logger.debug("parent before :	" + comment.getParent().shortName());

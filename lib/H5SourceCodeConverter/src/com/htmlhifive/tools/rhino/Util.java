@@ -281,7 +281,7 @@ public class Util {
 	}
 
 	/**
-	 * ノードを追加する.
+	 * ノードを追加する.文字列追加
 	 *
 	 * @param an
 	 * @param pos
@@ -298,7 +298,7 @@ public class Util {
 	}
 
 	/**
-	 * ノートを追加する。
+	 * ノートを追加する。子ノード追加
 	 *
 	 * @param an
 	 * @param child
@@ -311,7 +311,7 @@ public class Util {
 	}
 
 	/**
-	 * ノードを追加する.
+	 * ノードを追加する.子ノード追加
 	 *
 	 * @param an
 	 * @param child
@@ -325,7 +325,7 @@ public class Util {
 	}
 
 	/**
-	 * ノードを追加する.
+	 * ノードを追加する.子ノード追加
 	 *
 	 * @param an
 	 * @param child
