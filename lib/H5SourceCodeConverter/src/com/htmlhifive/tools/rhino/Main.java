@@ -58,16 +58,17 @@ public class Main {
 		boolean printTree = false;
 		String[] inPaths = new String[] {//
 				//
-				"js/h5.tmp.js",//
-				"js/h5.tmp2.js",//
-				"js/h5.js",//
-				"js/h5.dev.js",//
-				"js/h5.async.js",//
-				"js/jquery-codeAssist.js",
-				"js/jquery-1.7.js",//
-				"js/jquery-1.6.2-vsdoc.js",//
-				"js/jquery.mobile-1.0.js",//
-				"js/test.js"
+				// "js/h5.tmp.js",//
+				// "js/h5.tmp2.js",//
+				// "js/h5.js",//
+				// "js/h5.dev.js",//
+				// "js/h5.async.js",//
+				// "js/jquery-codeAssist.js",
+				// "js/jquery-1.7.js",//
+				// "js/jquery-1.6.2-vsdoc.js",//
+				// "js/jquery.mobile-1.0.js",//
+				// "js/test.js"
+				"js/h5-1.1.6.dev.js"
 				};
 
 		Main sample = new Main();

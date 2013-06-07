@@ -345,7 +345,11 @@ public class AddNodeInfoVisitor implements NodeVisitor {
 		// pos = addChild(an, an.getLength() - 1, "\n");
 
 		// JsDoc/VSDoc生成時切り替え機能未リリースのため一旦処理を簡素化 2013/05/31 by
-		addChild(an,  0,  an.getValue());
+		pos = addChild(an,  0,  an.getValue());
+		Token.CommentType commentType = an.getCommentType();
+		if (commentType == Token.CommentType.LINE || commentType == Token.CommentType.JSDOC) {
+			addChild(an, pos, Constants.LINE_SEPARATOR);
+		}
 
 		/*
 		String document = StringUtils.isEmpty(an.getJsDoc()) ? an.getValue() : an.getJsDoc();
