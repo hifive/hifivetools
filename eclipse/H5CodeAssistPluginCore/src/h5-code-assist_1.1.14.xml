@@ -101,9 +101,10 @@
 	</logic>
 	<eventcontext controllerSuffix="Controller">
 		<varRef key="controller" className="Controller" />
-		<varRef key="rootElement" className="Object" />
 		<varRef key="event" className="Object" />
 		<varRef key="evArg" className="Object" />
+		<varRef key="selector" className="String" />
+		<varRef key="selectorType" className="Number" />
 	</eventcontext>
 	<initcontext controllerSuffix="Controller">
 		<varRef key="args" className="Object" />
