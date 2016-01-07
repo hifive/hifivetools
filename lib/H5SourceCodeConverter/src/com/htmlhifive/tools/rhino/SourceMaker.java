@@ -20,6 +20,7 @@ package com.htmlhifive.tools.rhino;
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.EmptyExpression;
+import org.mozilla.javascript.ast.EmptyStatement;
 import org.mozilla.javascript.ast.Word;
 
 /**
@@ -47,7 +48,7 @@ public class SourceMaker {
 			}
 			return result;
 		} else {
-			if (node instanceof EmptyExpression) {
+			if ((node instanceof EmptyExpression) || (node instanceof EmptyStatement)) {
 				return "";
 			} else if (node instanceof Word) {
 				return node.toString();

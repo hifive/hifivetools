@@ -343,6 +343,15 @@ public class AddNodeInfoVisitor implements NodeVisitor {
 		// String document = StringUtils.isEmpty(an.getJsDoc()) ? an.getValue() : an.getJsDoc();
 		// pos = addChild(an, pos, document);
 		// pos = addChild(an, an.getLength() - 1, "\n");
+
+		// JsDoc/VSDoc生成時切り替え機能未リリースのため一旦処理を簡素化 2013/05/31 by
+		pos = addChild(an,  0,  an.getValue());
+		Token.CommentType commentType = an.getCommentType();
+		if (commentType == Token.CommentType.LINE || commentType == Token.CommentType.JSDOC) {
+			addChild(an, pos, Constants.LINE_SEPARATOR);
+		}
+
+		/*
 		String document = StringUtils.isEmpty(an.getJsDoc()) ? an.getValue() : an.getJsDoc();
 		// 一行ずつ取得
 		StringTokenizer st = new StringTokenizer(document, Constants.LINE_SEPARATOR);
@@ -363,6 +372,8 @@ public class AddNodeInfoVisitor implements NodeVisitor {
 			pos = addChild(an, pos, token);
 			pos = addChild(an, pos, Constants.LINE_SEPARATOR);
 		}
+
+		*/
 		logger.debug("Comment Visit end--------------------------------");
 	}
 
@@ -807,7 +818,8 @@ public class AddNodeInfoVisitor implements NodeVisitor {
 		int pos = addChild(an, 0, Util.makeIndent(indent));
 		pos = addChild(an, pos, "return");
 		if (an.getReturnValue() != null) {
-			pos = addChild(an, pos, " ");
+			// pos = addChild(an, pos, " ");
+			pos = addChild(an, 6, " ");
 			pos = addChild(an, an.getReturnValue(), depth);
 		}
 		pos = addChild(an, an.getLength() - 2, ";" + Constants.LINE_SEPARATOR);

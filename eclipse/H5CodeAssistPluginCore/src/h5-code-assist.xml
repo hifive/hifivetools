@@ -67,7 +67,7 @@
 			&lt;br /&gt;
 			targetを指定しない場合、コントローラを割り当てた要素(rootElement)に対してインジケータを表示します。
 			&lt;br /&gt;
-			詳細は http://dbato.sysrdc.ns-sol.co.jp:8080/hifive/doc/Controller.html#indicator を参照してください。
+			詳細は http://www.htmlhifive.com/ja/doc/Controller.html#indicator を参照してください。
 			</description>
 		</function>
 		<function name="throwError" returnType="void">
