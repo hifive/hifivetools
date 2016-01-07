@@ -92,7 +92,6 @@
 			</description>
 		</function>
 	</controller>
-	
 	<logic suffix="Logic" controllerSuffix="Logic">
 		<varRef key="log" className="Log" />
 		<function name="deferred" returnType="String"
@@ -100,14 +99,12 @@
 			<description>Deferredオブジェクトを返します。</description>
 		</function>
 	</logic>
-	
 	<eventcontext controllerSuffix="Controller">
 		<varRef key="controller" className="Controller" />
 		<varRef key="rootElement" className="Object" />
 		<varRef key="event" className="Object" />
 		<varRef key="evArg" className="Object" />
 	</eventcontext>
-	
 	<initcontext controllerSuffix="Controller">
 		<varRef key="args" className="Object" />
 	</initcontext>
