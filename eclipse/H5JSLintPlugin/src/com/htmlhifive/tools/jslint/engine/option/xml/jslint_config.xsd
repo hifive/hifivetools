@@ -22,7 +22,7 @@
 
 	<xsd:element name="jsCheckOption">
 	<xsd:complexType>
-		<xsd:sequence>
+		<xsd:sequence>
 			<xsd:element name="option" type="XmlOption" maxOccurs="unbounded" minOccurs="0"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType></xsd:element>

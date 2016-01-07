@@ -116,6 +116,7 @@
 			</description>
 		</function>
 	</controller>
+
 	<logic suffix="Logic" controllerSuffix="Logic">
 		<varRef key="log" className="Log" />
 		<function name="deferred" returnType="String"
@@ -131,6 +132,7 @@
 			<description>指定された関数に対して、コンテキスト(this)をロジックに変更し、元々のthisを第1引数に加えて実行する関数を返します。</description>
 		</function>
 	</logic>
+
 	<eventcontext controllerSuffix="Controller">
 		<varRef key="controller" className="Controller" />
 		<varRef key="event" className="Object" />
@@ -138,6 +140,7 @@
 		<varRef key="selector" className="String" />
 		<varRef key="selectorType" className="Number" />
 	</eventcontext>
+
 	<initcontext controllerSuffix="Controller">
 		<varRef key="args" className="Object" />
 	</initcontext>
