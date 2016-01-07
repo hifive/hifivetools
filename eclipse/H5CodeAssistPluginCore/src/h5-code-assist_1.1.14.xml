@@ -4,10 +4,8 @@
 	<controller suffix="Controller">
 		<varRef key="rootElement" className="Element" />
 		<varRef key="initPromise" className="Promise" />
-		<varRef key="postInitPromise" className="Promise" />
 		<varRef key="readyPromise" className="Promise" />
 		<varRef key="isInit" className="Boolean" />
-		<varRef key="isPostInit" className="Boolean" />
 		<varRef key="isReady" className="Boolean" />
 		<varRef key="log" className="Log" />
 		<varRef key="rootController" className="Controller" />
@@ -72,28 +70,6 @@
 			詳細は http://www.htmlhifive.com/ja/doc/Controller.html#indicator を参照してください。
 			</description>
 		</function>
-		<function name="manageChild" returnType="void">
-			<argument name="controller" type="Controller"></argument>
-			<argument name="andDispose" type="Boolean"
-				description="第1引数で指定されたコントローラをdisposeするかどうか。指定無しの場合はdisposeします。"></argument>
-			<description>子コントローラを動的に削除</description>
-		</function>
-		<function name="unmanageChild" returnType="void">
-			<argument name="controller" type="Controller"></argument>
-			<description>コントローラを子コントローラとして動的に追加します\追加されたコントローラは呼び出し元のコントローラの子コントローラとなります。</description>
-		</function>
-		<function name="on" returnType="void">
-			<argument name="target" type="String|Object" description="イベントハンドラのターゲット" />
-			<argument name="eventName" type="String" description="イベント名" />
-			<argument name="listener" type="listener" description="ハンドラ" />
-			<description>イベントハンドラを動的にバインドします。</description>
-		</function>
-		<function name="off" returnType="void">
-			<argument name="target" type="String|Object" description="イベントハンドラのターゲット" />
-			<argument name="eventName" type="String" description="イベント名" />
-			<argument name="listener" type="listener" description="ハンドラ" />
-			<description>イベントハンドラを動的にアンバインドします。</description>
-		</function>
 		<function name="throwError" returnType="void">
 			<argument name="parameter" type="String|Object"
 				description="文字列の場合、第2引数以降をパラメータとしてフォーマットします。オブジェクトの場合、そのままErrorクラスへ格納します。" />
@@ -122,21 +98,12 @@
 			returnDescription="Deferredオブジェクト">
 			<description>Deferredオブジェクトを返します。</description>
 		</function>
-		<function name="own" returnType="Function">
-			<argument name="func" type="Function" description="コンテキストを変更したい関数" />
-			<description>指定された関数に対して、コンテキスト(this)をロジックに変更して実行する関数を返します。</description>
-		</function>
-		<function name="ownWithOrg" returnType="Function">
-			<argument name="func" type="Function" description="コンテキストを変更したい関数" />
-			<description>指定された関数に対して、コンテキスト(this)をロジックに変更し、元々のthisを第1引数に加えて実行する関数を返します。</description>
-		</function>
 	</logic>
 	<eventcontext controllerSuffix="Controller">
 		<varRef key="controller" className="Controller" />
+		<varRef key="rootElement" className="Object" />
 		<varRef key="event" className="Object" />
 		<varRef key="evArg" className="Object" />
-		<varRef key="selector" className="String" />
-		<varRef key="selectorType" className="Number" />
 	</eventcontext>
 	<initcontext controllerSuffix="Controller">
 		<varRef key="args" className="Object" />
