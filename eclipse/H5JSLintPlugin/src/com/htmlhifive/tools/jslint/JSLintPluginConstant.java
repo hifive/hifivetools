@@ -53,7 +53,7 @@ public final class JSLintPluginConstant {
 	/**
 	 * jsLint使用時のメソッド名.
 	 */
-	public static final String JS_LINT_METHOD = "JSLINT";
+	public static final String JS_LINT_METHOD = "jslint";
 
 	/**
 	 * jsHint使用時の起動メソッド名.
