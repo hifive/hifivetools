@@ -161,64 +161,86 @@ VM0000=INFO,行　{0}
 #JSLint、JSHint共通
 DES_BITWISE=INFO,ビット演算子の仕様を禁止.
 DES_BROUSER=INFO,標準ブラウザでの実行を想定(documentやwindow等、のグローバル変数が事前に定義されているか.)
-DES_DEBUG=INFO,debuggerキーワードを許容.
+DES_COUCH=INFO,CouchDBでの実行を想定(CouchDBのグローバル変数が事前に定義されているか.)
 DES_DEVEL=INFO,alert、confirm、console、Debug、opera、promptを使用してもよいか
-DES_ES5=INFO,es5での実行を想定(es5の文法を使用してもよいか.)
-DES_EVIL=INFO,eval関数を許容.
-DES_FORIN=INFO,プロパティを持っていない場合のfor inを禁止.
 DES_MAXERR=INFO,許容するエラーの最大数(指定なし：50個)
-DES_NEWCAP=INFO,コンストラクタ名の最初の文字の大文字チェック.
+DES_MAXLEN=INFO,許容するソースコード行数(指定なし：全行)
 DES_NODE=INFO,node.jsでの実行を想定(node.jsのグローバル変数が事前に定義されているか.)
-DES_NOMEN=INFO,名前の先頭または末尾のアンダーバーを禁止.
-DES_PASSFAIL=INFO,1個目のエラーでチェックをを止める.
-DES_PLUSPLUS=INFO, インクリメント(++)・デクリメント(--)を使用を禁止.
-DES_REGEXP=INFO,正規表現の . (任意の1文字)と [^...] (指定した文字以外)の使用禁止
-DES_RHINO=INFO,Rhinoでの実行を想定(Rhinoのグローバル変数が事前に定義されているか.)
-DES_SUB=INFO,オブジェクトのプロパティへのアクセスは、ドットではなくて括弧記法を許容.
-DES_UNDEF=INFO,変数または関数の宣言があるかをチェックする
+DES_THIS=INFO,thisを許容.
 DES_WHITE=INFO,いい加減な空白をチェック.
 
 #JSLintオプション
-DES_ADSAFE=INFO,ADsafe のルールを適用するか
-DES_CAP=INFO,HTMLタグが大文字で書かれているか
-DES_CONFUSION=INFO,ある変数の型が途中で変わってもいいか
-DES_CONTINUE=INFO,continueを使用してもよいか
-DES_CSS=INFO,CSSの1行目に @charset 'UTF-8' が無くてもよいか
-DES_EQEQ=INFO,抽象比較( == または != )を使用してもよいか
-DES_FRAGMENT=INFO,HTMLでフラグメント識別子の使用してもよいか
-DES_INDENT=INFO,インデント幅が指定した幅になっているか(0の場合はチェックを行わない)
-DES_MAXLEN=INFO,許容するソースコード行数(指定なし：全行)
-DES_ON=INFO,HTMLでイベントハンドラーの登録をしてもよいか
-DES_PROPERTIES=INFO,\/*properties*\/コメントを利用して全プロパティのスペルミスをチェックするか
-DES_SAFE=INFO,ADsafeルールのうち、ウィジェット向けのルール以外を有効にするか
-DES_SLOPPY=INFO,'use strict' が無くてもよいか
-DES_UNPARAM=INFO,未使用の変数があってもよいか
-DES_VARS=INFO,1つのfunction内にvarステートメントが2つ以上あってもよいか
-DES_WIDGET=INFO,Yahoo Widget環境で提供されているグローバル変数・関数があらかじめ定義されていると仮定するか
-DES_WINDOWS=INFO,Windows固有のグローバル変数・関数があらかじめ定義されていると仮定するか
+DES_ES6=INFO,es6での実行を想定(es6の文法を使用してもよいか.)
+DES_EVAL=INFO,eval関数を許容.
+DES_FOR=INFO,forを許容.
+DES_FUDGE=INFO,テキストファイルの行列の開始インデックスを1とするか
 
 
 
 #JSHintオプション
-DES_JQUERY=INFO,jQueryでの実行を想定(jQueryのグローバル変数が事前に定義されているか.)
-DES_COUCH=INFO,CouchDBでの実行を想定(CouchDBのグローバル変数が事前に定義されているか.)
-DES_PROTOTYPEJS=INFO,prototype.jsでの実行を想定(prototype.jsのグローバル変数が事前に定義されているか.)
-DES_MOOTOOLS=INFO,mootoolsでの実行を想定(mootoolsのグローバル変数が事前に定義されているか.)
 DES_ASI=INFO,セミコロンの未挿入を許容.
 DES_BOSS=INFO,構造化要素の中身の割り当てを許容.
+DES_BROUSERIFY=INFO,Browserifyでの実行を想定(Browserifyのグローバル変数が事前に定義されているか.)
 DES_CURLY=INFO,構造化要素内の中括弧未使用を禁止.
+DES_DEBUG=INFO,debuggerキーワードを許容.
+DES_DOJO=INFO,dojoでの実行を想定(dojoのグローバル変数が事前に定義されているか.)
+DES_ELISION=INFO,ES3の配列内でのElision要素の許容.
+DES_ES3=INFO,es3での実行を想定(es3の文法を使用してもよいか.)
+DES_ES5=INFO,es5での実行を想定(es5の文法を使用してもよいか.)
 DES_EQEQEQ=INFO,===か!==以外の比較を禁止.
 DES_EQNULL=INFO,== null を許容.
+DES_EVIL=INFO,eval関数を許容.
+DES_FORIN=INFO,プロパティを持っていない場合のfor inを禁止.
+DES_FREEZE=INFO,Array、Dataなどネイティブオブジェクトの上書きを禁止.
+DES_FUNCSCOPE=INFO,スコープ内で定義した変数をスコープ外でアクセスすることを許容.
+DES_GLOBALS=INFO,許容するグローバル変数.
 DES_IMMED=INFO,If true、 JSHint will require immediate invocations to be wrapped in parens.
+DES_JASMINE=INFO,Jasmineでの実行を想定(Jasmineのグローバル変数が事前に定義されているか.)
+DES_JQUERY=INFO,jQueryでの実行を想定(jQueryのグローバル変数が事前に定義されているか.)
+DES_LATEDEF=INFO,宣言前の変数の使用禁止.
 DES_LAXBREAK=INFO,改行をチェックしない.
+DES_MAXCOMPLEXITY=INFO,最大複雑度の上限.
+DES_MAXDEPTH=INFO,ネストの深さの上限.
+DES_MAXPARAMS=INFO,最大パラメータ変数の上限.
+DES_MAXSTATEMENTS=INFO,関数内の宣言する変数の上限.
+DES_MOCHA=INFO,Mochaでの実行を想定(Mochaのグローバル変数が事前に定義されているか.)
+DES_MOOTOOLS=INFO,mootoolsでの実行を想定(mootoolsのグローバル変数が事前に定義されているか.)
+DES_MOZ=INFO,Mozilla JavaScript extensionsでの実行を想定
+DES_NEWCAP=INFO,コンストラクタ名の最初の文字の大文字チェック.
 DES_NOARG=INFO,arguments.caller と　arguments.calleeの使用を禁止.
+DES_NOCOMMA=INFO,カンマ演算子の禁止.
 DES_NOEMPTY=INFO,空ブロックの禁止.
+DES_NONBSP=INFO,NBSPの禁止.
 DES_NONEW=INFO,コンストラクタの使用を禁止.
-DES_ONEVAR=INFO,1つの関数で2つ以上のvarステートメントの使用を禁止.
+DES_NONSTANDARD=INFO,escape,unescapeの許容.
+DES_NOTYPEOF=INFO,typeof演算子の不正な値の許容.
+DES_NOYIELD=INFO,yield宣言のないジェネレータ関数の許容.
+DES_PASSFAIL=INFO,1個目のエラーでチェックをを止める.
+DES_PHANTOM=INFO,Phantomでの実行を想定(Phantomのグローバル変数が事前に定義されているか.)
+DES_PLUSPLUS=INFO, インクリメント(++)・デクリメント(--)を使用を禁止.
+DES_PROTOTYPEJS=INFO,prototype.jsでの実行を想定(prototype.jsのグローバル変数が事前に定義されているか.)
+DES_QUNIT=INFO,QUnitでの実行を想定(QUnitのグローバル変数が事前に定義されているか.)
+DES_REGEXP=INFO,正規表現の . (任意の1文字)と [^...] (指定した文字以外)の使用禁止
+DES_RHINO=INFO,Rhinoでの実行を想定(Rhinoのグローバル変数が事前に定義されているか.)
+DES_SCRIPTURL=INFO,javascript:...のようにscriptプロトコルのURLの許容.
+DES_SHADOW=INFO,変数の隠ぺいを許容する.
+DES_SINGLEGROUPS=INFO,グループ演算子の禁止.
+DES_SHELLJS=INFO,ShellJSでの実行を想定(ShellJSのグローバル変数が事前に定義されているか.)
 DES_STRICT=INFO,'use strict' の未使用を禁止.
+DES_SUB=INFO,オブジェクトのプロパティへのアクセスは、ドットではなくて括弧記法を許容.
+DES_TYPED=INFO,型付き配列の許容.
+DES_UNDEF=INFO,変数または関数の宣言があるかをチェックする
+DES_UNUSED=INFO,使用されない変数を許容.
+DES_WITHSTMT=INFO,with宣言の許容.
+DES_WORKER=INFO,Web Workerでの実行を想定(Web Workerのグローバル変数が事前に定義されているか.)
+DES_WSH=INFO,Windows Script Hostでの実行を想定(Windows Script Hostのグローバル変数が事前に定義されているか.)
+DES_YUI=INFO,YUIでの実行を想定(YUIのグローバル変数が事前に定義されているか.)
 
 
 
 #オプション詳細
+DET_FUDGE=INFO,(注意)JSLintPlugin使用時はtrueとするとエディタ上のエラーの行数がずれる。
 DET_NEWCAP=INFO,(注意)JSHINTは、コンストラクタの定義の所で名前のチェックをしていない。\r\n newでコンストラクタを呼ぶ所で名前をチェックしているので、小文字だった場合は\r\n その行を指摘される。
 DET_SUB=INFO,ドット演算子(dot notation): sample.aaa\r\n 括弧記法(subscript notation): sample['aaa']
+DET_SHADOW=INFO,"inner" or false: 同じスコープ内でチェック, "outer": スコープ外についてもチェック, true: 隠ぺいを許容する
+DET_UNUSED=INFO,"vars": 変数についてチェック, "strict": 変数およびパラメータについてチェック

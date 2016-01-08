@@ -384,127 +384,67 @@ public final class Messages extends MessagesBase {
 	/** DES_BROUSER=INFO,標準ブラウザでの実行を想定(documentやwindow等、のグローバル変数が事前に定義されているか.). */
 	public static final Message DES_BROUSER = createMessage("DES_BROUSER");
 
-	/** DES_DEBUG=INFO,debuggerキーワードを許容.. */
-	public static final Message DES_DEBUG = createMessage("DES_DEBUG");
+	/** DES_COUCH=INFO,CouchDBでの実行を想定(CouchDBのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_COUCH = createMessage("DES_COUCH");
 
 	/** DES_DEVEL=INFO,alert、confirm、console、Debug、opera、promptを使用してもよいか. */
 	public static final Message DES_DEVEL = createMessage("DES_DEVEL");
 
-	/** DES_ES5=INFO,es5での実行を想定(es5の文法を使用してもよいか.). */
-	public static final Message DES_ES5 = createMessage("DES_ES5");
-
-	/** DES_EVIL=INFO,eval関数を許容.. */
-	public static final Message DES_EVIL = createMessage("DES_EVIL");
-
-	/** DES_FORIN=INFO,プロパティを持っていない場合のfor inを禁止.. */
-	public static final Message DES_FORIN = createMessage("DES_FORIN");
-
 	/** DES_MAXERR=INFO,許容するエラーの最大数(指定なし：50個). */
 	public static final Message DES_MAXERR = createMessage("DES_MAXERR");
 
-	/** DES_NEWCAP=INFO,コンストラクタ名の最初の文字の大文字チェック.. */
-	public static final Message DES_NEWCAP = createMessage("DES_NEWCAP");
+	/** DES_MAXLEN=INFO,許容するソースコード行数(指定なし：全行). */
+	public static final Message DES_MAXLEN = createMessage("DES_MAXLEN");
 
 	/** DES_NODE=INFO,node.jsでの実行を想定(node.jsのグローバル変数が事前に定義されているか.). */
 	public static final Message DES_NODE = createMessage("DES_NODE");
 
-	/** DES_NOMEN=INFO,名前の先頭または末尾のアンダーバーを禁止.. */
-	public static final Message DES_NOMEN = createMessage("DES_NOMEN");
-
-	/** DES_PASSFAIL=INFO,1個目のエラーでチェックをを止める.. */
-	public static final Message DES_PASSFAIL = createMessage("DES_PASSFAIL");
-
-	/** DES_PLUSPLUS=INFO, インクリメント(++)・デクリメント(--)を使用を禁止.. */
-	public static final Message DES_PLUSPLUS = createMessage("DES_PLUSPLUS");
-
-	/** DES_REGEXP=INFO,正規表現の . (任意の1文字)と [^...] (指定した文字以外)の使用禁止. */
-	public static final Message DES_REGEXP = createMessage("DES_REGEXP");
-
-	/** DES_RHINO=INFO,Rhinoでの実行を想定(Rhinoのグローバル変数が事前に定義されているか.). */
-	public static final Message DES_RHINO = createMessage("DES_RHINO");
-
-	/** DES_SUB=INFO,オブジェクトのプロパティへのアクセスは、ドットではなくて括弧記法を許容.. */
-	public static final Message DES_SUB = createMessage("DES_SUB");
-
-	/** DES_UNDEF=INFO,変数または関数の宣言があるかをチェックする. */
-	public static final Message DES_UNDEF = createMessage("DES_UNDEF");
+	/** DES_THIS=INFO,thisを許容.. */
+	public static final Message DES_THIS = createMessage("DES_THIS");
 
 	/** DES_WHITE=INFO,いい加減な空白をチェック.. */
 	public static final Message DES_WHITE = createMessage("DES_WHITE");
 
 	// #JSLintオプション
-	/** DES_ADSAFE=INFO,ADsafe のルールを適用するか. */
-	public static final Message DES_ADSAFE = createMessage("DES_ADSAFE");
+	/** DES_ES6=INFO,es6での実行を想定(es6の文法を使用してもよいか.). */
+	public static final Message DES_ES6 = createMessage("DES_ES6");
 
-	/** DES_CAP=INFO,HTMLタグが大文字で書かれているか. */
-	public static final Message DES_CAP = createMessage("DES_CAP");
+	/** DES_EVAL=INFO,eval関数を許容.. */
+	public static final Message DES_EVAL = createMessage("DES_EVAL");
 
-	/** DES_CONFUSION=INFO,ある変数の型が途中で変わってもいいか. */
-	public static final Message DES_CONFUSION = createMessage("DES_CONFUSION");
+	/** DES_FOR=INFO,forを許容.. */
+	public static final Message DES_FOR = createMessage("DES_FOR");
 
-	/** DES_CONTINUE=INFO,continueを使用してもよいか. */
-	public static final Message DES_CONTINUE = createMessage("DES_CONTINUE");
-
-	/** DES_CSS=INFO,CSSの1行目に @charset 'UTF-8' が無くてもよいか. */
-	public static final Message DES_CSS = createMessage("DES_CSS");
-
-	/** DES_EQEQ=INFO,抽象比較( = または != )を使用してもよいか. */
-	public static final Message DES_EQEQ = createMessage("DES_EQEQ");
-
-	/** DES_FRAGMENT=INFO,HTMLでフラグメント識別子の使用してもよいか. */
-	public static final Message DES_FRAGMENT = createMessage("DES_FRAGMENT");
-
-	/** DES_INDENT=INFO,インデント幅が指定した幅になっているか(0の場合はチェックを行わない). */
-	public static final Message DES_INDENT = createMessage("DES_INDENT");
-
-	/** DES_MAXLEN=INFO,許容するソースコード行数(指定なし：全行). */
-	public static final Message DES_MAXLEN = createMessage("DES_MAXLEN");
-
-	/** DES_ON=INFO,HTMLでイベントハンドラーの登録をしてもよいか. */
-	public static final Message DES_ON = createMessage("DES_ON");
-
-	/** DES_PROPERTIES=INFO,\/*properties*\/コメントを利用して全プロパティのスペルミスをチェックするか. */
-	public static final Message DES_PROPERTIES = createMessage("DES_PROPERTIES");
-
-	/** DES_SAFE=INFO,ADsafeルールのうち、ウィジェット向けのルール以外を有効にするか. */
-	public static final Message DES_SAFE = createMessage("DES_SAFE");
-
-	/** DES_SLOPPY=INFO,'use strict' が無くてもよいか. */
-	public static final Message DES_SLOPPY = createMessage("DES_SLOPPY");
-
-	/** DES_UNPARAM=INFO,未使用の変数があってもよいか. */
-	public static final Message DES_UNPARAM = createMessage("DES_UNPARAM");
-
-	/** DES_VARS=INFO,1つのfunction内にvarステートメントが2つ以上あってもよいか. */
-	public static final Message DES_VARS = createMessage("DES_VARS");
-
-	/** DES_WIDGET=INFO,Yahoo Widget環境で提供されているグローバル変数・関数があらかじめ定義されていると仮定するか. */
-	public static final Message DES_WIDGET = createMessage("DES_WIDGET");
-
-	/** DES_WINDOWS=INFO,Windows固有のグローバル変数・関数があらかじめ定義されていると仮定するか. */
-	public static final Message DES_WINDOWS = createMessage("DES_WINDOWS");
+	/** DES_FUDGE=INFO,テキストファイルの行列の開始インデックスを1とするか. */
+	public static final Message DES_FUDGE = createMessage("DES_FUDGE");
 
 	// #JSHintオプション
-	/** DES_JQUERY=INFO,jQueryでの実行を想定(jQueryのグローバル変数が事前に定義されているか.). */
-	public static final Message DES_JQUERY = createMessage("DES_JQUERY");
-
-	/** DES_COUCH=INFO,CouchDBでの実行を想定(CouchDBのグローバル変数が事前に定義されているか.). */
-	public static final Message DES_COUCH = createMessage("DES_COUCH");
-
-	/** DES_PROTOTYPEJS=INFO,prototype.jsでの実行を想定(prototype.jsのグローバル変数が事前に定義されているか.). */
-	public static final Message DES_PROTOTYPEJS = createMessage("DES_PROTOTYPEJS");
-
-	/** DES_MOOTOOLS=INFO,mootoolsでの実行を想定(mootoolsのグローバル変数が事前に定義されているか.). */
-	public static final Message DES_MOOTOOLS = createMessage("DES_MOOTOOLS");
-
 	/** DES_ASI=INFO,セミコロンの未挿入を許容.. */
 	public static final Message DES_ASI = createMessage("DES_ASI");
 
 	/** DES_BOSS=INFO,構造化要素の中身の割り当てを許容.. */
 	public static final Message DES_BOSS = createMessage("DES_BOSS");
 
+	/** DES_BROUSERIFY=INFO,Browserifyでの実行を想定(Browserifyのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_BROUSERIFY = createMessage("DES_BROUSERIFY");
+
 	/** DES_CURLY=INFO,構造化要素内の中括弧未使用を禁止.. */
 	public static final Message DES_CURLY = createMessage("DES_CURLY");
+
+	/** DES_DEBUG=INFO,debuggerキーワードを許容.. */
+	public static final Message DES_DEBUG = createMessage("DES_DEBUG");
+
+	/** DES_DOJO=INFO,dojoでの実行を想定(dojoのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_DOJO = createMessage("DES_DOJO");
+
+	/** DES_ELISION=INFO,ES3の配列内でのElision要素の許容.. */
+	public static final Message DES_ELISION = createMessage("DES_ELISION");
+
+	/** DES_ES3=INFO,es3での実行を想定(es3の文法を使用してもよいか.). */
+	public static final Message DES_ES3 = createMessage("DES_ES3");
+
+	/** DES_ES5=INFO,es5での実行を想定(es5の文法を使用してもよいか.). */
+	public static final Message DES_ES5 = createMessage("DES_ES5");
 
 	/** DES_EQEQEQ=INFO,=か!==以外の比較を禁止.. */
 	public static final Message DES_EQEQEQ = createMessage("DES_EQEQEQ");
@@ -512,33 +452,159 @@ public final class Messages extends MessagesBase {
 	/** DES_EQNULL=INFO,= null を許容.. */
 	public static final Message DES_EQNULL = createMessage("DES_EQNULL");
 
+	/** DES_EVIL=INFO,eval関数を許容.. */
+	public static final Message DES_EVIL = createMessage("DES_EVIL");
+
+	/** DES_FORIN=INFO,プロパティを持っていない場合のfor inを禁止.. */
+	public static final Message DES_FORIN = createMessage("DES_FORIN");
+
+	/** DES_FREEZE=INFO,Array、Dataなどネイティブオブジェクトの上書きを禁止.. */
+	public static final Message DES_FREEZE = createMessage("DES_FREEZE");
+
+	/** DES_FUNCSCOPE=INFO,スコープ内で定義した変数をスコープ外でアクセスすることを許容.. */
+	public static final Message DES_FUNCSCOPE = createMessage("DES_FUNCSCOPE");
+
+	/** DES_GLOBALS=INFO,許容するグローバル変数.. */
+	public static final Message DES_GLOBALS = createMessage("DES_GLOBALS");
+
 	/** DES_IMMED=INFO,If true、 JSHint will require immediate invocations to be wrapped in parens.. */
 	public static final Message DES_IMMED = createMessage("DES_IMMED");
+
+	/** DES_JASMINE=INFO,Jasmineでの実行を想定(Jasmineのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_JASMINE = createMessage("DES_JASMINE");
+
+	/** DES_JQUERY=INFO,jQueryでの実行を想定(jQueryのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_JQUERY = createMessage("DES_JQUERY");
+
+	/** DES_LATEDEF=INFO,宣言前の変数の使用禁止.. */
+	public static final Message DES_LATEDEF = createMessage("DES_LATEDEF");
 
 	/** DES_LAXBREAK=INFO,改行をチェックしない.. */
 	public static final Message DES_LAXBREAK = createMessage("DES_LAXBREAK");
 
+	/** DES_MAXCOMPLEXITY=INFO,最大複雑度の上限.. */
+	public static final Message DES_MAXCOMPLEXITY = createMessage("DES_MAXCOMPLEXITY");
+
+	/** DES_MAXDEPTH=INFO,ネストの深さの上限.. */
+	public static final Message DES_MAXDEPTH = createMessage("DES_MAXDEPTH");
+
+	/** DES_MAXPARAMS=INFO,最大パラメータ変数の上限.. */
+	public static final Message DES_MAXPARAMS = createMessage("DES_MAXPARAMS");
+
+	/** DES_MAXSTATEMENTS=INFO,関数内の宣言する変数の上限.. */
+	public static final Message DES_MAXSTATEMENTS = createMessage("DES_MAXSTATEMENTS");
+
+	/** DES_MOCHA=INFO,Mochaでの実行を想定(Mochaのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_MOCHA = createMessage("DES_MOCHA");
+
+	/** DES_MOOTOOLS=INFO,mootoolsでの実行を想定(mootoolsのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_MOOTOOLS = createMessage("DES_MOOTOOLS");
+
+	/** DES_MOZ=INFO,Mozilla JavaScript extensionsでの実行を想定. */
+	public static final Message DES_MOZ = createMessage("DES_MOZ");
+
+	/** DES_NEWCAP=INFO,コンストラクタ名の最初の文字の大文字チェック.. */
+	public static final Message DES_NEWCAP = createMessage("DES_NEWCAP");
+
 	/** DES_NOARG=INFO,arguments.caller と　arguments.calleeの使用を禁止.. */
 	public static final Message DES_NOARG = createMessage("DES_NOARG");
+
+	/** DES_NOCOMMA=INFO,カンマ演算子の禁止.. */
+	public static final Message DES_NOCOMMA = createMessage("DES_NOCOMMA");
 
 	/** DES_NOEMPTY=INFO,空ブロックの禁止.. */
 	public static final Message DES_NOEMPTY = createMessage("DES_NOEMPTY");
 
+	/** DES_NONBSP=INFO,NBSPの禁止.. */
+	public static final Message DES_NONBSP = createMessage("DES_NONBSP");
+
 	/** DES_NONEW=INFO,コンストラクタの使用を禁止.. */
 	public static final Message DES_NONEW = createMessage("DES_NONEW");
 
-	/** DES_ONEVAR=INFO,1つの関数で2つ以上のvarステートメントの使用を禁止.. */
-	public static final Message DES_ONEVAR = createMessage("DES_ONEVAR");
+	/** DES_NONSTANDARD=INFO,escape,unescapeの許容.. */
+	public static final Message DES_NONSTANDARD = createMessage("DES_NONSTANDARD");
+
+	/** DES_NOTYPEOF=INFO,typeof演算子の不正な値の許容.. */
+	public static final Message DES_NOTYPEOF = createMessage("DES_NOTYPEOF");
+
+	/** DES_NOYIELD=INFO,yield宣言のないジェネレータ関数の許容.. */
+	public static final Message DES_NOYIELD = createMessage("DES_NOYIELD");
+
+	/** DES_PASSFAIL=INFO,1個目のエラーでチェックをを止める.. */
+	public static final Message DES_PASSFAIL = createMessage("DES_PASSFAIL");
+
+	/** DES_PHANTOM=INFO,Phantomでの実行を想定(Phantomのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_PHANTOM = createMessage("DES_PHANTOM");
+
+	/** DES_PLUSPLUS=INFO, インクリメント(++)・デクリメント(--)を使用を禁止.. */
+	public static final Message DES_PLUSPLUS = createMessage("DES_PLUSPLUS");
+
+	/** DES_PROTOTYPEJS=INFO,prototype.jsでの実行を想定(prototype.jsのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_PROTOTYPEJS = createMessage("DES_PROTOTYPEJS");
+
+	/** DES_QUNIT=INFO,QUnitでの実行を想定(QUnitのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_QUNIT = createMessage("DES_QUNIT");
+
+	/** DES_REGEXP=INFO,正規表現の . (任意の1文字)と [^...] (指定した文字以外)の使用禁止. */
+	public static final Message DES_REGEXP = createMessage("DES_REGEXP");
+
+	/** DES_RHINO=INFO,Rhinoでの実行を想定(Rhinoのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_RHINO = createMessage("DES_RHINO");
+
+	/** DES_SCRIPTURL=INFO,javascript:...のようにscriptプロトコルのURLの許容.. */
+	public static final Message DES_SCRIPTURL = createMessage("DES_SCRIPTURL");
+
+	/** DES_SHADOW=INFO,変数の隠ぺいを許容する.. */
+	public static final Message DES_SHADOW = createMessage("DES_SHADOW");
+
+	/** DES_SINGLEGROUPS=INFO,グループ演算子の禁止.. */
+	public static final Message DES_SINGLEGROUPS = createMessage("DES_SINGLEGROUPS");
+
+	/** DES_SHELLJS=INFO,ShellJSでの実行を想定(ShellJSのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_SHELLJS = createMessage("DES_SHELLJS");
 
 	/** DES_STRICT=INFO,'use strict' の未使用を禁止.. */
 	public static final Message DES_STRICT = createMessage("DES_STRICT");
 
+	/** DES_SUB=INFO,オブジェクトのプロパティへのアクセスは、ドットではなくて括弧記法を許容.. */
+	public static final Message DES_SUB = createMessage("DES_SUB");
+
+	/** DES_TYPED=INFO,型付き配列の許容.. */
+	public static final Message DES_TYPED = createMessage("DES_TYPED");
+
+	/** DES_UNDEF=INFO,変数または関数の宣言があるかをチェックする. */
+	public static final Message DES_UNDEF = createMessage("DES_UNDEF");
+
+	/** DES_UNUSED=INFO,使用されない変数を許容.. */
+	public static final Message DES_UNUSED = createMessage("DES_UNUSED");
+
+	/** DES_WITHSTMT=INFO,with宣言の許容.. */
+	public static final Message DES_WITHSTMT = createMessage("DES_WITHSTMT");
+
+	/** DES_WORKER=INFO,Web Workerでの実行を想定(Web Workerのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_WORKER = createMessage("DES_WORKER");
+
+	/** DES_WSH=INFO,Windows Script Hostでの実行を想定(Windows Script Hostのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_WSH = createMessage("DES_WSH");
+
+	/** DES_YUI=INFO,YUIでの実行を想定(YUIのグローバル変数が事前に定義されているか.). */
+	public static final Message DES_YUI = createMessage("DES_YUI");
+
 	// #オプション詳細
+	/** DET_FUDGE=INFO,(注意)JSLintPlugin使用時はtrueとするとエディタ上のエラーの行数がずれる。. */
+	public static final Message DET_FUDGE = createMessage("DET_FUDGE");
+
 	/** DET_NEWCAP=INFO,(注意)JSHINTは、コンストラクタの定義の所で名前のチェックをしていない。\r\n newでコンストラクタを呼ぶ所で名前をチェックしているので、小文字だった場合は\r\n その行を指摘される。. */
 	public static final Message DET_NEWCAP = createMessage("DET_NEWCAP");
 
 	/** DET_SUB=INFO,ドット演算子(dot notation): sample.aaa\r\n 括弧記法(subscript notation): sample['aaa']. */
 	public static final Message DET_SUB = createMessage("DET_SUB");
+
+	/** DET_SHADOW=INFO,"inner" or false: 同じスコープ内でチェック, "outer": スコープ外についてもチェック, true: 隠ぺいを許容する. */
+	public static final Message DET_SHADOW = createMessage("DET_SHADOW");
+
+	/** DET_UNUSED=INFO,"vars": 変数についてチェック, "strict": 変数およびパラメータについてチェック. */
+	public static final Message DET_UNUSED = createMessage("DET_UNUSED");
 
 	/**
 	 * デフォルトコンストラクタ.

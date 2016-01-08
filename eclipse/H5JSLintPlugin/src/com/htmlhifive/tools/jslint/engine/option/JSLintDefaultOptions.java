@@ -27,10 +27,6 @@ import com.htmlhifive.tools.jslint.messages.Messages;
  */
 public enum JSLintDefaultOptions {
 	/**
-	 * adsafe.
-	 */
-	ADSAFE("adsafe", Boolean.class, Messages.DES_ADSAFE.getText(), ""),
-	/**
 	 * bitwise.
 	 */
 	BITWISE("bitwise", Boolean.class, Messages.DES_BITWISE.getText(), ""),
@@ -39,53 +35,29 @@ public enum JSLintDefaultOptions {
 	 */
 	BROWSER("browser", Boolean.class, Messages.DES_BROUSER.getText(), ""),
 	/**
-	 * cap.
+	 * couch.
 	 */
-	CAP("cap", Boolean.class, Messages.DES_CAP.getText(), ""),
-	/**
-	 * confusion.
-	 */
-	CONFUSION("confusion", Boolean.class, Messages.DES_CONFUSION.getText(), ""),
-	/**
-	 * 'continue'.
-	 */
-	CONTINUE("'continue'", Boolean.class, Messages.DES_CONTINUE.getText(), ""),
-	/**
-	 * css.
-	 */
-	CSS("css", Boolean.class, Messages.DES_CSS.getText(), ""),
-	/**
-	 * debug.
-	 */
-	DEBUG("debug", Boolean.class, Messages.DES_DEBUG.getText(), ""),
+	COUCH("couch", Boolean.class, Messages.DES_COUCH.getText(), ""),
 	/**
 	 * devel.
 	 */
 	DEVEL("devel", Boolean.class, Messages.DES_DEVEL.getText(), ""),
 	/**
-	 * eqeq.
+	 * es6.
 	 */
-	EQEQ("eqeq", Boolean.class, Messages.DES_EQEQ.getText(), ""),
+	ES5("es6", Boolean.class, Messages.DES_ES6.getText(), ""),
 	/**
-	 * es5.
+	 * eval.
 	 */
-	ES5("es5", Boolean.class, Messages.DES_ES5.getText(), ""),
+	EVAL("eval", Boolean.class, Messages.DES_EVAL.getText(), ""),
 	/**
-	 * evil.
+	 * for.
 	 */
-	EVIL("evil", Boolean.class, Messages.DES_EVIL.getText(), ""),
+	FOR("for", Boolean.class, Messages.DES_FOR.getText(), ""),
 	/**
-	 * forin.
+	 * fudge.
 	 */
-	FORIN("forin", Boolean.class, Messages.DES_FORIN.getText(), ""),
-	/**
-	 * fragment.
-	 */
-	FRAGMENT("fragment", Boolean.class, Messages.DES_FRAGMENT.getText(), ""),
-	/**
-	 * indent.
-	 */
-	INDENT("indent", Integer.class, Messages.DES_INDENT.getText(), ""),
+	FUDGE("fudge", Boolean.class, Messages.DES_FUDGE.getText(), Messages.DET_FUDGE.getText()),
 	/**
 	 * maxerr.
 	 */
@@ -95,78 +67,17 @@ public enum JSLintDefaultOptions {
 	 */
 	MAXLEN("maxlen", Integer.class, Messages.DES_MAXLEN.getText(), ""),
 	/**
-	 * newcap.
-	 */
-	NEWCAP("newcap", Boolean.class, Messages.DES_NEWCAP.getText(), Messages.DET_NEWCAP.getText()),
-	/**
 	 * node.
 	 */
 	NODE("node", Boolean.class, Messages.DES_NODE.getText(), ""),
 	/**
-	 * nomen.
+	 * this.
 	 */
-	NOMEN("nomen", Boolean.class, Messages.DES_NOMEN.getText(), ""),
-	/**
-	 * on.
-	 */
-	ON("on", Boolean.class, Messages.DES_ON.getText(), ""),
-	/**
-	 * passfail.
-	 */
-	PASSFAIL("passfail", Boolean.class, Messages.DES_PASSFAIL.getText(), ""),
-	/**
-	 * plusplus.
-	 */
-	PLUSPLUS("plusplus", Boolean.class, Messages.DES_PLUSPLUS.getText(), ""),
-	/**
-	 * properties.
-	 */
-	PROPERTIES("properties", Boolean.class, Messages.DES_PROPERTIES.getText(), ""),
-	/**
-	 * regexp.
-	 */
-	REGEXP("regexp", Boolean.class, Messages.DES_REGEXP.getText(), ""),
-	/**
-	 * rhino.
-	 */
-	RHINO("rhino", Boolean.class, Messages.DES_RHINO.getText(), ""),
-	/**
-	 * safe.
-	 */
-	SAFE("safe", Boolean.class, Messages.DES_SAFE.getText(), ""),
-	/**
-	 * sloppy.
-	 */
-	SLOPPY("sloppy", Boolean.class, Messages.DES_SLOPPY.getText(), ""),
-	/**
-	 * sub.
-	 */
-	SUB("sub", Boolean.class, Messages.DES_SUB.getText(), ""),
-	/**
-	 * undef.
-	 */
-	UNDEF("undef", Boolean.class, Messages.DES_UNDEF.getText(), ""),
-	/**
-	 * unparam.
-	 */
-	UNPARAM("unparam", Boolean.class, Messages.DES_UNPARAM.getText(), ""),
-	/**
-	 * vars.
-	 */
-	VARS("vars", Boolean.class, Messages.DES_VARS.getText(), ""),
+	THIS("this", Boolean.class, Messages.DES_THIS.getText(), ""),
 	/**
 	 * white.
 	 */
-	WHITE("white", Boolean.class, Messages.DES_WHITE.getText(), ""),
-	/**
-	 * widget.
-	 */
-	WIDGET("widget", Boolean.class, Messages.DES_WIDGET.getText(), ""),
-
-	/**
-	 * windows.
-	 */
-	WINDOWS("windows", Boolean.class, Messages.DES_WINDOWS.getText(), "");
+	WHITE("white", Boolean.class, Messages.DES_WHITE.getText(), "");
 
 	/**
 	 * 設定クラス.
