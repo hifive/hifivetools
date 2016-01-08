@@ -69,7 +69,6 @@ public abstract class AbstractJSChecker implements JSChecker {
 	private CheckOption[] options;
 
 	/**
-<<<<<<< HEAD
 	 * JSLint/JSHintの結果オブジェクト
 	 */
 	protected Object result;
@@ -122,7 +121,7 @@ public abstract class AbstractJSChecker implements JSChecker {
 				Object[] args = new Object[] { src, optionsAsJavaScriptObject() };
 				Function lintFunc = (Function) scope.get(getCheckerMethodName(), scope);
 				long lintFuncstart = System.currentTimeMillis();
-				lintFunc.call(cx, scope, scope, args);
+				result = lintFunc.call(cx, scope, scope, args);
 				logger.debug("lint func time " + String.valueOf(System.currentTimeMillis() - lintFuncstart));
 				return null;
 			}
@@ -194,118 +193,6 @@ public abstract class AbstractJSChecker implements JSChecker {
 	private void addError(JSCheckerResult result, Scriptable err) {
 
 		JSCheckerErrorBean e = convertToErrorBean(err);
-=======
-	 * コンストラクタ.
-	 * 
-	 * @param jslint JSLINTのjsファイルパス
-	 * @param options オプション
-	 * @throws CoreException 解析例外
-	 */
-	public AbstractJSChecker(Reader jslint, CheckOption[] options) throws CoreException {
-		if (options != null) {
-			this.options = options.clone();
-		}
-		try {
-			factory = new ContextFactory();
-			Context context = factory.enterContext();
-			context.setOptimizationLevel(OPTIMAZATION_LEVEL);
-			logger.debug("optimizationLevel is " + String.valueOf(context.getOptimizationLevel()));
-			scope = context.initStandardObjects();
-			context.evaluateReader(scope, jslint, "test", 1, null);
-		} catch (FileNotFoundException e) {
-			throw new CoreException(null);
-		} catch (IOException e) {
-			throw new CoreException(null);
-		}
-	}
-
-	/**
-	 * コンストラクタ.
-	 * 
-	 * @param jslint JSLINTのjsファイルパス
-	 * @throws CoreException 解析例外
-	 */
-	public AbstractJSChecker(Reader jslint) throws CoreException {
-		this(jslint, null);
-	}
-
-	@Override
-	public JSCheckerResult lint(final String source) {
-
-		long lintStart = System.currentTimeMillis();
-		factory.call(new ContextAction() {
-			@Override
-			public Object run(Context cx) {
-
-				String src = source == null ? "" : source;
-				logger.debug("target source : " + src.toCharArray().length);
-				Object[] args = new Object[] { src, optionsAsJavaScriptObject() };
-				Function lintFunc = (Function) scope.get(getCheckerMethodName(), scope);
-				long lintFuncstart = System.currentTimeMillis();
-				lintFunc.call(cx, scope, scope, args);
-				logger.debug("lint func time " + String.valueOf(System.currentTimeMillis() - lintFuncstart));
-				return null;
-			}
-		});
-		logger.debug("lint time " + String.valueOf(System.currentTimeMillis() - lintStart));
-		return builtResults();
-	}
-
-	/**
-	 * JSLINTの実行結果を取得する.
-	 * 
-	 * @return 実行エラー結果.
-	 */
-	private JSCheckerResult builtResults() {
-
-		long createResultStart = System.currentTimeMillis();
-		JSCheckerResult result = (JSCheckerResult) factory.call(new ContextAction() {
-
-			@Override
-			public Object run(Context cx) {
-
-				JSCheckerResult result = new JSCheckerResult();
-				Scriptable jslint = (Scriptable) scope.get(getCheckerMethodName(), scope);
-				NativeArray errors = (NativeArray) jslint.get("errors", jslint);
-				logger.debug("error count : " + errors.getLength());
-				for (int i = 0; i < errors.getLength(); i++) {
-					Scriptable err = (Scriptable) errors.get(i, errors);
-					if (err != null) {
-						addError(result, err);
-					}
-				}
-				return result;
-			}
-
-		});
-		logger.debug("result build time " + String.valueOf(System.currentTimeMillis() - createResultStart));
-		return result;
-
-	}
-
-	/**
-	 * 使用するチェッカメソッドを取得する.<br>
-	 * JSLINT or JSHINT
-	 * 
-	 * @return 使用するチェッカメソッド
-	 */
-	abstract String getCheckerMethodName();
-
-	/**
-	 * JSLintのエラーをリストに追加する.
-	 * 
-	 * @param result 追加するリスト
-	 * @param err エラーオブジェクト
-	 */
-	private void addError(JSCheckerResult result, Scriptable err) {
-
-		JSCheckerErrorBean e = new JSCheckerErrorBean();
-		e.setCharacter(err.get("character", err) == Scriptable.NOT_FOUND ? null : Double.valueOf(err.get("character",
-				err).toString()));
-		e.setEvidence(err.get("evidence", err) == Scriptable.NOT_FOUND ? null : err.get("evidence", err).toString());
-		e.setLine(err.get("line", err) == Scriptable.NOT_FOUND ? null : Double.valueOf(err.get("line", err).toString()));
-		e.setReason(err.get("reason", err) == Scriptable.NOT_FOUND ? null : err.get("reason", err).toString());
->>>>>>> branch 'master' of https://github.com/hifive/hifivetools.git
 		result.addErroList(e);
 
 	}

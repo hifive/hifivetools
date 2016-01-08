@@ -19,7 +19,6 @@ package com.htmlhifive.tools.jslint.engine;
 import java.io.Reader;
 
 import org.eclipse.core.runtime.CoreException;
-<<<<<<< HEAD
 import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.Scriptable;
 
@@ -86,43 +85,5 @@ public class JSLint extends AbstractJSChecker {
 				err.get("line", err) == Scriptable.NOT_FOUND ? null : Double.valueOf(err.get("line", err).toString()));
 		e.setReason(err.get("message", err) == Scriptable.NOT_FOUND ? null : err.get("message", err).toString());
 		return e;
-=======
-
-import com.htmlhifive.tools.jslint.JSLintPluginConstant;
-import com.htmlhifive.tools.jslint.engine.option.CheckOption;
-
-/**
- * JSLintを利用したチェッカクラス.
- * 
- * @author NS Solutions Corporation
- * 
- */
-public class JSLint extends AbstractJSChecker {
-
-	/**
-	 * コンストラクタ.
-	 * 
-	 * @param jslint jslint.jsファイル.
-	 * @param options オプション.
-	 * @throws CoreException 解析例外
-	 */
-	public JSLint(Reader jslint, CheckOption[] options) throws CoreException {
-
-		super(jslint, options);
 	}
-
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see
-	 * com.htmlhifive.tool.jslint.engine.AbstractJSChecker#getCheckerMethodName
-	 * ()
-	 */
-	@Override
-	protected String getCheckerMethodName() {
-
-		return JSLintPluginConstant.JS_LINT_METHOD;
->>>>>>> branch 'master' of https://github.com/hifive/hifivetools.git
-	}
-
 }
