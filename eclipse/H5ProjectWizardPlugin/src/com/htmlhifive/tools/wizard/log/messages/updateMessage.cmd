@@ -73,7 +73,7 @@ rem "%JAVA_HOME%\bin\native2ascii" -encoding utf-8 -reverse %outfile% %inputfile
 
 
 echo /*>>%java_file_ascii%
-echo  * Copyright (C) 2012 NS Solutions Corporation>>%java_file_ascii%
+echo  * Copyright (C) 2012-2016 NS Solutions Corporation>>%java_file_ascii%
 echo  *>>%java_file_ascii%
 echo  * Licensed under the Apache License, Version 2.0 (the "License");>>%java_file_ascii%
 echo  * you may not use this file except in compliance with the License.>>%java_file_ascii%

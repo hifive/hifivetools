@@ -1,5 +1,5 @@
 @echo off
-REM Copyright (C) 2012 NS Solutions Corporation
+REM Copyright (C) 2012-2016 NS Solutions Corporation
 REM
 REM Licensed under the Apache License, Version 2.0 (the "License");
 REM you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ set java_package_name=com.htmlhifive.tools.jslint.messages
 set java_base_class_package=com.htmlhifive.tools.jslint.messages
 set java_base_class_name=MessagesBase
 set message_class_file=MessageClass2.txt
-set file_header_comment=Copyright (C) 2011 NS Solutions Corporation, All Rights Reserved.
+set file_header_comment=Copyright (C) 2012-2016 NS Solutions Corporation, All Rights Reserved.
 
 set replace_str=%~dp0
 set project_root=%replace_str:\src\com\htmlhifive\tools\jslint\messages\=%

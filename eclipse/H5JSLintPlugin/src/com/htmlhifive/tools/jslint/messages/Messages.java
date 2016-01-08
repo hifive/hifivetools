@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 NS Solutions Corporation, All Rights Reserved.
+ * Copyright (C) 2011-2016 NS Solutions Corporation, All Rights Reserved.
  */
 package com.htmlhifive.tools.jslint.messages;
 
@@ -18,7 +18,7 @@ public final class Messages extends MessagesBase {
 	}
 
 	// #
-	// # Copyright (C) 2012 NS Solutions Corporation
+	// # Copyright (C) 2012-2016 NS Solutions Corporation
 	// #
 	// # Licensed under the Apache License, Version 2.0 (the "License");
 	// # you may not use this file except in compliance with the License.
