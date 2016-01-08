@@ -81,8 +81,8 @@ public class JSLint extends AbstractJSChecker {
 		e.setCharacter(err.get("column", err) == Scriptable.NOT_FOUND ? null
 				: Double.valueOf(err.get("column", err).toString()));
 		e.setEvidence(err.get("code", err) == Scriptable.NOT_FOUND ? null : err.get("code", err).toString());
-		e.setLine(
-				err.get("line", err) == Scriptable.NOT_FOUND ? null : Double.valueOf(err.get("line", err).toString()));
+		e.setLine(err.get("line", err) == Scriptable.NOT_FOUND ? null
+				: Double.valueOf(err.get("line", err).toString()) + 1);
 		e.setReason(err.get("message", err) == Scriptable.NOT_FOUND ? null : err.get("message", err).toString());
 		return e;
 	}
