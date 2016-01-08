@@ -24,8 +24,5 @@
    <feature url="features/com.htmlhifive.tools.wizard_1.2.0.vqualifier.jar" id="com.htmlhifive.tools.wizard" version="1.2.0.vqualifier">
       <category name="hifive Plugins"/>
    </feature>
-   <feature url="features/com.htmlhifive.tools.codeassist_1.2.0.vqualifier.jar" id="com.htmlhifive.tools.codeassist" version="1.2.0.vqualifier">
-      <category name="hifive Plugins"/>
-   </feature>
    <category-def name="hifive Plugins" label="hifive プラグイン"/>
 </site>
