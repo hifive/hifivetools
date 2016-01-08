@@ -13,6 +13,7 @@
 		<varRef key="rootController" className="Controller" />
 		<varRef key="parentController" className="Controller" />
 		<varRef key="view" className="View" />
+		<varRef key="scene" className="Scene" />
 		<function name="$find" returnType="jQuery" returnDescription="jQueryオブジェクト">
 			<argument name="selector" type="String" description="セレクタ" />
 			<description>コントローラがバインドされた要素内から要素を選択します</description>
