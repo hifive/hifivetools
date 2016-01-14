@@ -75,4 +75,15 @@ public class DownloadJSLintSupport extends AbstractDownloadEngineSupport impleme
 		return Engine.JSLINT;
 	}
 
+	/*
+	 * (非 Javadoc)
+	 * 
+	 * @see com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport#
+	 * getLicenseSourceUrl ()
+	 */
+	@Override
+	public String getLicenseSourceUrl() {
+		return PropertyUtils.getProperty("path.jslint.license.js");
+	}
+
 }

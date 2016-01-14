@@ -72,37 +72,68 @@ public abstract class AbstractDownloadEngineSupport implements DownloadEngineSup
 			actualMonitor = new NullProgressMonitor();
 		}
 		actualMonitor.setTaskName(Messages.T0009.getText());
-		HttpClient client = createHttpClient(getEngineSourceUrl());
-		HttpMethod getMethod = new GetMethod(getEngineSourceUrl());
+		StringBuilder licenseSb = getLicenseSb(actualMonitor);
+		if (licenseSb == null) {
+			return null;
+		}
+
+		EngineInfo info = new EngineInfo();
+		info.setLicenseStr(licenseSb.toString());
+
+		StringBuilder rawSource = getRowSource(actualMonitor);
+
+		info.setMainSource(rawSource.toString());
+		monitor.done();
+		return info;
+	}
+
+	private StringBuilder getLicenseSb(IProgressMonitor actualMonitor) throws IOException {
+		String licenseSourceUrl = getLicenseSourceUrl();
+		HttpClient client = createHttpClient(licenseSourceUrl);
+		HttpMethod getMethod = new GetMethod(licenseSourceUrl);
 		int result = client.executeMethod(getMethod);
 		if (result != HttpStatus.SC_OK) {
 			// TODO 失敗
 			return null;
 		}
-		StringBuilder licenseSb = new StringBuilder();
-		StringBuilder rawSource = new StringBuilder();
 		Header header = getMethod.getResponseHeader("Content-Length");
 		int content = Integer.valueOf(header.getValue());
 		actualMonitor.beginTask(Messages.T0010.getText(), content);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getMethod.getResponseBodyAsStream()));
-		String temp = reader.readLine();
+
+		StringBuilder licenseSb = new StringBuilder();
+		String temp;
 		int progress = 0;
-		while (!isEndLicenseLine(temp)) {
+		while ((temp = reader.readLine()) != null) {
 			progress += temp.length();
 			actualMonitor.subTask(Messages.T0011.format(progress, content));
 			actualMonitor.worked(temp.length());
-			rawSource.append(temp);
 			temp = StringUtils.trim(temp);
 			temp = StringUtils.substring(temp, 2);
 			temp = StringUtils.trim(temp);
 			licenseSb.append(temp);
 			licenseSb.append(System.getProperty("line.separator"));
-			rawSource.append(System.getProperty("line.separator"));
-			temp = reader.readLine();
 		}
-		EngineInfo info = new EngineInfo();
-		info.setLicenseStr(licenseSb.toString());
+		return licenseSb;
+	}
 
+	private StringBuilder getRowSource(IProgressMonitor actualMonitor) throws IOException {
+		String engineSourceUrl = getEngineSourceUrl();
+		HttpClient client = createHttpClient(engineSourceUrl);
+		HttpMethod getMethod = new GetMethod(engineSourceUrl);
+		int result = client.executeMethod(getMethod);
+		if (result != HttpStatus.SC_OK) {
+			// TODO 失敗
+			return null;
+		}
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(getMethod.getResponseBodyAsStream()));
+		Header header = getMethod.getResponseHeader("Content-Length");
+		int content = Integer.valueOf(header.getValue());
+
+		StringBuilder rawSource = new StringBuilder();
+		String temp;
+		int progress = 0;
 		while ((temp = reader.readLine()) != null) {
 			progress += temp.length();
 			actualMonitor.subTask(Messages.T0011.format(progress, content));
@@ -110,9 +141,7 @@ public abstract class AbstractDownloadEngineSupport implements DownloadEngineSup
 			rawSource.append(temp);
 			rawSource.append(System.getProperty("line.separator"));
 		}
-		info.setMainSource(rawSource.toString());
-		monitor.done();
-		return info;
+		return rawSource;
 	}
 
 	/**

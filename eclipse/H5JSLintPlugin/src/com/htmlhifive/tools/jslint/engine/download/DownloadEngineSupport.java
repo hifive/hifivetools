@@ -53,6 +53,13 @@ public interface DownloadEngineSupport {
 	String getEngineSourceUrl();
 
 	/**
+	 * ライセンスソース取得URLを取得する.
+	 * 
+	 * @return ライセンスソース取得URL
+	 */
+	String getLicenseSourceUrl();
+
+	/**
 	 * エンジン情報を取得する.
 	 * 
 	 * @param monitor モニター.
