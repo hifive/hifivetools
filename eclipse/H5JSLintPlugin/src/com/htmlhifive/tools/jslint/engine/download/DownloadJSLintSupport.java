@@ -43,10 +43,10 @@ public class DownloadJSLintSupport extends AbstractDownloadEngineSupport impleme
 	 * (非 Javadoc)
 	 * 
 	 * @see com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport#
-	 * getEngineSourceUrl()
+	 * getEngineSourcePath()
 	 */
 	@Override
-	public String getEngineSourceUrl() {
+	public String getEngineSourcePath() {
 
 		return PropertyUtils.getProperty("path.jslint.js");
 	}
@@ -54,21 +54,8 @@ public class DownloadJSLintSupport extends AbstractDownloadEngineSupport impleme
 	/*
 	 * (非 Javadoc)
 	 * 
-	 * @see
-	 * com.htmlhifive.tools.jslint.engine.download.AbstractDownloadEngineSupport
-	 * #isEndLicenseLine(java.lang.String)
-	 */
-	@Override
-	protected boolean isEndLicenseLine(String line) {
-		return line.startsWith("// WARNING:");
-	}
-
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see
-	 * com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport#getEngine
-	 * ()
+	 * @see com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport#
+	 * getEngine ()
 	 */
 	@Override
 	public Engine getEngine() {
@@ -79,10 +66,10 @@ public class DownloadJSLintSupport extends AbstractDownloadEngineSupport impleme
 	 * (非 Javadoc)
 	 * 
 	 * @see com.htmlhifive.tools.jslint.engine.download.DownloadEngineSupport#
-	 * getLicenseSourceUrl ()
+	 * getLicenseSourcePath ()
 	 */
 	@Override
-	public String getLicenseSourceUrl() {
+	public String getLicenseSourcePath() {
 		return PropertyUtils.getProperty("path.jslint.license.js");
 	}
 

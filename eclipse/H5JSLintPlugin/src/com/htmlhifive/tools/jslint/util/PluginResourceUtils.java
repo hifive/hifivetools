@@ -16,6 +16,14 @@
  */
 package com.htmlhifive.tools.jslint.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -74,6 +82,57 @@ public final class PluginResourceUtils {
 	public static boolean isExistFile(String path) {
 
 		return ResourcesPlugin.getWorkspace().getRoot().exists(new Path(path));
+	}
+
+	/**
+	 * 指定したパスのファイルの中身を取得する
+	 * 
+	 * @param filePath ファイルパス
+	 * @return ファイルの中身の文字列
+	 * @throws IOException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
+	 */
+	public static String getFileContent(String filePath)
+			throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException,
+			InstantiationException, IllegalAccessException, InvocationTargetException {
+		return getFileContent(filePath, BufferedReader.class);
+	}
+
+	/**
+	 * 指定したパスのファイルの中身を取得する
+	 * 
+	 * @param filePath ファイルパス
+	 * @param readerClass ファイル読み込みクラス
+	 * @return ファイルの中身の文字列
+	 * @throws IOException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws IllegalArgumentException
+	 */
+	public static String getFileContent(String filePath, Class<? extends BufferedReader> readerClass)
+			throws IOException, SecurityException, NoSuchMethodException, IllegalArgumentException,
+			InstantiationException, IllegalAccessException, InvocationTargetException {
+		InputStream fileStream = PluginResourceUtils.class.getClassLoader().getResourceAsStream(filePath);
+
+		Constructor<? extends BufferedReader> constructor = readerClass.getConstructor(Reader.class);
+		BufferedReader reader = constructor.newInstance(new InputStreamReader(fileStream));
+
+		StringBuilder builder = new StringBuilder();
+		String line;
+		final String separator = System.getProperty("line.separator");
+		while ((line = reader.readLine()) != null) {
+			builder.append(line);
+			builder.append(separator);
+		}
+		return builder.toString();
 	}
 
 }

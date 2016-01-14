@@ -17,6 +17,7 @@
 package com.htmlhifive.tools.jslint.engine.download;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -50,14 +51,14 @@ public interface DownloadEngineSupport {
 	 * 
 	 * @return エンジンソース取得URL
 	 */
-	String getEngineSourceUrl();
+	String getEngineSourcePath();
 
 	/**
 	 * ライセンスソース取得URLを取得する.
 	 * 
 	 * @return ライセンスソース取得URL
 	 */
-	String getLicenseSourceUrl();
+	String getLicenseSourcePath();
 
 	/**
 	 * エンジン情報を取得する.
@@ -65,7 +66,14 @@ public interface DownloadEngineSupport {
 	 * @param monitor モニター.
 	 * @return エンジン情報.
 	 * @throws IOException 入出力例外.
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
 	 */
-	EngineInfo getEngineInfo(IProgressMonitor monitor) throws IOException;
+	EngineInfo getEngineInfo(IProgressMonitor monitor) throws IOException, SecurityException, IllegalArgumentException,
+			NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException;
 
 }
