@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2016 NS Solutions Corporation, All Rights Reserved.
+ * Copyright (C) 2012-2016 NS Solutions Corporation, All Rights Reserved.
  */
 package com.htmlhifive.tools.jslint.messages;
 
@@ -62,7 +62,7 @@ public final class Messages extends MessagesBase {
 	/** B0007=INFO,全解除. */
 	public static final Message B0007 = createMessage("B0007");
 
-	/** B0008=INFO,ダウンロード. */
+	/** B0008=INFO,ファイル取得. */
 	public static final Message B0008 = createMessage("B0008");
 
 	// #ダイアログラベル
