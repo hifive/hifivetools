@@ -120,6 +120,16 @@ public class CreateEngineDialog extends TitleAreaDialog {
 				result = support.getEngineInfo(monitor);
 			} catch (IOException e) {
 				throw new InvocationTargetException(e, e.getMessage());
+			} catch (SecurityException e) {
+				throw new InvocationTargetException(e, e.getMessage());
+			} catch (IllegalArgumentException e) {
+				throw new InvocationTargetException(e, e.getMessage());
+			} catch (NoSuchMethodException e) {
+				throw new InvocationTargetException(e, e.getMessage());
+			} catch (InstantiationException e) {
+				throw new InvocationTargetException(e, e.getMessage());
+			} catch (IllegalAccessException e) {
+				throw new InvocationTargetException(e, e.getMessage());
 			}
 		}
 
@@ -401,8 +411,8 @@ public class CreateEngineDialog extends TitleAreaDialog {
 				return;
 			}
 		} catch (InvocationTargetException e) {
-			ErrorDialog.openError(getShell(), Messages.DT0003.getText(), Messages.EM0015.getText(), new Status(
-					IStatus.ERROR, JSLintPlugin.PLUGIN_ID, e.getMessage(), e));
+			ErrorDialog.openError(getShell(), Messages.DT0003.getText(), Messages.EM0015.getText(),
+					new Status(IStatus.ERROR, JSLintPlugin.PLUGIN_ID, e.getMessage(), e));
 			logger.put(Messages.EM0100, e);
 		} catch (InterruptedException e) {
 			// キャンセル無視しているので来ない.
